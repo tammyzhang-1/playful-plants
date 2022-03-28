@@ -4,13 +4,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>TODO: 404</title>
+  <title>Playful Plants</title>
+  <link rel="stylesheet" type="text/css" href="public/styles/site.css"/>
 </head>
 
 <body>
+  <header>
+      <h1>Playful Plants</h1>
+    </header>
 
-  TODO: 404
+    <main>
+      <div id="error-message">
+        <h2>Page not found</h2>
+        <p>This page does not exist. <a href="/">Go back to the home page?</a></p>
+      </div>
+    </main>
 
 </body>
 
