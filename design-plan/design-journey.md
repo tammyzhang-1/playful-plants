@@ -131,13 +131,101 @@ _Administrator_ Goal 3: Print lists of plants to hand out as reference to intere
 
 _Initial Designs / Design Iterations:_
 
-TODO
+Pages to be planned:
+- Catalog view for consumers
+  - On mobile
+  - On desktop
+- Details page for consumers
+  - On mobile
+  - On desktop
+- Catalog view for administrators
+  - On desktop
+- Details page for administrators
+  - On desktop
+- Log in page for administrators
+
+URLs:
+- /catalog for catalog view
+- /plant-name for details page (different for each plant)
+- /login for login page
+
+Thinking process for deciding what data is shown:
+- For administrators like Tim, their goals are focused on editing their data and on seeing play types
+  - Thus, Tim doesn't need to be able to filter for gardening information on catalog view
+  - But since he may want to edit gardening information for the consumers, this should be visible on the details page
+- For consumers like Abi, their goals are focused around finding plants for their garden which their children may like
+  - She should be able to filter by gardening info and not by play types
+  - She isn't as interested in fulfilling very specific play types - she will likely follow a process of first finding plants that fit the climate and her image of her garden, and then look at these plants in more detail to make final choices
+  - However, since she has children who she wants to engage, it may be helpful for her to see play types supported on the details page to see the possible positive side benefits of choosing the plant for her kids
+- In conclusion, the catalog views will have a different set of filters for each audience to support their different priorities, but the detail pages will appear the same for both
+  - Only exception is that administrators can see options to edit on the details page
+
+
+  1. Catalog view for consumers on mobile iterations
+
+  ![Sketch 1 and 2 for consumer mobile catalog](consumer_mobile_catalog_sketch1.jpg)
+
+  - Put filters at top since sidebars don't function well on mobile displays
+  - One picture per row
+  - In second iteration, filter options moved next to each other to make use of space after noticing the filter options are all relatively short text
+  - Login corner in upper right as is often done
+
+  ![Sketch 3 for consumer mobile catalog](consumer_mobile_catalog_sketch2.jpg)
+
+  - Exploring options for filter/sort form at the top
+  - Sketching out a dropdown / expansion option (which is done on sites such as JSTOR on mobile)
+  - Plan for if an image is not available - slightly grayed out picture used for all such cases
+
+  2. Catalog view for consumers on desktop iterations
+
+  ![Sketch 1 for consumer desktop catalog](consumer_desktop_catalog_sketch1.jpg)
+
+  - Drawing on similar website layouts like rareseeds.com, sidebar with image grid to the right
+  - Only colloquial names needed to be visible because consumers like Abi are only interested in the most well-known names; she is less familiar with scientific names and has no need for plant IDs
+  - Important for consumers to have images so that Abi can look for plants that fit her vision of her garden
+
+  3. Details page for consumers on mobile iterations
+
+  ![Sketch 1 for consumer mobile details](consumer-mobile-details-sketch1.jpg)
+
+  - Use familiar layout of name above one large image at top with bullet points for information
+  - Abi can quickly find gardening information immediately below the image and if she wants to see play types, they are also visible
+
+  4. Details page for consumers on desktop iterations
+
+  ![Sketch 1 for consumer desktop details](consumer-desktop-details-sketch1.jpg)
+
+  - Avoids use of a hero image by aligning image next to text
 
 
 _Final Design:_
 
-TODO
+1. Catalog view for consumers on mobile
 
+![Final sketch for consumer mobile catalog](consumer_mobile_catalog_sketch_final.jpg)
+
+- Largely similar to sketch 2, but two photos on each row instead of one so that the user is not overwhelmed with large photos
+- Follows the layout of similar sites such as rareseeds.com
+- Uses collapses filter section to save space vertically
+
+2. Catalog view for consumers on desktop
+
+![Final sketch for consumer desktop catalog](consumer_desktop_catalog_sketch_final.jpg)
+
+- Iterates on sketch 1 by moving the images down slightly, allowing space at the top to show how many results were found
+- Also moved sort from the sidebar towards the top right in a dropdown, which is a more familiar design pattern to both Abi and Tim
+
+3. Details page for consumers on mobile
+
+![Final sketch for consumer mobile details](consumer-mobile-details-sketch-final.jpg)
+
+- Changed play types from bullet points into round tags to offset them from the gardening information and limit scrolling and shift focus to the gardening content
+
+ 4. Details page for consumers on desktop
+
+![Final sketch for consumer desktop details](consumer-desktop-details-sketch-final.jpg)
+
+- Moved plant name to the right side to better support scanning styles - when the text content is all placed towards the right half, Abi will have an easier time getting a quick overview
 
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
