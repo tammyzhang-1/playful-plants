@@ -145,7 +145,7 @@ Pages to be planned:
 - Log in page for administrators
 
 URLs:
-- /catalog for catalog view
+- / for catalog view
 - /plant-name for details page (different for each plant)
 - /login for login page
 
@@ -159,6 +159,7 @@ Thinking process for deciding what data is shown:
   - However, since she has children who she wants to engage, it may be helpful for her to see play types supported on the details page to see the possible positive side benefits of choosing the plant for her kids
 - In conclusion, the catalog views will have a different set of filters for each audience to support their different priorities, but the detail pages will appear the same for both
   - Only exception is that administrators can see options to edit on the details page
+  - Revision: administrators' details page will be the edit page; the elements will be form elements right away
 
 
   1. Catalog view for consumers on mobile iterations
@@ -179,24 +180,55 @@ Thinking process for deciding what data is shown:
   2. Catalog view for consumers on desktop iterations
 
   ![Sketch 1 for consumer desktop catalog](consumer_desktop_catalog_sketch1.jpg)
+  ![Sketch 2 for consumer desktop catalog](consumer_desktop_catalog_sketch2.jpg)
 
   - Drawing on similar website layouts like rareseeds.com, sidebar with image grid to the right
   - Only colloquial names needed to be visible because consumers like Abi are only interested in the most well-known names; she is less familiar with scientific names and has no need for plant IDs
   - Important for consumers to have images so that Abi can look for plants that fit her vision of her garden
 
+  - Sketch 2 iterates on sketch 1 by moving the images down slightly, allowing space at the top to show how many results were found
+  - Also moved sort from the sidebar towards the top right in a dropdown, which is a more familiar design pattern to both Abi and Tim
+
   3. Details page for consumers on mobile iterations
 
   ![Sketch 1 for consumer mobile details](consumer-mobile-details-sketch1.jpg)
+  ![Sketch 2 for consumer mobile details](consumer-mobile-details-sketch2.jpg)
 
+  - Page that is displayed when the consumer clicks on a plant image or name in the broader catalog
   - Use familiar layout of name above one large image at top with bullet points for information
   - Abi can quickly find gardening information immediately below the image and if she wants to see play types, they are also visible
+
+  - Sketch 2 changed play types from bullet points into round tags to offset them from the gardening information and limit scrolling and shift focus to the gardening content
 
   4. Details page for consumers on desktop iterations
 
   ![Sketch 1 for consumer desktop details](consumer-desktop-details-sketch1.jpg)
+  ![Sketch 2 for consumer desktop details](consumer-desktop-details-sketch2.jpg)
 
+  - Page that is displayed when the consumer clicks on a plant image or name in the broader catalog
   - Avoids use of a hero image by aligning image next to text
 
+  - Sketch 2 moved plant name to the right side to better support scanning styles - when the text content is all placed towards the right half, Abi will have an easier time getting a quick overview
+
+  5. Catalog view for administrators on desktop iterations
+
+  ![Sketch 1 for admin desktop catalog](admin-desktop-catalog-sketch1.jpg)
+  ![Sketch 2 for admin desktop catalog](admin-desktop-catalog-sketch2.jpg)
+
+  - Add form at top for quick access; sidebar for filtering and sorting so that Tim can see changes applied immediately
+  - Images not needed because the admin are more concerned with the play types than the other information, so each entry is a horizontal "card" that can be clicked on for a more details page identical to the consumers'
+
+  - Sketch 2 showed number of results and moved sorting to an upper dropdown menu to better match known design patterns and have it match the consumer catalog slightly more
+  - Put edit and delete icon buttons on the upper right of each entry as a shortcut for updating the plant
+
+  6. Details page for administrators on desktop iterations
+
+  ![Sketch 1 for admin desktop details](admin-desktop-details-sketch1.jpg)
+  ![Sketch 2 for admin desktop details](admin-desktop-details-sketch2.jpg)
+
+  - The details page for the admin has slightly more information than for the consumer because the details page also serves as the admin's edit form for each entry, so all information needs to be present if the admin wants to update
+  - Each element is an editable form element, so that Tim can efficiently update entries without having to click extra buttons
+  - Experimenting with moving around parts of the form to accommodate desktop's large size
 
 _Final Design:_
 
@@ -212,20 +244,34 @@ _Final Design:_
 
 ![Final sketch for consumer desktop catalog](consumer_desktop_catalog_sketch_final.jpg)
 
-- Iterates on sketch 1 by moving the images down slightly, allowing space at the top to show how many results were found
-- Also moved sort from the sidebar towards the top right in a dropdown, which is a more familiar design pattern to both Abi and Tim
+- Increased spacing between images vertically to be less visually crowded in Abi's point of view
+- Added dropdown menu in filter because the type of plant is better suited to that than a list of checkboxes, given the type can only be one of a list
 
 3. Details page for consumers on mobile
 
 ![Final sketch for consumer mobile details](consumer-mobile-details-sketch-final.jpg)
 
-- Changed play types from bullet points into round tags to offset them from the gardening information and limit scrolling and shift focus to the gardening content
+- Made list of tags of supported play types from inline into block because on mobile, there may not be enough space for wrapping to work properly
 
  4. Details page for consumers on desktop
 
 ![Final sketch for consumer desktop details](consumer-desktop-details-sketch-final.jpg)
 
-- Moved plant name to the right side to better support scanning styles - when the text content is all placed towards the right half, Abi will have an easier time getting a quick overview
+- Expanded text content to better fit what what likely happen - there may be empty space underneath the image, but Abi has likely seen this in similar websites before, especially those that are associated with shopping
+- Prevents Abi's eyes from having to jump to different spots on the page
+
+5. Catalog view for administrators on desktop
+
+![Final sketch for admin desktop catalog](admin-desktop-catalog-sketch-final.jpg)
+
+- Fixed margin inconsistencies in sketch 2 by aligning everything in an entry to the left
+
+6. Details page for administrators on desktop
+
+![Final sketch for admin desktop details](admin-desktop-details-sketch-final.jpg)
+
+- Decided to move form elements from being underneath the image to the side in a stacked layout with checkboxes being inline as needed, so that the form has good alignment and is filled out in a smooth vertical motion
+- This way Tim does not have to jump around the page to fill out all fields and the layout is more similar to the details page seen by the consumers
 
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
