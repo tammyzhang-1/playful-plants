@@ -277,7 +277,7 @@ _Final Design:_
 
 > Write a one paragraph (6-8 sentences) reflection explaining how you used design patterns for media catalogs in your site's final design.
 
-TODO
+The login button is placed in the upper right corner, where it is typically located on many websites. On desktop, a sidebar with filters is a common design pattern, especially one that is located on the left side and is aligned with the media so that changes can be applied adjacently. Sorting is also usually done in dropdown menus on the upper right and is separate from the filtering sidebar. For the consumer, a grid of images was used with limited text associated with each, a common simple layout for media catalogs. By being able to see a separate page with more details by clicking on each square, this design emulates many similar websites with a catalog. Finally, aligning text on the details page towards the right half and the image on the left is following a common pattern seen in many shopping sites.
 
 
 ### Cognitive Styles Explanation/Reflection (Milestone 1)
@@ -286,12 +286,12 @@ TODO
 
 _Consumer Cognitive Styles Reflection:_
 
-TODO
+By using very common design patterns and a simple layout with high amounts of alignment, Abi sees aspects of the website as familiar and predictable, which suits her lower computer self-efficacy and attitude toward risk. By placing the filters in a visually prominent location, Abi can also quickly search for the plants that will suit her garden without having to scroll or click around too much, suiting her motivations. She wants to accomplish her tasks using comfortable methods instead of experimentation, so familiar steps like clicking on recognizable elements helps her learn by process. By making the images and plant names clickable links on catalog view, she feels comfortable taking the next step after finding a plant she wants to know more about. With catalog view, since everything is visible in a quick overview, Abi can look over what the site offers as a whole instead of immediately choosing a specific plant's information, suiting her information processing style.
 
 
 _Site Administrator Cognitive Styles Reflection:_
 
-TODO
+On catalog view, subheadings for different sections like Add Plant, Refine Results, and Results allow Tim to find leads to figure out how to accomplish tasks. This suits his selective information processing style. The edit and delete buttons being available immediately next to each entry serve as shortcuts and suit Tim's high computer self-efficacy and risk tolerance. He is more likely to find these tools useful than be hesitant to click on them. Since he likes tinkering and is motivated by exploration, these details like small buttons are something that Tim is likely to notice and make use of. Instead of following a process like clicking on one entry and then clicking an edit button, then clicking into a field to change it, his high risk tolerance allows him to utilize shortcut tools without much concern.
 
 
 ## Implementation Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
@@ -301,11 +301,7 @@ TODO
 > **Hint: You probably need a table for "entries", `tags`, `"entry"_tags`** (stores relationship between entries and tags), and a `users` tables.
 > **Hint: For foreign keys, use the singular name of the table + _id.** For example: `image_id` and `tag_id` for the `image_tags` (tags for each image) table.
 
-Table: TODO
 
-- field1: TYPE {constraints...},
-- field2...
-- TODO
 
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
