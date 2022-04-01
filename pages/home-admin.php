@@ -257,124 +257,132 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button">Log out</button>
+    <button type="button"><a href="/">Log out</a></button>
   </header>
 
   <main>
     <!-- form for adding a plant to the catalog -->
-    <section id="add-plant-form">
-      <h2>Add new plant</h2>
-      <form id="add-plant" method="post" action="/" novalidate>
-        <div class="main-add">
-          <!-- div containing two text fields of form -->
-          <div class="text-fields">
-            <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>
-            <div class="add-text">
-              <label for="plant-name">Plant Name (Colloquial):</label>
-              <input type="text" name="plant-name" id="plant-name" value="<?php echo htmlspecialchars($sticky_name); ?>"/>
-            </div>
+    <div id="add-plant-form">
+      <div>
+        <h2>Add new plant</h2>
+      </div>
 
-            <div class="feedback <?php echo $scientific_name_feedback_class; ?>">A scientific name is required.</div>
-            <div class="add-text">
-              <label for="scientific-name">Plant Name (Scientific):</label>
-              <input type="text" name="scientific-name" id="scientific-name" value="<?php echo htmlspecialchars($sticky_scientific_name); ?>" />
-            </div>
-
-            <div class="feedback <?php echo $plant_id_feedback_class; ?>">A plant ID is required.</div>
-            <div class="feedback <?php echo $plant_id_unique_feedback_class; ?>">A plant with that ID already exists.</div>
-            <div class="add-text">
-              <label for="plant-id">Plant ID:</label>
-              <input type="text" name="plant-id" id="plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
-            </div>
-          </div>
-
-          <!-- div containing multiple select section of form for play types -->
-          <div class="add-play-type">
-            <div class="feedback <?php echo $play_type_feedback_class; ?>">At least one supported play type is required.</div>
-            <div class="play-checkboxes">
-              <div class="play-type">
-                <input type="checkbox" name="add-exploratory-constructive" id="add-exploratory-constructive" <?php echo $sticky_exploratory_constructive; ?>/>
-                <label for="add-exploratory-constructive">Exploratory Constructive Play</label>
+      <div class="add-body">
+        <form id="add-plant" method="post" action="/" novalidate>
+          <div class="main-add">
+            <!-- div containing text fields of form -->
+            <div class="text-fields">
+              <h3>Basic Information</h3>
+              <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>
+              <div class="add-text">
+                <label for="plant-name">Plant Name (Colloquial):</label>
+                <input type="text" name="plant-name" id="plant-name" value="<?php echo htmlspecialchars($sticky_name); ?>"/>
               </div>
 
-              <div class="play-type">
-                <input type="checkbox" name="add-exploratory-sensory" id="add-exploratory-sensory" <?php echo $sticky_exploratory_sensory; ?>/>
-                <label for="add-exploratory-sensory">Exploratory Sensory Play</label>
+              <div class="feedback <?php echo $scientific_name_feedback_class; ?>">A scientific name is required.</div>
+              <div class="add-text">
+                <label for="scientific-name">Plant Name (Scientific):</label>
+                <input type="text" name="scientific-name" id="scientific-name" value="<?php echo htmlspecialchars($sticky_scientific_name); ?>" />
               </div>
 
-              <div class="play-type">
-                <input type="checkbox" name="add-physical" id="add-physical" <?php echo $sticky_physical; ?>/>
-                <label for="add-physical">Physical Play</label>
-              </div>
-
-              <div class="play-type">
-                <input type="checkbox" name="add-imaginative" id="add-imaginative" <?php echo $sticky_imaginative; ?>/>
-                <label for="add-imaginative">Imaginative Play</label>
-              </div>
-
-              <div class="play-type">
-                <input type="checkbox" name="add-restorative" id="add-restorative" <?php echo $sticky_restorative; ?>/>
-                <label for="add-restorative">Restorative Play</label>
-              </div>
-
-              <div class="play-type">
-                <input type="checkbox" name="add-expressive" id="add-expressive" <?php echo $sticky_expressive; ?>/>
-                <label for="add-expressive">Expressive Play</label>
-              </div>
-
-              <div class="play-type">
-                <input type="checkbox" name="add-rules" id="add-rules" <?php echo $sticky_rules; ?>/>
-                <label for="add-rules">Play with Rules</label>
-              </div>
-
-              <div class="play-type">
-                <input type="checkbox" name="add-bio" id="add-bio" <?php echo $sticky_bio; ?>/>
-                <label for="add-bio">Bio Play</label>
+              <div class="feedback <?php echo $plant_id_feedback_class; ?>">A plant ID is required.</div>
+              <div class="feedback <?php echo $plant_id_unique_feedback_class; ?>">A plant with that ID already exists.</div>
+              <div class="add-text">
+                <label for="plant-id">Plant ID:</label>
+                <input type="text" name="plant-id" id="plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
               </div>
             </div>
-            <!-- code for adding gardening information -->
-          <!-- </div>
-            <div class="garden-type">
-              <input type="checkbox" name="add-perennial" id="add-perennial"/>
-              <label for="add-perennial">Perennial</label>
-            </div>
-            <div class="garden-type">
-              <input type="checkbox" name="add-annual" id="add-annual"/>
-              <label for="add-annual">Annual</label>
-            </div>
-            <div class="garden-type">
-              <input type="checkbox" name="add-full-sun" id="add-full-sun"/>
-              <label for="add-full-sun">Full Sun</label>
-            </div>
-            <div class="garden-type">
-              <input type="checkbox" name="add-partial-shade" id="add-partial-shade"/>
-              <label for="add-partial-shade">Partial Shade</label>
-            </div>
-            <div class="garden-type">
-              <input type="checkbox" name="add-full-shade" id="add-full-shade"/>
-              <label for="add-full-shade">Full Shade</label>
-            </div>
-          </div>
 
-          <div class="garden-type">
-            <label for="add-type-select">Plant type:  </label>
-              <select name="add-type-select" id="add-type-select">
-                <option value="none">None selected</option>
-                <option value="shrub">Shrub</option>
-                <option value="grass">Grass</option>
-                <option value="vine">Vine</option>
-                <option value="tree">Tree</option>
-                <option value="flower">Flower</option>
-                <option value="groundcover">Groundcover</option>
-                <option value="other">Other</option>
-              </select>
+            <!-- div containing multiple select section of form for play types -->
+            <div class="add-play-type">
+              <h3>Supported Play Types</h3>
+              <div class="play-checkboxes">
+                <div class="play-type">
+                  <input type="checkbox" name="add-exploratory-constructive" id="add-exploratory-constructive" <?php echo $sticky_exploratory_constructive; ?>/>
+                  <label for="add-exploratory-constructive">Exploratory Constructive Play</label>
+                </div>
+
+                <div class="play-type">
+                  <input type="checkbox" name="add-exploratory-sensory" id="add-exploratory-sensory" <?php echo $sticky_exploratory_sensory; ?>/>
+                  <label for="add-exploratory-sensory">Exploratory Sensory Play</label>
+                </div>
+
+                <div class="play-type">
+                  <input type="checkbox" name="add-physical" id="add-physical" <?php echo $sticky_physical; ?>/>
+                  <label for="add-physical">Physical Play</label>
+                </div>
+
+                <div class="play-type">
+                  <input type="checkbox" name="add-imaginative" id="add-imaginative" <?php echo $sticky_imaginative; ?>/>
+                  <label for="add-imaginative">Imaginative Play</label>
+                </div>
+
+                <div class="play-type">
+                  <input type="checkbox" name="add-restorative" id="add-restorative" <?php echo $sticky_restorative; ?>/>
+                  <label for="add-restorative">Restorative Play</label>
+                </div>
+
+                <div class="play-type">
+                  <input type="checkbox" name="add-expressive" id="add-expressive" <?php echo $sticky_expressive; ?>/>
+                  <label for="add-expressive">Expressive Play</label>
+                </div>
+
+                <div class="play-type">
+                  <input type="checkbox" name="add-rules" id="add-rules" <?php echo $sticky_rules; ?>/>
+                  <label for="add-rules">Play with Rules</label>
+                </div>
+
+                <div class="play-type">
+                  <input type="checkbox" name="add-bio" id="add-bio" <?php echo $sticky_bio; ?>/>
+                  <label for="add-bio">Bio Play</label>
+                </div>
+              </div>
             </div>
-          </div> -->
-          <div class="submit">
-            <input id="add-submit" type="submit" name="add-plant" value="Add Plant" />
+              <!-- code for adding gardening information -->
+            <div class="garden-info">
+              <h3>Gardening Information</h3>
+              <div class="garden-type">
+                <input type="checkbox" name="add-perennial" id="add-perennial"/>
+                <label for="add-perennial">Perennial</label>
+              </div>
+              <div class="garden-type">
+                <input type="checkbox" name="add-annual" id="add-annual"/>
+                <label for="add-annual">Annual</label>
+              </div>
+              <div class="garden-type">
+                <input type="checkbox" name="add-full-sun" id="add-full-sun"/>
+                <label for="add-full-sun">Full Sun</label>
+              </div>
+              <div class="garden-type">
+                <input type="checkbox" name="add-partial-shade" id="add-partial-shade"/>
+                <label for="add-partial-shade">Partial Shade</label>
+              </div>
+              <div class="garden-type">
+                <input type="checkbox" name="add-full-shade" id="add-full-shade"/>
+                <label for="add-full-shade">Full Shade</label>
+              </div>
+
+              <div class="garden-type">
+                <label for="add-type-select">Plant type:  </label>
+                  <select name="add-type-select" id="add-type-select">
+                    <option value="none">None selected</option>
+                    <option value="shrub">Shrub</option>
+                    <option value="grass">Grass</option>
+                    <option value="vine">Vine</option>
+                    <option value="tree">Tree</option>
+                    <option value="flower">Flower</option>
+                    <option value="groundcover">Groundcover</option>
+                    <option value="other">Other</option>
+                  </select>
+              </div>
+            </div>
           </div>
         </form>
-    </section>
+      </div>
+      <div class="submit">
+              <input id="add-submit" type="submit" name="add-plant" value="Add Plant" />
+            </div>
+    </div>
 
     <?php if ($show_confirmation) { ?>
       <!-- confirmation after successfully adding a plant, hidden by default -->
@@ -453,10 +461,11 @@
       <!-- Actual database section -->
       <section class="table">
       <div class="catalog-header">
-          <h2>3 Results</h2>
+          <h2>1 Result</h2>
           <div>
             <select name="media-sort" id="media-sort">
-              <option value="none">Sort By</option>
+              <option value="default">Most recent to oldest</option>
+              <option value="oldest">Oldest to most recent</option>
               <option value="alphabetical-asc">Alphabetical by Name A-Z</option>
               <option value="alphabetical-desc">Alphabetical by Name Z-A</option>
             </select>

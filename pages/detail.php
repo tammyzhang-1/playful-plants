@@ -11,7 +11,7 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button">Log in</button>
+    <button type="button"><a href="/detail-admin">Log in</a></button>
   </header>
 
   <main>

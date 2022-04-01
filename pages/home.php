@@ -11,7 +11,7 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button">Log in</button>
+    <button type="button"><a href="/admin">Log in</a></button>
   </header>
 
   <main>
@@ -88,8 +88,8 @@
         <!-- Media grid section -->
         <div id="media-grid">
           <div class="photo">
-            <img src="public/images/FL_27.jpg" alt="">
-            <p>High Mallow</p>
+            <a href="/detail"><img src="public/images/FL_27.jpg" alt=""/></a>
+            <a href="/detail"><p>High Mallow</p></a>
           </div>
           <div class="photo">
             <img src="public/images/GA_03.jpg" alt="">

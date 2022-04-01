@@ -11,7 +11,7 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button">Log out</button>
+    <button type="button"><a href="/">Log out</a></button>
   </header>
   <main>
   <div class="detail-page">
