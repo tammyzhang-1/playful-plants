@@ -301,21 +301,83 @@ On catalog view, subheadings for different sections like Add Plant, Refine Resul
 > **Hint: You probably need a table for "entries", `tags`, `"entry"_tags`** (stores relationship between entries and tags), and a `users` tables.
 > **Hint: For foreign keys, use the singular name of the table + _id.** For example: `image_id` and `tag_id` for the `image_tags` (tags for each image) table.
 
+Table: entries
 
+- id: INTEGER {PK, U, NN, AI}
+- name: STRING {NN}
+- scientific_name: STRING {NN}
+- plant_id: STRING {U, NN}
+
+- exploratory_constructive_play: INTEGER {NN}
+- exploratory_sensitive_play : INTEGER {NN}
+- physical_play: INTEGER {NN}
+- imaginative_play: INTEGER {NN}
+- restorative_play: INTEGER {NN}
+- expressive_play: INTEGER {NN}
+- play_with_rules: INTEGER {NN}
+- bio_play: INTEGER {NN}
+
+Table: tags
+
+- id: INTEGER {PK, U, NN, AI}
+- name: TEXT {NN}
+
+Table: entry_tags
+
+- id: INTEGER {PK, U, NN, AI}
+- entry_id: {NN} FOREIGN KEY REFERENCES entries
+- tag_id: {NN} FOREIGN KEY REFERENCES tags
+
+Table: users
+
+- id: INTEGER {PK, U, NN, AI}
+- username: TEXT {U, NN}
+- password: TEXT {NN}
 
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
 > Plan _all_ of your database queries. You may use natural language, pseudocode, or SQL.
 
+- For admin:
+
 ```
-TODO: Plan a query
+// all records
+SELECT * FROM entries;
 ```
 
 ```
-TODO: Plan another query
+// filtering
+SELECT * FROM entries WHERE (the play type(s) checked by the admin is 1, indicating the plant supports it);
+
+// sorting
+SELECT * FROM entries ORDER BY id DESC; // for most recent to oldest
+SELECT * FROM entires ORDER BY name ASC; // for alphabetical A-Z);
 ```
 
-TODO: ...
+```
+// editing a plant entry
+UPDATE entries SET
+  field1 = value1,
+  field2 = value2,
+  ...
+  WHERE (id=___);
+
+  DELETE FROM entries WHERE (id=___);
+
+  INSERT INTO entries (fields) VALUES (parameter markers using an array);
+```
+
+
+- For consumer:
+```
+// filtering
+SELECT * FROM entries WHERE (the gardening conditions checked by the consumer is 1, indicating it is true for the plant);
+
+// sorting
+SELECT * FROM entries ORDER BY id DESC; // for most recent to oldest
+SELECT * FROM entires ORDER BY name ASC; // for alphabetical A-Z);
+```
+
 
 
 ### Code Planning (Milestone 1, Milestone 2, Milestone 3, Final Submission)
@@ -323,8 +385,44 @@ TODO: ...
 > Tip: Break this up by pages. It makes it easier to plan.
 
 ```
-TODO: WRITE YOUR PSEUDOCODE HERE, between the back-tick lines.
+// for outputting into html for admin catalog view after retrieving records:
+for each record in records:
+  echo the name into the heading of a data "entry" div
+  echo the scientific name into the heading
+  echo the plant id into the paragraph element below the heading
+  check each field related to play types and see what it is
+    if it is a 1:
+      echo out the name of the field into a list element
+    else:
+      do nothing
 ```
+
+```
+// for outputting into html for consumer catalog view after retrieving records:
+for each record in records:
+  echo image associated with the id for the record into the square div
+  echo the name into the div underneath the picture
+```
+
+```
+// big picture add form validation:
+check if form is valid
+if form valid:
+  show confirmation message
+else:
+  form is not valid
+  set all variables of form input to sticky values
+  remove hidden from the feedback messages for the affected field(s)
+```
+
+```
+// editing an entry
+if the admin clicks the edit button or clicks on a plant name from catalog view:
+  use hidden inputs to echo current data for that entry id into the edit form that comes up
+  if the admin clicks save:
+    update the database via database query where the id from the hidden input is used so the right entry is edited
+```
+
 
 ```
 TODO: WRITE MORE PSEUDOCODE HERE, between the back-tick lines.
