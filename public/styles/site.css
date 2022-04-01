@@ -3,6 +3,13 @@ html {
     height: 100%;
 }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1em;
+}
+
 body, main {
     height: 100%;
     width: 100%;
@@ -33,6 +40,7 @@ h2, h3 {
     margin-left: 0.5em;
     background-color: #f0f7ee;
     border-radius: 0.75em;
+    height: 100%;
 }
 
 form {
@@ -146,6 +154,7 @@ input:hover {
 
 .catalog {
     display: flex;
+    height: 100%;
 }
 
 .table {
@@ -153,14 +162,22 @@ input:hover {
 }
 
 .entry {
-    padding: 0 2em 0 5em;
+    padding-right: 2em;
+    padding-left: 2em;
+    padding-bottom: 2em;
     margin-bottom: 5em;
+    border-style: solid;
+    border-width: thin;
+    border-color: #e9e9e9;
+    margin-left: 3em;
+    margin-right: 3em;
 }
 
 .entry ul {
     display: flex;
     flex-wrap: wrap;
     row-gap: 1em;
+    padding-left: 0;
 }
 
 .entry li {
@@ -173,12 +190,22 @@ input:hover {
     padding-right: 1.5em;
     padding-left: 1.5em;
     border-radius: 1em;
-
 }
 
 .entry p {
-    padding-left: 2em;
     font-size: 1.25em;
+    margin-top: 0.25em;
+}
+
+.entry-edit-buttons {
+    display: flex;
+    gap: 1em;
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #error-message {
@@ -192,6 +219,44 @@ input:hover {
 
 .feedback {
     color: #ab4653;
+}
+
+#filter-garden-submit {
+    margin-top: 1em;
+}
+
+#media-grid {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-left: 2em;
+}
+
+.photo {
+    max-width: 30%;
+}
+
+.photo img {
+    max-width: 100%;
+}
+
+.photo p {
+    margin-top: 0.25em;
+}
+
+.catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.media-catalog {
+    display: flex;
+    height: 100%;
+    justify-content: center;
 }
 
 @media print {
@@ -224,5 +289,28 @@ input:hover {
     }
     .confirmation {
         display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .photo {
+        max-width: 45%;
+    }
+    .sidebar {
+        padding-left: 3em;
+    }
+}
+
+@media (max-width: 700px) {
+    .catalog-header {
+        flex-direction: column;
+        margin-bottom: 1em;
+    }
+}
+
+@media (max-width: 800px) {
+    .media-catalog {
+        flex-direction: column;
+        justify-content: flex-start;
     }
 }
