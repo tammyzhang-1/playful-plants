@@ -332,12 +332,47 @@
                 <label for="add-bio">Bio Play</label>
               </div>
             </div>
+            <!-- code for adding gardening information -->
+          <!-- </div>
+            <div class="garden-type">
+              <input type="checkbox" name="add-perennial" id="add-perennial"/>
+              <label for="add-perennial">Perennial</label>
+            </div>
+            <div class="garden-type">
+              <input type="checkbox" name="add-annual" id="add-annual"/>
+              <label for="add-annual">Annual</label>
+            </div>
+            <div class="garden-type">
+              <input type="checkbox" name="add-full-sun" id="add-full-sun"/>
+              <label for="add-full-sun">Full Sun</label>
+            </div>
+            <div class="garden-type">
+              <input type="checkbox" name="add-partial-shade" id="add-partial-shade"/>
+              <label for="add-partial-shade">Partial Shade</label>
+            </div>
+            <div class="garden-type">
+              <input type="checkbox" name="add-full-shade" id="add-full-shade"/>
+              <label for="add-full-shade">Full Shade</label>
+            </div>
           </div>
-        </div>
 
-        <div class="submit">
-          <input id="add-submit" type="submit" name="add-plant" value="Add Plant" />
-        </div>
+          <div class="garden-type">
+            <label for="add-type-select">Plant type:  </label>
+              <select name="add-type-select" id="add-type-select">
+                <option value="none">None selected</option>
+                <option value="shrub">Shrub</option>
+                <option value="grass">Grass</option>
+                <option value="vine">Vine</option>
+                <option value="tree">Tree</option>
+                <option value="flower">Flower</option>
+                <option value="groundcover">Groundcover</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div> -->
+          <div class="submit">
+            <input id="add-submit" type="submit" name="add-plant" value="Add Plant" />
+          </div>
         </form>
     </section>
 

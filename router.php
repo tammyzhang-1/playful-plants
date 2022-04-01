@@ -27,7 +27,11 @@ if (preg_match('/^\/public\//', $request_uri) || $request_uri == '/favicon.ico')
   require 'pages/home.php';
 } else if (match_routes($request_uri, '/admin')) {
   require 'pages/home-admin.php';
-} else {
+} else if (match_routes($request_uri, '/detail')) {
+  require 'pages/detail.php';
+} else if (match_routes($request_uri, '/detail-admin')) {
+  require 'pages/detail-admin.php';
+}else {
   error_log("  404 Not Found: " . $request_uri);
   http_response_code(404);
   require 'pages/404.php';
