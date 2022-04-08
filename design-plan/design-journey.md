@@ -316,6 +316,7 @@ Table: entries
 - expressive_play: INTEGER {NN}
 - play_with_rules: INTEGER {NN}
 - bio_play: INTEGER {NN}
+- Revision: above play types will be removed as fields in this table and will become tags instead
 
 Table: tags
 
@@ -333,6 +334,8 @@ Table: users
 - id: INTEGER {PK, U, NN, AI}
 - username: TEXT {U, NN}
 - password: TEXT {NN}
+
+LATER REVISION - play types will instead be included under tags, which removes all of the play type fields from table "entries". Examples of possible records under "name" in table "tags" would be "bio play", "restorative play", "shrub", "partial shade" and other information that is not the main plant data (plant name, scientific name, plant id).
 
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)

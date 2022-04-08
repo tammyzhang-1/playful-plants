@@ -1,5 +1,5 @@
 <?php
-  $db = open_sqlite_db("tmp/site.sqlite");
+  // $db = init_sqlite_db('db/site.sqlite', 'db/init_sql');
 
   // add form feedback classes
   $name_feedback_class = 'hidden';
@@ -69,15 +69,15 @@
       $plant_id_feedback_class = '';
     } else {
       // check plant id is unique
-      $check_records = exec_sql_query($db, "SELECT * FROM plants WHERE (plant_id = :plant_id);",
-        array(
-          ':plant_id' => $plant_id
-        )
-      ) -> fetchAll();
-      if (count($check_records) > 0) {
-        $add_form_valid = False;
-        $plant_id_unique_feedback_class = '';
-      }
+      // $check_records = exec_sql_query($db, "SELECT * FROM plants WHERE (plant_id = :plant_id);",
+      //   array(
+      //     ':plant_id' => $plant_id
+      //   )
+      // ) -> fetchAll();
+      // if (count($check_records) > 0) {
+      //   $add_form_valid = False;
+      //   $plant_id_unique_feedback_class = '';
+      // }
     }
 
     if (empty($exploratory_constructive) && empty($exploratory_sensory) && empty($physical) && empty($imaginative) && empty($restorative) && empty($expressive ) && empty($rules) && empty($bio)) {
@@ -87,21 +87,21 @@
 
     if ($add_form_valid) {
       // form is valid; add record to database
-      $result = exec_sql_query($db, "INSERT INTO plants (name, scientific_name, plant_id, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);",
-        array(
-          ':name' => $name,
-          ':scientific_name' => $scientific_name,
-          ':plant_id' => $plant_id,
-          ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
-          ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
-          ':physical' => ($physical) ? 1 : 0,
-          ':imaginative' => ($imaginative) ? 1 : 0,
-          ':restorative' => ($restorative) ? 1 : 0,
-          ':expressive' => ($expressive) ? 1 : 0,
-          ':rules' => ($rules) ? 1 : 0,
-          ':bio' => ($bio) ? 1 : 0
-        )
-      );
+      // $result = exec_sql_query($db, "INSERT INTO plants (name, scientific_name, plant_id, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);",
+      //   array(
+      //     ':name' => $name,
+      //     ':scientific_name' => $scientific_name,
+      //     ':plant_id' => $plant_id,
+      //     ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
+      //     ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
+      //     ':physical' => ($physical) ? 1 : 0,
+      //     ':imaginative' => ($imaginative) ? 1 : 0,
+      //     ':restorative' => ($restorative) ? 1 : 0,
+      //     ':expressive' => ($expressive) ? 1 : 0,
+      //     ':rules' => ($rules) ? 1 : 0,
+      //     ':bio' => ($bio) ? 1 : 0
+      //   )
+      // );
       if ($result) {
         $plant_added = True;
         $show_confirmation = True;
@@ -240,8 +240,8 @@
   // final filter/sort query
   $filter_query = $filter_base . $filter_where . $filter_order;
 
-  $records = exec_sql_query($db, $filter_query) -> fetchAll();
-  $queries_matching = count($records);
+  // $records = exec_sql_query($db, $filter_query) -> fetchAll();
+  // $queries_matching = count($records);
 ?>
 
 <!DOCTYPE html>
