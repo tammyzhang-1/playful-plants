@@ -1,5 +1,5 @@
 <?php
-  // $db = init_sqlite_db('db/site.sqlite', 'db/init_sql');
+  $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
   // add form feedback classes
   $name_feedback_class = 'hidden';

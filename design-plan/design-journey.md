@@ -307,6 +307,7 @@ Table: entries
 - name: STRING {NN}
 - scientific_name: STRING {NN}
 - plant_id: STRING {U, NN}
+- Revision: hardiness_zone: STRING {NN}
 
 - exploratory_constructive_play: INTEGER {NN}
 - exploratory_sensitive_play : INTEGER {NN}
@@ -336,6 +337,8 @@ Table: users
 - password: TEXT {NN}
 
 LATER REVISION - play types will instead be included under tags, which removes all of the play type fields from table "entries". Examples of possible records under "name" in table "tags" would be "bio play", "restorative play", "shrub", "partial shade" and other information that is not the main plant data (plant name, scientific name, plant id).
+
+REVISION 2 - category "hardiness zones" will be moved out of table "tags" and instead to "entries", because they function unlike the other fields in tags (are unique and not represented by boolean type data)
 
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)

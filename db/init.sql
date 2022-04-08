@@ -2,18 +2,20 @@ CREATE TABLE entries (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
     name TEXT NOT NULL,
     scientific_name TEXT NOT NULL,
-    plant_id TEXT NOT NULL UNIQUE,
+    plant_id TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE tags (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL
 );
 
 CREATE TABLE entry_tags (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    FOREIGN KEY (entry_id) REFERENCES entries(id) INTEGER NOT NULL,
-    FOREIGN KEY (tag_id) REFERENCES tags(id) INTEGER NOT NULL,
+    entry_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL,
+    FOREIGN KEY (entry_id) REFERENCES entries(id),
+    FOREIGN KEY (tag_id) REFERENCES tags(id)
 );
 
 CREATE TABLE users (
@@ -21,7 +23,6 @@ CREATE TABLE users (
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL
 );
-
 
 INSERT INTO entries (id, name, scientific_name, plant_id) VALUES (1, "Cutleaf Weeping Birch", "Betula pendula 'Dalecarlica'", "TR_07");
 INSERT INTO entries (id, name, scientific_name, plant_id) VALUES (2, "High mallow", "Malva sylvestris", "FL_27");
@@ -171,8 +172,27 @@ INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (105, 12, 12);
 INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (106, 13, 12);
 INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (107, 15, 12);
 INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (108, 16, 12);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (109, 4, 13);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (110, 11, 13);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (111, 12, 13);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (112, 6, 15);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (113, 15, 15);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (114, 16, 15);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (115, 3, 16);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (116, 9, 16);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (117, 10, 17);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (118, 1, 18);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (119, 13, 18);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (120, 2, 19);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (121, 5, 19);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (122, 7, 19);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (123, 11, 19);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (124, 14, 19);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (125, 8, 20);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (126, 4, 21);
+INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (127, 12, 21);
 
 
-INSERT INTO users (id, username, password) VALUES (0, 'user1', 'password1'));
-INSERT INTO users (id, username, password) VALUES (1, 'user2', 'password2'));
-INSERT INTO users (id, username, password) VALUES (2, 'user3', 'password3'));
+INSERT INTO users (id, username, password) VALUES (0, 'user1', 'password1');
+INSERT INTO users (id, username, password) VALUES (1, 'user2', 'password2');
+INSERT INTO users (id, username, password) VALUES (2, 'user3', 'password3');
