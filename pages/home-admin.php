@@ -478,7 +478,10 @@
             <div class="entry-header">
               <h4><?php echo htmlspecialchars($record["name"]); ?><em> (<?php echo htmlspecialchars($record["scientific_name"]); ?>)</em></h4>
               <div class="entry-edit-buttons">
-                <button type="button">Edit</button>
+                <form method="get" action="/detail-admin/update">
+                  <input type="hidden" name="id" value="<?php echo $record["id"]; ?>" />
+                  <button type="submit">Edit</button>
+                </form>
                 <button type="button">Delete</button>
               </div>
             </div>

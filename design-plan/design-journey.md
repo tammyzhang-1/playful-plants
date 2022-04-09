@@ -476,7 +476,7 @@ if the admin clicks the edit button from catalog view:
 
 ```
 create form element where the submit button is the edit button
-<form method = "get" action="/admin/detail-admin" />
+<form method = "get" action="/admin/detail-admin">
 
 use hidden input to track what plant is being edited
 <input type="hidden" name="id" value="<?php echo $record["id"]; ?>"/>

@@ -1,3 +1,9 @@
+<?php
+  $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
+
+  $id = $_GET["id"] ?? NULL;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +11,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Playful Plants</title>
-  <link rel="stylesheet" type="text/css" href="public/styles/site.css"/>
+  <link rel="stylesheet" type="text/css" href="/public/styles/site.css" media="all"/>
+
 </head>
 
 <body>
@@ -16,7 +23,7 @@
   <main>
   <div class="detail-page">
     <div class="detail-photo">
-      <img src="public/images/FL_27.jpg" alt="">
+      <img src="/public/images/FL_27.jpg" alt="">
     </div>
     <div class="detail-text">
     <section class="edit-plant-form">
