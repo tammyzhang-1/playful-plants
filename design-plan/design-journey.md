@@ -432,18 +432,6 @@ for each record in records:
 ```
 
 ```
-when user clicks on image or plant name:
-  use <a> element for URL with query string parameters for a GET request
-
-the link on each image/name for every plant on catalog view should roughly be:
-<a href="/details?name=value>
-where name is "name" and value is $record["name"]
-
-Revision: since the names have spaces that will make the url less usable, ids will be used instead
-<a href="/details?id=$record["id"]> for each record in records
-```
-
-```
 php code at top of page:
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
@@ -461,16 +449,38 @@ $records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
 ```
 
 
+- Consumer details view
+
+```
+when user clicks on image or plant name:
+  use <a> element for URL with query string parameters for a GET request
+
+the link on each image/name for every plant on catalog view should roughly be:
+<a href="/details?name=value>
+where name is "name" and value is $record["name"]
+
+Revision: since the names have spaces that will make the url less usable, ids will be used instead
+<a href="/details?id=$record["id"]> for each record in records
+```
+
+
 - Admin details view
 
 ```
 // editing an entry
-if the admin clicks the edit button or clicks on a plant name from catalog view:
+if the admin clicks the edit button from catalog view:
   use hidden inputs to echo current data for that entry id into the edit form that comes up
   if the admin clicks save:
     update the database via database query where the id from the hidden input is used so the right entry is edited
 ```
 
+```
+create form element where the submit button is the edit button
+<form method = "get" action="/admin/detail-admin" />
+
+use hidden input to track what plant is being edited
+<input type="hidden" name="id" value="<?php echo $record["id"]; ?>"/>
+```
 
 - General
 
