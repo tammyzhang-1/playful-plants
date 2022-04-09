@@ -304,6 +304,10 @@ input:hover {
     max-width: 50%;
 }
 
+.detail-text {
+    max-width: 30%;
+}
+
 .garden-list {
     margin-bottom: 3em;
 }
