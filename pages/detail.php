@@ -3,12 +3,13 @@
 
   $id = $_GET["id"] ?? NULL;
 
-  $records = exec_sql_query($db, "SELECT * FROM entries WHERE (id=$id);") -> fetchAll();
+  $records = exec_sql_query($db, "SELECT * FROM entries WHERE (id=:id);", array(":id" => $id)) -> fetchAll();
+
   $record = $records[0];
 
   $tag_list = exec_sql_query($db, "SELECT tags.id, tags.name
   FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
-  WHERE (entry_tags.entry_id = $id);") -> fetchAll();
+  WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -40,14 +41,11 @@
         <h2><?php echo ucwords($record["name"]); ?></h2>
         <h3>Gardening information:</h3>
         <ul>
+          <li>Hardiness Zone: <?php echo $record["hardiness_zone"]; ?></li>
           <?php
           foreach ($tag_list as $tag) { ?>
             <?php echo "<li>" . $tag["name"] . "</li>"; ?>
           <?php } ?>
-          <!-- <li>Perennial</li>
-          <li>Full sun, partial shade</li>
-          <li>Hardiness Zone Range: 4-8</li>
-          <li>Type: flower</li> -->
         </ul>
       </div>
       <div class="play-list">

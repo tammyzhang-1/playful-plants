@@ -365,6 +365,12 @@ SELECT * FROM entires ORDER BY name ASC; // for alphabetical A-Z);
 ```
 
 ```
+// details page
+SELECT * FROM entries WHERE (id=$id);
+// then escape with array of parameter markers
+```
+
+```
 // editing a plant entry
 UPDATE entries SET
   field1 = value1,
@@ -394,9 +400,11 @@ SELECT * FROM entries ORDER BY name ASC; // for alphabetical A-Z);
 SELECT tags.id, tags.name
   FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
   WHERE (entry_tags.entry_id = $id);
+// then escape with array of parameter markers
 
 // returning the information associated with the plant entry
 SELECT * FROM entries WHERE (id = $id);
+// then escape with array of parameter markers
 ```
 
 
@@ -416,6 +424,7 @@ for each record in records:
 ```
 
 ```
+// dynamic output
 <div class="entry">
   <div class="entry-header">
     <h4> echo $name <em>(echo $scientific_name)</em></h4>
@@ -475,6 +484,7 @@ Revision: since the names have spaces that will make the url less usable, ids wi
 ```
 
 ```
+// dynamic output
 <div class="detail-page">
     <div class="detail-photo">
       <img src="public/images/[$plant_id].jpg" alt="">
@@ -514,6 +524,37 @@ create form element where the submit button is the edit button
 
 use hidden input to track what plant is being edited
 <input type="hidden" name="id" value="<?php echo $record["id"]; ?>"/>
+```
+
+```
+// dynamic output part 1
+$name = "";
+$scientific_name = "";
+$plant_id = "";
+
+$name = $record["name"];
+$scientific_name = $record["scientific_name"];
+$plant_id = $record["plant_id"];
+// where $record is the plant data retrieved using the viewed plant's id
+
+<section class="edit-plant-form">
+      <h2>Edit [$name]</h2>
+      <form id="edit-plant" method="post" action="/" novalidate>
+
+        <div class="edit-text">
+          <label for="edit-plant-name">Plant Name (Colloquial):</label>
+          <input type="text" name="edit-plant-name" id="edit-plant-name" value="[$name]"/>
+        </div>
+
+        <div class="edit-text">
+          <label for="edit-scientific-name">Plant Name (Scientific):</label>
+          <input type="text" name="edit-scientific-name" id="edit-scientific-name" value="[$scientific_name]" />
+        </div>
+
+        <div class="edit-text">
+          <label for="edit-plant-id">Plant ID:</label>
+            <input type="text" name="edit-plant-id" id="edit-plant-id" value="[$plant_id]" />
+        </div>
 ```
 
 - General

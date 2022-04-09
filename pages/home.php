@@ -103,7 +103,7 @@ $queries_matching = count($records);
               <!-- referencing mozilla documentation: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Img -->
               <!-- default.png is original work (created by Tammy Zhang) -->
               <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="public/images/<?php echo $record["plant_id"]; ?>.jpg" onerror=this.src="public/images/default.png" alt=""/></a>
-              <a href="/detail?id=<?php echo $record["id"]; ?>"><p><?php echo $record["name"]; ?></p></a>
+              <a href="/detail?id=<?php echo $record["id"]; ?>"><p><?php echo ucwords($record["name"]); ?></p></a>
             </div>
           <?php } ?>
         </div>
