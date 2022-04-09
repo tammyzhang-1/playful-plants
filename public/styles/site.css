@@ -46,6 +46,15 @@ h2, h3 {
     height: 100%;
 }
 
+.breadcrumb {
+    margin-left: 2em;
+    margin-top: 0.5em;
+}
+
+.breadcrumb a {
+    color: gray;
+}
+
 form {
     display: flex;
     flex-direction: column;

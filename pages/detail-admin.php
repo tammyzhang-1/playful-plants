@@ -20,6 +20,10 @@
     <h1>Playful Plants</h1>
     <button type="button"><a href="/">Log out</a></button>
   </header>
+  <div class="breadcrumb">
+    <a href="/admin">< Back to Catalog View</a>
+  </div>
+
   <main>
   <div class="detail-page">
     <div class="detail-photo">

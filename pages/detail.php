@@ -19,6 +19,9 @@
     <h1>Playful Plants</h1>
     <button type="button"><a href="/detail-admin">Log in</a></button>
   </header>
+  <div class="breadcrumb">
+    <a href="/">< Back to Home</a>
+  </div>
 
   <main>
   <div class="detail-page">
