@@ -25,7 +25,7 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button"><a href="/detail-admin">Log in</a></button>
+    <button type="button">Log in</button>
   </header>
   <div class="breadcrumb">
     <a href="/">< Back to Home</a>
@@ -34,7 +34,7 @@
   <main>
   <div class="detail-page">
     <div class="detail-photo">
-      <img src="public/images/<?php echo $record["plant_id"]; ?>.jpg" onerror=this.src="public/images/default.png" alt=""/>
+      <img src="/public/images/<?php echo $record["plant_id"];?>.jpg" onerror=this.src="public/images/default.png" alt=""/>
     </div>
     <div class="detail-text">
       <div class="garden-list">

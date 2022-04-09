@@ -2,6 +2,13 @@
   $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
   $id = $_GET["id"] ?? NULL;
+
+  $records = exec_sql_query($db, "SELECT * FROM entries WHERE (id=:id);", array(":id" => $id)) -> fetchAll();
+  $record = $records[0];
+
+  $tag_list = exec_sql_query($db, "SELECT tags.id, tags.name
+  FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
+  WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -27,26 +34,26 @@
   <main>
   <div class="detail-page">
     <div class="detail-photo">
-      <img src="/public/images/FL_27.jpg" alt="">
+      <img src="/public/images/<?php echo $record["plant_id"]; ?>.jpg" onerror=this.src="/public/images/default.png" alt=""/>
     </div>
     <div class="detail-text">
     <section class="edit-plant-form">
-      <h2>Edit High Mallow</h2>
+      <h2>Edit <?php echo ucwords(htmlspecialchars($record["name"])); ?></h2>
       <form id="edit-plant" method="post" action="/" novalidate>
 
         <div class="edit-text">
           <label for="edit-plant-name">Plant Name (Colloquial):</label>
-          <input type="text" name="edit-plant-name" id="edit-plant-name" value="High Mallow"/>
+          <input type="text" name="edit-plant-name" id="edit-plant-name" value="<?php echo ucwords(htmlspecialchars($record["name"])); ?>"/>
         </div>
 
         <div class="edit-text">
           <label for="edit-scientific-name">Plant Name (Scientific):</label>
-          <input type="text" name="edit-scientific-name" id="edit-scientific-name" value="Malva sylvestris" />
+          <input type="text" name="edit-scientific-name" id="edit-scientific-name" value="<?php echo htmlspecialchars($record["scientific_name"]); ?>" />
         </div>
 
         <div class="edit-text">
           <label for="edit-plant-id">Plant ID:</label>
-            <input type="text" name="edit-plant-id" id="edit-plant-id" value="FL_27" />
+            <input type="text" name="edit-plant-id" id="edit-plant-id" value="<?php echo htmlspecialchars($record["plant_id"]); ?>" />
         </div>
 
         <h3>Gardening characteristics:</h3>
