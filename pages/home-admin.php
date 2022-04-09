@@ -488,6 +488,7 @@
             <li>Type 3</li>
           </ul>
         </div>
+
       </section>
     </div>
   </main>

@@ -318,6 +318,7 @@ Table: entries
 - play_with_rules: INTEGER {NN}
 - bio_play: INTEGER {NN}
 - Revision: above play types will be removed as fields in this table and will become tags instead
+- Revision: above play types will be moved back as fields in this table instead of being tags
 
 Table: tags
 
@@ -337,6 +338,8 @@ Table: users
 - password: TEXT {NN}
 
 LATER REVISION - play types will instead be included under tags, which removes all of the play type fields from table "entries". Examples of possible records under "name" in table "tags" would be "bio play", "restorative play", "shrub", "partial shade" and other information that is not the main plant data (plant name, scientific name, plant id).
+
+LATER REVISION 2 - play types will be moved back under entries instead of tags because separating the play type tags from the other tags makes it less complex to echo out data in admin catalog
 
 REVISION 2 - category "hardiness zones" will be moved out of table "tags" and instead to "entries", because they function unlike the other fields in tags (are unique and not represented by boolean type data)
 
@@ -390,18 +393,19 @@ SELECT * FROM entires ORDER BY name ASC; // for alphabetical A-Z);
 > Plan any PHP code you'll need here using pseudocode.
 > Tip: Break this up by pages. It makes it easier to plan.
 
+- Admin catalog view
+
 ```
 // for outputting into html for admin catalog view after retrieving records:
 for each record in records:
   echo the name into the heading of a data "entry" div
   echo the scientific name into the heading
   echo the plant id into the paragraph element below the heading
-  check each field related to play types and see what it is
-    if it is a 1:
-      echo out the name of the field into a list element
-    else:
-      do nothing
+  if play type has value of 1, echo it into a list element
 ```
+
+
+- Consumer catalog view
 
 ```
 // for outputting into html for consumer catalog view after retrieving records:
@@ -409,6 +413,39 @@ for each record in records:
   echo image associated with the id for the record into the square div
   echo the name into the div underneath the picture
 ```
+
+```
+when user clicks on image or plant name:
+  use <a> element for URL with query string parameters for a GET request
+
+the link on each image/name for every plant on catalog view should roughly be:
+<a href="/details?name=value>
+where name is "name" and value is $record["name"]
+```
+
+```
+php code at top of page:
+$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
+
+$name = '';
+$scientific_name = '';
+$plant_id = '';
+$hardiness_zone = '';
+```
+
+
+- Admin details view
+
+```
+// editing an entry
+if the admin clicks the edit button or clicks on a plant name from catalog view:
+  use hidden inputs to echo current data for that entry id into the edit form that comes up
+  if the admin clicks save:
+    update the database via database query where the id from the hidden input is used so the right entry is edited
+```
+
+
+- General
 
 ```
 // big picture add form validation:
@@ -420,21 +457,6 @@ else:
   set all variables of form input to sticky values
   remove hidden from the feedback messages for the affected field(s)
 ```
-
-```
-// editing an entry
-if the admin clicks the edit button or clicks on a plant name from catalog view:
-  use hidden inputs to echo current data for that entry id into the edit form that comes up
-  if the admin clicks save:
-    update the database via database query where the id from the hidden input is used so the right entry is edited
-```
-
-
-```
-TODO: WRITE MORE PSEUDOCODE HERE, between the back-tick lines.
-```
-
-TODO: ...
 
 
 ### Accessibility Audit (Final Submission)
