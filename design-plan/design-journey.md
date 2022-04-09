@@ -445,9 +445,16 @@ php code at top of page:
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
 $name = '';
-$scientific_name = '';
 $plant_id = '';
-$hardiness_zone = '';
+
+$records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
+```
+
+```
+<div class="photo">
+  <a href="/detail"><img src="public/images/ echo $plant_id .jpg" alt=""/></a>
+  <a href="/detail"><p> echo $name </p></a>
+</div>
 ```
 
 
