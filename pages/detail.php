@@ -1,3 +1,9 @@
+<?php
+  $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
+
+  $id = $_GET["id"] ?? NULL;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
