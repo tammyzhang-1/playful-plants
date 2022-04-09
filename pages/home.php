@@ -5,6 +5,7 @@ $name = '';
 $plant_id = '';
 
 $records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
+$queries_matching = count($records);
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +86,7 @@ $records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
 
       <div>
         <div class="catalog-header">
-          <h2>3 Results</h2>
+          <h2><?php echo $queries_matching; ?> Results</h2>
           <div>
             <select name="media-sort" id="media-sort">
               <option value="none">Sort By</option>

@@ -438,6 +438,9 @@ when user clicks on image or plant name:
 the link on each image/name for every plant on catalog view should roughly be:
 <a href="/details?name=value>
 where name is "name" and value is $record["name"]
+
+Revision: since the names have spaces that will make the url less usable, ids will be used instead
+<a href="/details?id=$record["id"]> for each record in records
 ```
 
 ```
