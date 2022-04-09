@@ -259,6 +259,7 @@ _Final Design:_
 
 - Expanded text content to better fit what what likely happen - there may be empty space underneath the image, but Abi has likely seen this in similar websites before, especially those that are associated with shopping
 - Prevents Abi's eyes from having to jump to different spots on the page
+- Revision: add breadcrumbs to top left of page so that Abi can navigate more easily back to the home page
 
 5. Catalog view for administrators on desktop
 
@@ -384,9 +385,16 @@ SELECT * FROM entries WHERE (the gardening conditions checked by the consumer is
 
 // sorting
 SELECT * FROM entries ORDER BY id DESC; // for most recent to oldest
-SELECT * FROM entires ORDER BY name ASC; // for alphabetical A-Z);
+SELECT * FROM entries ORDER BY name ASC; // for alphabetical A-Z);
 ```
 
+```
+// details page
+// returning the tags associated with the plant being viewed
+SELECT tags.id, tags.name
+  FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
+  WHERE (entry_tags.entry_id = $id);
+```
 
 
 ### Code Planning (Milestone 1, Milestone 2, Milestone 3, Final Submission)
