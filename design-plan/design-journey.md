@@ -404,6 +404,23 @@ for each record in records:
   if play type has value of 1, echo it into a list element
 ```
 
+```
+<div class="entry">
+  <div class="entry-header">
+    <h4> echo $name <em>(echo $scientific_name)</em></h4>
+    <div class="entry-edit-buttons">
+      <button type="button">Edit</button>
+      <button type="button">Delete</button>
+    </div>
+  </div>
+  <p> echo $plant_id <p>
+  <p>Types of play supported:</p>
+  <ul>
+    echo <li> . play type . </li> if play type is supported (not 0)
+  </ul>
+</div>
+```
+
 
 - Consumer catalog view
 
