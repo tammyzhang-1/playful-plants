@@ -2,7 +2,8 @@ CREATE TABLE entries (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
     name TEXT NOT NULL,
     scientific_name TEXT NOT NULL,
-    plant_id TEXT NOT NULL UNIQUE
+    plant_id TEXT NOT NULL UNIQUE,
+    hardiness_zone TEXT NOT NULL
 );
 
 CREATE TABLE tags (
