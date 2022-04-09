@@ -125,7 +125,7 @@
   // sort/filter form section
 
   // sort/filter SQL query base pieces
-  $filter_base = "SELECT * FROM plants";
+  $filter_base = "SELECT * FROM entries";
   $filter_where = '';
   $play_filter_options = array();
   $filter_order = ' ORDER BY id ASC;';
@@ -240,8 +240,8 @@
   // final filter/sort query
   $filter_query = $filter_base . $filter_where . $filter_order;
 
-  // $records = exec_sql_query($db, $filter_query) -> fetchAll();
-  // $queries_matching = count($records);
+  $records = exec_sql_query($db, $filter_query) -> fetchAll();
+  $queries_matching = count($records);
 ?>
 
 <!DOCTYPE html>
@@ -461,7 +461,7 @@
       <!-- Actual database section -->
       <section class="table">
       <div class="catalog-header">
-          <h2>1 Result</h2>
+          <h2><?php echo $queries_matching; ?> results</h2>
           <div>
             <select name="media-sort" id="media-sort">
               <option value="default">Most recent to oldest</option>
@@ -472,23 +472,46 @@
           </div>
         </div>
 
-        <div class="entry">
-          <div class="entry-header">
-            <h4>Name <em>(Scientific Name)</em></h4>
-            <div class="entry-edit-buttons">
-              <button type="button">Edit</button>
-              <button type="button">Delete</button>
+        <?php
+        foreach ($records as $record) { ?>
+          <div class="entry">
+            <div class="entry-header">
+              <h4><?php echo htmlspecialchars($record["name"]); ?><em> (<?php echo htmlspecialchars($record["scientific_name"]); ?>)</em></h4>
+              <div class="entry-edit-buttons">
+                <button type="button">Edit</button>
+                <button type="button">Delete</button>
+              </div>
             </div>
+            <p>Plant ID: <?php echo htmlspecialchars($record["plant_id"]); ?><p>
+            <p>Types of play supported:</p>
+            <ul>
+              <?php if ($record["exploratory_constructive_play"]) { ?>
+                <li>Exploratory Constructive Play</li>
+              <?php } ?>
+              <?php if ($record["exploratory_sensory_play"]) { ?>
+                <li>Exploratory Sensory Play</li>
+              <?php } ?>
+              <?php if ($record["physical_play"]) { ?>
+                <li>Physical Play</li>
+              <?php } ?>
+              <?php if ($record["imaginative_play"]) { ?>
+                <li>Imaginative Play</li>
+              <?php } ?>
+              <?php if ($record["restorative_play"]) { ?>
+                <li>Restorative Play</li>
+              <?php } ?>
+              <?php if ($record["expressive_play"]) { ?>
+                <li>Expressive Play</li>
+              <?php } ?>
+              <?php if ($record["play_with_rules"]) { ?>
+                <li>Play with Rules</li>
+              <?php } ?>
+              <?php if ($record["bio_play"]) { ?>
+                <li>Bio Play</li>
+              <?php } ?>
+            </ul>
           </div>
-          <p>Plant ID<p>
-          <p>Types of play supported:</p>
-          <ul>
-            <li>Type 1</li>
-            <li>Type 2</li>
-            <li>Type 3</li>
-          </ul>
-        </div>
-
+          <?php } ?>
       </section>
     </div>
   </main>

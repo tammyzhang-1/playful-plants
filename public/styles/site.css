@@ -185,8 +185,7 @@ input:hover {
 .entry {
     padding-right: 2em;
     padding-left: 2em;
-    padding-bottom: 2em;
-    margin-bottom: 5em;
+    margin-bottom: 1em;
     border-style: solid;
     border-width: thin;
     border-color: #e9e9e9;
