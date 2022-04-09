@@ -1,3 +1,12 @@
+<?php
+$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
+
+$name = '';
+$plant_id = '';
+
+$records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -87,22 +96,26 @@
         </div>
         <!-- Media grid section -->
         <div id="media-grid">
-          <div class="photo">
-            <a href="/detail"><img src="public/images/FL_27.jpg" alt=""/></a>
-            <a href="/detail"><p>High Mallow</p></a>
-          </div>
-          <div class="photo">
-            <img src="public/images/GA_03.jpg" alt="">
-            <p>Switchgrass</p>
-          </div>
-          <div class="photo">
-            <img src="public/images/GR_15.jpg" alt="">
-            <p>Blue Violet</p>
-          </div>
+          <?php
+          foreach ($records as $record) { ?>
+            <div class="photo">
+              <!-- referencing mozilla documentation: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Img -->
+              <a href="/detail"><img src="public/images/<?php echo $record["plant_id"]; ?>.jpg" onerror=this.src="public/images/default.png" alt=""/></a>
+              <a href="/detail"><p><?php echo $record["name"]; ?></p></a>
+            </div>
+          <?php } ?>
+            <!-- <div class="photo">
+              <img src="public/images/GA_03.jpg" alt="">
+              <p>Switchgrass</p>
+            </div>
+            <div class="photo">
+              <img src="public/images/GR_15.jpg" alt="">
+              <p>Blue Violet</p> -->
+            <!-- </div> -->
         </div>
       </div>
     </div>
-    </main>
+  </main>
 
 </body>
 

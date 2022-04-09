@@ -391,4 +391,7 @@ input:hover {
         flex-direction: column;
         justify-content: flex-start;
     }
+    .sidebar {
+        margin-right: 0.5em;
+    }
 }
