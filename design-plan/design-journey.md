@@ -394,6 +394,9 @@ SELECT * FROM entries ORDER BY name ASC; // for alphabetical A-Z);
 SELECT tags.id, tags.name
   FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
   WHERE (entry_tags.entry_id = $id);
+
+// returning the information associated with the plant entry
+SELECT * FROM entries WHERE (id = $id);
 ```
 
 
@@ -440,7 +443,7 @@ for each record in records:
 ```
 
 ```
-php code at top of page:
+//php code at top of page:
 $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
 $name = '';
@@ -469,6 +472,29 @@ where name is "name" and value is $record["name"]
 
 Revision: since the names have spaces that will make the url less usable, ids will be used instead
 <a href="/details?id=$record["id"]> for each record in records
+```
+
+```
+<div class="detail-page">
+    <div class="detail-photo">
+      <img src="public/images/[$plant_id].jpg" alt="">
+    </div>
+    <div class="detail-text">
+      <div class="garden-list">
+        <h2>[$name]</h2>
+        <h3>Gardening care:</h3>
+        <ul>
+          [All tags associated with this plant as list elements]
+        </ul>
+      </div>
+      <div class="play-list">
+        <h3>Types of play supported:</h3>
+          <ul>
+            [All types of play associated with this plant as list elements]
+          </ul>
+      </div>
+    </div>
+  </div>
 ```
 
 
