@@ -10,6 +10,8 @@
   FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
   WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
 
+  // list of tags associated with this plant
+  $tag_list = array_column($tag_array, 'id');
 
   $name = '';
   $scientific_name = '';
@@ -69,11 +71,11 @@
   $rules = $record["play_with_rules"];
   $bio = $record["bio_play"];
 
-  $perennial = '';
-  $annual = '';
-  $full_sun = '';
-  $partial_shade = '';
-  $full_shade = '';
+  $perennial = in_array(1, $tag_list);
+  $annual = in_array(2, $tag_list);;
+  $full_sun = in_array(3, $tag_list);;
+  $partial_shade = in_array(4, $tag_list);;
+  $full_shade = in_array(5, $tag_list);;
   $plant_type = '';
 
   $sticky_name = $name;
@@ -88,6 +90,12 @@
   $sticky_rules = (empty($rules) ? '' : 'checked');
   $sticky_bio = (empty($bio) ? '' : 'checked');
 
+  $sticky_perennial = $perennial ? 'checked' : '';
+  $sticky_annual = $annual ? 'checked' : '';
+  $sticky_full_sun = $full_sun ? 'checked' : '';
+  $sticky_partial_shade = $partial_shade ? 'checked' : '';
+  $sticky_full_shade = $full_shade ? 'checked' : '';
+  $sticky_plant_type = '';
 
 ?>
 
@@ -139,25 +147,25 @@
         <h3>Gardening Characteristics:</h3>
         <div class="seasonality">
           <div>
-            <input type="checkbox" name="edit-perennial" id="edit-perennial" checked/>
+            <input type="checkbox" name="edit-perennial" id="edit-perennial" <?php echo $sticky_perennial; ?>/>
             <label for="edit-perennial">Perennial</label>
           </div>
           <div>
-            <input type="checkbox" name="edit-annual" id="edit-annual"/>
+            <input type="checkbox" name="edit-annual" id="edit-annual" <?php echo $sticky_annual; ?>/>
             <label for="edit-annual">Annual</label>
           </div>
         </div>
         <div class="sun-needs">
           <div>
-            <input type="checkbox" name="edit-full-sun" id="edit-full-sun" checked/>
+            <input type="checkbox" name="edit-full-sun" id="edit-full-sun" <?php echo $sticky_full_sun; ?>/>
             <label for="edit-full-sun">Full Sun</label>
           </div>
           <div>
-            <input type="checkbox" name="edit-partial-shade" id="edit-partial-shade" checked/>
+            <input type="checkbox" name="edit-partial-shade" id="edit-partial-shade" <?php echo $sticky_partial_shade; ?>/>
             <label for="edit-partial-shade">Partial Shade</label>
           </div>
           <div>
-            <input type="checkbox" name="edit-full-shade" id="edit-full-shade"/>
+            <input type="checkbox" name="edit-full-shade" id="edit-full-shade"/ <?php echo $sticky_full_shade; ?>>
             <label for="edit-full-shade">Full Shade</label>
           </div>
         </div>
