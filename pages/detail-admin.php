@@ -13,6 +13,7 @@
   // list of tags associated with this plant
   $tag_list = array_column($tag_array, 'id');
 
+  // initialize variables needed to keep track of plant data
   $name = '';
   $scientific_name = '';
   $plant_id = '';
@@ -34,7 +35,7 @@
   $full_shade = '';
   $plant_type = '';
 
-  // sticky variables
+  // initialize sticky variables
   $sticky_name = '';
   $sticky_scientific_name = '';
   $sticky_plant_id = '';
@@ -57,6 +58,7 @@
   $sticky_plant_type = '';
 
   // to be put under a conditional statement
+  // assign initialized variables a value based on data retrieved from table
   $name = $record["name"];
   $scientific_name = $record["scientific_name"];
   $plant_id = $record["plant_id"];
@@ -85,17 +87,18 @@
   $groundcover = in_array(11, $tag_list);
   $other = in_array(12, $tag_list);
 
+  // set sticky values
   $sticky_name = $name;
   $sticky_scientific_name = $scientific_name;
   $sticky_plant_id = $plant_id;
-  $sticky_exploratory_constructive = (empty($exploratory_constructive) ? '' : 'checked');
-  $sticky_exploratory_sensory = (empty($exploratory_sensory) ? '' : 'checked');
-  $sticky_physical = (empty($physical) ? '' : 'checked');
-  $sticky_imaginative = (empty($imaginative) ? '' : 'checked');
-  $sticky_restorative = (empty($restorative) ? '' : 'checked');
-  $sticky_expressive = (empty($expressive) ? '' : 'checked');
-  $sticky_rules = (empty($rules) ? '' : 'checked');
-  $sticky_bio = (empty($bio) ? '' : 'checked');
+  $sticky_exploratory_constructive = $exploratory_constructive ? 'checked' : '';
+  $sticky_exploratory_sensory = $exploratory_sensory ? 'checked' : '';
+  $sticky_physical = $physical ? 'checked' : '';
+  $sticky_imaginative = $imaginative ? 'checked' : '';
+  $sticky_restorative = $restorative ? 'checked' : '';
+  $sticky_expressive = $expressive ? 'checked' : '';
+  $sticky_rules = $rules ? 'checked' : '';
+  $sticky_bio = $bio ? 'checked' : '';
 
   $sticky_perennial = $perennial ? 'checked' : '';
   $sticky_annual = $annual ? 'checked' : '';
@@ -103,14 +106,13 @@
   $sticky_partial_shade = $partial_shade ? 'checked' : '';
   $sticky_full_shade = $full_shade ? 'checked' : '';
 
-  $sticky_shrub = ($shrub ? 'selected' : '');
-  $sticky_grass = ($grass ? 'selected' : '');
-  $sticky_vine = ($vine ? 'selected' : '');
-  $sticky_tree = ($tree ? 'selected' : '');
-  $sticky_flower = ($flower ? 'selected' : '');
-  $sticky_groundcover = ($groundcover ? 'selected' : '');
-  $sticky_other = ($other ? 'selected' : '');
-
+  $sticky_shrub = $shrub ? 'selected' : '';
+  $sticky_grass = $grass ? 'selected' : '';
+  $sticky_vine = $vine ? 'selected' : '';
+  $sticky_tree = $tree ? 'selected' : '';
+  $sticky_flower = $flower ? 'selected' : '';
+  $sticky_groundcover = $groundcover ? 'selected' : '';
+  $sticky_other = $other ? 'selected' : '';
 ?>
 
 <!DOCTYPE html>

@@ -266,6 +266,7 @@ _Final Design:_
 ![Final sketch for admin desktop catalog](admin-desktop-catalog-sketch-final.jpg)
 
 - Fixed margin inconsistencies in sketch 2 by aligning everything in an entry to the left
+- REVISION: add fourth textbox for a place to input hardiness zone data
 
 6. Details page for administrators on desktop
 
@@ -273,6 +274,7 @@ _Final Design:_
 
 - Decided to move form elements from being underneath the image to the side in a stacked layout with checkboxes being inline as needed, so that the form has good alignment and is filled out in a smooth vertical motion
 - This way Tim does not have to jump around the page to fill out all fields and the layout is more similar to the details page seen by the consumers
+- REVISION: will add fourth textbox so that there is a place to input hardiness zone data, which does not suit checkboxes or dropdowns
 
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
