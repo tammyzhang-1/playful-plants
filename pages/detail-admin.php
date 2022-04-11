@@ -76,7 +76,14 @@
   $full_sun = in_array(3, $tag_list);;
   $partial_shade = in_array(4, $tag_list);;
   $full_shade = in_array(5, $tag_list);;
-  $plant_type = '';
+
+  $shrub = in_array(6, $tag_list);
+  $grass = in_array(7, $tag_list);
+  $vine = in_array(8, $tag_list);
+  $tree = in_array(9, $tag_list);
+  $flower = in_array(10, $tag_list);
+  $groundcover = in_array(11, $tag_list);
+  $other = in_array(12, $tag_list);
 
   $sticky_name = $name;
   $sticky_scientific_name = $scientific_name;
@@ -95,7 +102,14 @@
   $sticky_full_sun = $full_sun ? 'checked' : '';
   $sticky_partial_shade = $partial_shade ? 'checked' : '';
   $sticky_full_shade = $full_shade ? 'checked' : '';
-  $sticky_plant_type = '';
+
+  $sticky_shrub = ($shrub ? 'selected' : '');
+  $sticky_grass = ($grass ? 'selected' : '');
+  $sticky_vine = ($vine ? 'selected' : '');
+  $sticky_tree = ($tree ? 'selected' : '');
+  $sticky_flower = ($flower ? 'selected' : '');
+  $sticky_groundcover = ($groundcover ? 'selected' : '');
+  $sticky_other = ($other ? 'selected' : '');
 
 ?>
 
@@ -174,13 +188,13 @@
           <label for="edit-type-select">Plant type:  </label>
             <select name="edit-type-select" id="edit-type-select">
               <option value="none">None selected</option>
-              <option value="shrub">Shrub</option>
-              <option value="grass">Grass</option>
-              <option value="vine">Vine</option>
-              <option value="tree">Tree</option>
-              <option value="flower" selected>Flower</option>
-              <option value="groundcover">Groundcover</option>
-              <option value="other">Other</option>
+              <option value="shrub" <?php echo $sticky_shrub; ?>>Shrub</option>
+              <option value="grass" <?php echo $sticky_grass; ?>>Grass</option>
+              <option value="vine" <?php echo $sticky_vine; ?>>Vine</option>
+              <option value="tree" <?php echo $sticky_tree; ?>>Tree</option>
+              <option value="flower" <?php echo $sticky_flower; ?>>Flower</option>
+              <option value="groundcover" <?php echo $sticky_groundcover; ?>>Groundcover</option>
+              <option value="other" <?php echo $sticky_other; ?>>Other</option>
             </select>
           </div>
 
