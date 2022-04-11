@@ -635,10 +635,26 @@ $sticky_annual = '';
 $sticky_full_sun = '';
 $sticky_partial_shade = '';
 $sticky_full_shade = '';
-$sticky_plant_type = '';
+$sticky_shrub = '';
+$sticky_grass = '';
+$sticky_vine = '';
+$sticky_tree = '';
+$sticky_flower = '';
+$sticky_groundcover = '';
+$sticky_other = '';
 
 // for both the play types and the gardening info checkboxes (whose variables are boolean), the sticky values can be assigned to a ternary operator of general form $variable ? '' : 'checked' which will then be echoed into the form checkbox input element
 // therefore the form will load with the corresponding boxes already checked for the plant being displayed on the admin details page
+
+// sticky values for dropdown menu (plant types):
+$sticky_shrub = ($plant_type == 'Shrub' ? 'selected' : '');
+$sticky_grass = ($plant_type == 'Grass' ? 'selected' : '');
+$sticky_vine = ($plant_type == 'Vine' ? 'selected' : '');
+$sticky_tree = ($plant_type == 'Tree' ? 'selected' : '');
+$sticky_flower = ($plant_type == 'Flower' ? 'selected' : '');
+$sticky_groundcover = ($plant_type == 'Groundcover' ? 'selected' : '');
+$sticky_other = ($plant_type == 'Other' ? 'selected' : '');
+// echo sticky values in option elements in html dropdown menu code
 ```
 
 
