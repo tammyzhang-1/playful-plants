@@ -402,6 +402,8 @@ SELECT tags.id, tags.name
   WHERE (entry_tags.entry_id = $id);
 // then escape with array of parameter markers
 
+// ^ REVISION: only need tags.id from the inner join, not both id and name
+
 // returning the information associated with the plant entry
 SELECT * FROM entries WHERE (id = $id);
 // then escape with array of parameter markers
@@ -528,13 +530,16 @@ use hidden input to track what plant is being edited
 
 ```
 // dynamic output part 1
+// outputting into the html the text fields
 $name = "";
 $scientific_name = "";
 $plant_id = "";
+$hardiness_zone = "";
 
 $name = $record["name"];
 $scientific_name = $record["scientific_name"];
 $plant_id = $record["plant_id"];
+$hardiness_zone = $record["hardiness_zone"];
 // where $record is the plant data retrieved using the viewed plant's id
 
 <section class="edit-plant-form">
@@ -557,6 +562,22 @@ $plant_id = $record["plant_id"];
         </div>
 ```
 
+```
+// dynamic output part 2
+// outputting checked boxes for the gardening information section, accessing tags
+// general idea: create list of boolean variables tracking if a tag was returned from the inner join above (basically checks if the displayed plant has that tag)
+// to check if a tag is in the array, the column with the tag ids needs to be turned into an array first
+
+$tag_list = array_column($tag_array, 'id');
+
+// then in_array can be used to check if a tag's id is present or not
+$perennial = in_array(1, $tag_list);
+$annual = in_array(2, $tag_list);
+$full_sun = in_array(3, $tag_list);
+$partial_shade = in_array(4, $tag_list);
+$full_shade = in_array(5, $tag_list);
+```
+
 - General
 
 ```
@@ -568,6 +589,56 @@ else:
   form is not valid
   set all variables of form input to sticky values
   remove hidden from the feedback messages for the affected field(s)
+```
+
+```
+// variables needed to track all values of a plant
+
+$name = '';
+$scientific_name = '';
+$plant_id = '';
+$hardiness_zone = '';
+
+$exploratory_constructive = '';
+$exploratory_sensory = '';
+$physical = '';
+$imaginative = '';
+$restorative = '';
+$expressive = '';
+$rules = '';
+$bio = '';
+
+$perennial = '';
+$annual = '';
+$full_sun = '';
+$partial_shade = '';
+$full_shade = '';
+$plant_type = '';
+
+// sticky variables
+$sticky_name = '';
+$sticky_scientific_name = '';
+$sticky_plant_id = '';
+$sticky_hardiness_zone = '';
+
+$sticky_exploratory_constructive = '';
+$sticky_exploratory_sensory = '';
+$sticky_physical = '';
+$sticky_imaginative = '';
+$sticky_restorative = '';
+$sticky_expressive = '';
+$sticky_rules = '';
+$sticky_bio = '';
+
+$sticky_perennial = '';
+$sticky_annual = '';
+$sticky_full_sun = '';
+$sticky_partial_shade = '';
+$sticky_full_shade = '';
+$sticky_plant_type = '';
+
+// for both the play types and the gardening info checkboxes (whose variables are boolean), the sticky values can be assigned to a ternary operator of general form $variable ? '' : 'checked' which will then be echoed into the form checkbox input element
+// therefore the form will load with the corresponding boxes already checked for the plant being displayed on the admin details page
 ```
 
 
