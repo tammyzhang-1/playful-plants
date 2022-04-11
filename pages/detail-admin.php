@@ -91,6 +91,7 @@
   $sticky_name = $name;
   $sticky_scientific_name = $scientific_name;
   $sticky_plant_id = $plant_id;
+  $sticky_hardiness_zone = $hardiness_zone;
   $sticky_exploratory_constructive = $exploratory_constructive ? 'checked' : '';
   $sticky_exploratory_sensory = $exploratory_sensory ? 'checked' : '';
   $sticky_physical = $physical ? 'checked' : '';
@@ -161,6 +162,12 @@
         </div>
 
         <h3>Gardening Characteristics:</h3>
+
+        <div class="edit-text-short">
+          <label for="edit-hardiness-zone">Hardiness Zone:</label>
+            <input type="text" name="edit-hardiness-zone" id="edit-hardiness-zone" value="<?php echo htmlspecialchars($record["hardiness_zone"]); ?>" />
+        </div>
+
         <div class="seasonality">
           <div>
             <input type="checkbox" name="edit-perennial" id="edit-perennial" <?php echo $sticky_perennial; ?>/>

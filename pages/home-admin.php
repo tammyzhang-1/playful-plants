@@ -15,6 +15,7 @@
   $name = '';
   $scientific_name = '';
   $plant_id = '';
+  $hardiness_zone = '';
   $exploratory_constructive = '';
   $exploratory_sensory = '';
   $physical = '';
@@ -28,6 +29,7 @@
   $sticky_name = '';
   $sticky_scientific_name = '';
   $sticky_plant_id = '';
+  $sticky_hardiness_zone = '';
   $sticky_exploratory_constructive = '';
   $sticky_exploratory_sensory = '';
   $sticky_physical = '';
@@ -111,6 +113,7 @@
       $sticky_name = $name; //untrusted
       $sticky_scientific_name = $scientific_name; //untrusted
       $sticky_plant_id = $plant_id; //untrusted
+      $sticky_hardiness_zone = $hardiness_zone; // untrusted
       $sticky_exploratory_constructive = (empty($exploratory_constructive) ? '' : 'checked');
       $sticky_exploratory_sensory = (empty($exploratory_sensory) ? '' : 'checked');
       $sticky_physical = (empty($physical) ? '' : 'checked');
@@ -291,6 +294,8 @@
                 <label for="plant-id">Plant ID:</label>
                 <input type="text" name="plant-id" id="plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
               </div>
+
+
             </div>
 
             <!-- div containing multiple select section of form for play types -->
@@ -341,6 +346,10 @@
               <!-- code for adding gardening information -->
             <div class="garden-info">
               <h3>Gardening Information</h3>
+              <div class="short-text">
+                <label for="hardiness-zone">Hardiness Zone:</label>
+                <input type="text" name="hardiness-zone" id="hardiness-zone" value="<?php echo htmlspecialchars($sticky_hardiness_zone); ?>" />
+              </div>
               <div class="garden-type">
                 <input type="checkbox" name="add-perennial" id="add-perennial"/>
                 <label for="add-perennial">Perennial</label>

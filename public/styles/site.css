@@ -154,8 +154,8 @@ input:hover {
 .garden-info {
     display: flex;
     flex-direction: column;
-    row-gap: 0.5em;
     column-gap: 1em;
+    row-gap: 0.2em;
 }
 
 .add-body, #add-plant {
@@ -171,6 +171,17 @@ input:hover {
     display: flex;
     flex-direction: column;
 }
+
+.short-text input {
+    width: 4em;
+    margin-left: 0.5em;
+}
+
+.edit-text-short input {
+    width: 3em;
+    margin-bottom: 1em;
+}
+
 
 .confirmation {
     text-align: center;
@@ -189,6 +200,7 @@ input:hover {
 
 .table {
     width: 100%;
+    height: 100%;
 }
 
 .entry {
@@ -205,7 +217,7 @@ input:hover {
 .entry ul, .play-list ul {
     display: flex;
     flex-wrap: wrap;
-    row-gap: 1em;
+    row-gap: 0.75em;
     padding-left: 0;
 }
 
@@ -219,11 +231,13 @@ input:hover {
     padding-right: 1.5em;
     padding-left: 1.5em;
     border-radius: 1em;
+    font-size: 0.9em;
 }
 
 .entry p {
-    font-size: 1.25em;
-    margin-top: 0.25em;
+    font-size: 1em;
+    margin-top: 0.1em;
+    margin-bottom: 0.5em;
 }
 
 .entry-edit-buttons {
@@ -235,6 +249,11 @@ input:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.entry h4, .catalog-header h2 {
+    font-size: 1.35em;
+    margin-top: 1em;
 }
 
 #error-message {
