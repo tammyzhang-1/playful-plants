@@ -6,7 +6,7 @@
   $records = exec_sql_query($db, "SELECT * FROM entries WHERE (id=:id);", array(":id" => $id)) -> fetchAll();
   $record = $records[0];
 
-  $tag_array = exec_sql_query($db, "SELECT tags.id
+  $tag_array = exec_sql_query($db, "SELECT tags.id AS 'tags.id',
   FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
   WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
 

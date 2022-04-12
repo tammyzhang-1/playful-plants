@@ -445,6 +445,36 @@ for each record in records:
 </div>
 ```
 
+```
+// list of feedback classes for admin add and edit forms, hidden by default
+// will be placed in divs of class="feedback" above form elements
+$name_feedback_class = 'hidden';
+$scientific_name_feedback_class = 'hidden';
+$plant_id_feedback_class = 'hidden';
+$plant_id_unique_feedback_class = 'hidden';
+$play_type_feedback_class = 'hidden';
+
+// NEW from project 2
+$hardiness_zone_feedback_class = 'hidden'; // should not be empty
+$shade_feedback_class = 'hidden'; // at least one should be chosen
+$plant_type_feedback_class = 'hidden'; // one should be chosen
+
+if (empty($hardiness_zone)) {
+  $add_form_valid = False;
+  $hardiness_zone_feedback_class = '';
+}
+
+if (empty($full_sun) && empty($partial_shade) && empty($full_shade)) {
+  $add_form_valid = False;
+  $shade_feedback_class = '';
+}
+
+if (empty($shrub) && empty($grass) && empty($vine) && empty($tree) && empty($flower) && empty($groundcover) && empty($other)) {
+  $add_form_valid = False;
+  $plant_type_feedback_class = '';
+}
+```
+
 
 - Consumer catalog view
 
@@ -578,6 +608,30 @@ $annual = in_array(2, $tag_list);
 $full_sun = in_array(3, $tag_list);
 $partial_shade = in_array(4, $tag_list);
 $full_shade = in_array(5, $tag_list);
+```
+
+```
+// edit form feedback classes (same as add form feedback classes on admin catalog view)
+// NEW from project 2
+// will be placed in divs of class="feedback" above form elements
+$hardiness_zone_feedback_class = 'hidden'; // should not be empty
+$shade_feedback_class = 'hidden'; // at least one should be chosen
+$plant_type_feedback_class = 'hidden'; // one should be chosen
+
+if (empty($hardiness_zone)) {
+  $add_form_valid = False;
+  $hardiness_zone_feedback_class = '';
+}
+
+if (empty($full_sun) && empty($partial_shade) && empty($full_shade)) {
+  $add_form_valid = False;
+  $shade_feedback_class = '';
+}
+
+if (empty($shrub) && empty($grass) && empty($vine) && empty($tree) && empty($flower) && empty($groundcover) && empty($other)) {
+  $add_form_valid = False;
+  $plant_type_feedback_class = '';
+}
 ```
 
 - General

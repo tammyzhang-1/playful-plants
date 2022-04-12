@@ -6,6 +6,8 @@ $plant_id = '';
 
 $records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
 $queries_matching = count($records);
+
+$image_url = 'public/images/default.png';
 ?>
 
 <!DOCTYPE html>
@@ -100,9 +102,12 @@ $queries_matching = count($records);
           <?php
           foreach ($records as $record) { ?>
             <div class="photo">
-              <!-- referencing mozilla documentation: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Img -->
+              <?php if (file_exists("public/images/" . $record["plant_id"] . ".jpg")) { ?>
+                <?php $image_url = "public/images/" . $record["plant_id"] . ".jpg"; ?>
+              <?php } ?>
+              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="<?php echo $image_url; ?>" alt="Picture of plant."/></a>
               <!-- default.png is original work (created by Tammy Zhang) -->
-              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="public/images/<?php echo $record["plant_id"]; ?>.jpg" onerror=this.src="public/images/default.png" alt=""/></a>
+              <?php $image_url = "public/images/default.png"; ?>
               <a href="/detail?id=<?php echo $record["id"]; ?>"><p><?php echo ucwords($record["name"]); ?></p></a>
             </div>
           <?php } ?>
