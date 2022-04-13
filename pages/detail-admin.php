@@ -6,12 +6,12 @@
   $records = exec_sql_query($db, "SELECT * FROM entries WHERE (id=:id);", array(":id" => $id)) -> fetchAll();
   $record = $records[0];
 
-  $tag_array = exec_sql_query($db, "SELECT tags.id AS 'tags.id',
+  $tag_array = exec_sql_query($db, "SELECT tags.id AS 'tags.id'
   FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
   WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
 
   // list of tags associated with this plant
-  $tag_list = array_column($tag_array, 'id');
+  $tag_list = array_column($tag_array, 'tags.id');
 
   // initialize variables needed to keep track of plant data
   $name = '';
@@ -130,17 +130,24 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button"><a href="/">Log out</a></button>
+    <button type="button">Log out</button>
   </header>
   <div class="breadcrumb">
-    <a href="/admin">< Back to Catalog View</a>
+    <a href="/admin">&lt; Back to Catalog View</a>
   </div>
 
   <main>
   <div class="detail-page">
     <div class="detail-photo">
-      <img src="/public/images/<?php echo $record["plant_id"]; ?>.jpg" onerror=this.src="/public/images/default.png" alt=""/>
+      <?php if (file_exists("public/images/" . $record["plant_id"] . ".jpg")) { ?>
+        <?php $image_url = "/public/images/" . $record["plant_id"] . ".jpg"; ?>
+      <?php } else { ?>
+        <!-- default.png is original work (created by Tammy Zhang) -->
+        <?php $image_url = "/public/images/default.png"; ?>
+      <?php } ?>
+      <img src="<?php echo $image_url; ?>" alt="Picture of plant."/>
     </div>
+
     <div class="detail-text">
     <section class="edit-plant-form">
       <h2>Edit <?php echo ucwords(htmlspecialchars($record["name"])); ?></h2>
@@ -188,7 +195,7 @@
             <label for="edit-partial-shade">Partial Shade</label>
           </div>
           <div>
-            <input type="checkbox" name="edit-full-shade" id="edit-full-shade"/ <?php echo $sticky_full_shade; ?>>
+            <input type="checkbox" name="edit-full-shade" id="edit-full-shade" <?php echo $sticky_full_shade; ?>/>
             <label for="edit-full-shade">Full Shade</label>
           </div>
         </div>

@@ -7,6 +7,9 @@
   $plant_id_feedback_class = 'hidden';
   $plant_id_unique_feedback_class = 'hidden';
   $play_type_feedback_class = 'hidden';
+  $hardiness_zone_feedback_class = 'hidden';
+  $shade_feedback_class = 'hidden';
+  $plant_type_feedback_class = 'hidden';
 
   $show_confirmation = False;
   $plant_added = False;
@@ -39,11 +42,13 @@
   $sticky_rules = '';
   $sticky_bio = '';
 
+  $check4 = isset($_POST['add-plant']);
   // code to be executed when add form submitted
   if (isset($_POST['add-plant'])) {
     $name = trim($_POST['plant-name']); //untrusted
     $scientific_name = trim($_POST['scientific-name']); //untrusted
     $plant_id = trim($_POST['plant-id']); //untrusted
+    $hardiness_zone = trim($POST['hardiness-zone']); //untrusted
     $exploratory_constructive = $_POST['add-exploratory-constructive']; //untrusted
     $exploratory_sensory = $_POST['add-exploratory-sensory']; //untrusted
     $physical = $_POST['add-physical']; //untrusted
@@ -71,15 +76,15 @@
       $plant_id_feedback_class = '';
     } else {
       // check plant id is unique
-      // $check_records = exec_sql_query($db, "SELECT * FROM plants WHERE (plant_id = :plant_id);",
-      //   array(
-      //     ':plant_id' => $plant_id
-      //   )
-      // ) -> fetchAll();
-      // if (count($check_records) > 0) {
-      //   $add_form_valid = False;
-      //   $plant_id_unique_feedback_class = '';
-      // }
+      $check_records = exec_sql_query($db, "SELECT * FROM entries WHERE (plant_id = :plant_id);",
+        array(
+          ':plant_id' => $plant_id
+        )
+      ) -> fetchAll();
+      if (count($check_records) > 0) {
+        $add_form_valid = False;
+        $plant_id_unique_feedback_class = '';
+      }
     }
 
     if (empty($exploratory_constructive) && empty($exploratory_sensory) && empty($physical) && empty($imaginative) && empty($restorative) && empty($expressive ) && empty($rules) && empty($bio)) {
@@ -87,23 +92,37 @@
       $play_type_feedback_class = '';
     }
 
+    if (empty($hardiness_zone)) {
+      $add_form_valid = False;
+      $hardiness_zone_feedback_class = '';
+    }
+    if (empty($full_sun) && empty($partial_shade) && empty($full_shade)) {
+      $add_form_valid = False;
+      $shade_feedback_class = '';
+    }
+    if (empty($shrub) && empty($grass) && empty($vine) && empty($tree) && empty($flower) && empty($groundcover) && empty($other)) {
+      $add_form_valid = False;
+      $plant_type_feedback_class = '';
+    }
+
     if ($add_form_valid) {
-      // form is valid; add record to database
-      // $result = exec_sql_query($db, "INSERT INTO plants (name, scientific_name, plant_id, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);",
-      //   array(
-      //     ':name' => $name,
-      //     ':scientific_name' => $scientific_name,
-      //     ':plant_id' => $plant_id,
-      //     ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
-      //     ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
-      //     ':physical' => ($physical) ? 1 : 0,
-      //     ':imaginative' => ($imaginative) ? 1 : 0,
-      //     ':restorative' => ($restorative) ? 1 : 0,
-      //     ':expressive' => ($expressive) ? 1 : 0,
-      //     ':rules' => ($rules) ? 1 : 0,
-      //     ':bio' => ($bio) ? 1 : 0
-      //   )
-      // );
+      //form is valid; add record to database
+      $result = exec_sql_query($db, "INSERT INTO entries (name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :hardiness_zone, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);",
+        array(
+          ':name' => $name,
+          ':scientific_name' => $scientific_name,
+          ':plant_id' => $plant_id,
+          ':hardiness_zone' => $hardiness_zone,
+          ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
+          ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
+          ':physical' => ($physical) ? 1 : 0,
+          ':imaginative' => ($imaginative) ? 1 : 0,
+          ':restorative' => ($restorative) ? 1 : 0,
+          ':expressive' => ($expressive) ? 1 : 0,
+          ':rules' => ($rules) ? 1 : 0,
+          ':bio' => ($bio) ? 1 : 0
+        )
+      );
       if ($result) {
         $plant_added = True;
         $show_confirmation = True;
@@ -260,7 +279,7 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button"><a href="/">Log out</a></button>
+    <button type="button">Log out</button>
   </header>
 
   <main>
@@ -271,7 +290,7 @@
       </div>
 
       <div class="add-body">
-        <form id="add-plant" method="post" action="/" novalidate>
+        <form id="add-plant" name = "add-plant" method="post" action="/admin" novalidate>
           <div class="main-add">
             <!-- div containing text fields of form -->
             <div class="text-fields">
@@ -294,13 +313,12 @@
                 <label for="plant-id">Plant ID:</label>
                 <input type="text" name="plant-id" id="plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
               </div>
-
-
             </div>
 
             <!-- div containing multiple select section of form for play types -->
             <div class="add-play-type">
               <h3>Supported Play Types</h3>
+              <div class="feedback <?php echo $play_type_feedback_class; ?>">At least one play type is required.</div>
               <div class="play-checkboxes">
                 <div class="play-type">
                   <input type="checkbox" name="add-exploratory-constructive" id="add-exploratory-constructive" <?php echo $sticky_exploratory_constructive; ?>/>
@@ -346,10 +364,13 @@
               <!-- code for adding gardening information -->
             <div class="garden-info">
               <h3>Gardening Information</h3>
+
+              <div class="feedback <?php echo $hardiness_zone_feedback_class; ?>">Hardiness zone is required.</div>
               <div class="short-text">
                 <label for="hardiness-zone">Hardiness Zone:</label>
                 <input type="text" name="hardiness-zone" id="hardiness-zone" value="<?php echo htmlspecialchars($sticky_hardiness_zone); ?>" />
               </div>
+
               <div class="garden-type">
                 <input type="checkbox" name="add-perennial" id="add-perennial"/>
                 <label for="add-perennial">Perennial</label>
@@ -358,6 +379,8 @@
                 <input type="checkbox" name="add-annual" id="add-annual"/>
                 <label for="add-annual">Annual</label>
               </div>
+
+              <div class="feedback <?php echo $shade_feedback_class; ?>">At least one type of light requirement is required.</div>
               <div class="garden-type">
                 <input type="checkbox" name="add-full-sun" id="add-full-sun"/>
                 <label for="add-full-sun">Full Sun</label>
@@ -371,6 +394,7 @@
                 <label for="add-full-shade">Full Shade</label>
               </div>
 
+              <div class="feedback <?php echo $plant_type_feedback_class; ?>">A plant type is required.</div>
               <div class="garden-type">
                 <label for="add-type-select">Plant type:  </label>
                   <select name="add-type-select" id="add-type-select">
@@ -384,13 +408,14 @@
                     <option value="other">Other</option>
                   </select>
               </div>
+              <div class="submit">
+                <input class= "submit" id="add-submit" type="submit" name="add-plant" value="Add Plant" />
+              </div>
             </div>
           </div>
         </form>
       </div>
-      <div class="submit">
-              <input id="add-submit" type="submit" name="add-plant" value="Add Plant" />
-            </div>
+
     </div>
 
     <?php if ($show_confirmation) { ?>

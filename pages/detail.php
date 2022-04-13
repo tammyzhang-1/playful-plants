@@ -28,13 +28,19 @@
     <button type="button">Log in</button>
   </header>
   <div class="breadcrumb">
-    <a href="/">< Back to Home</a>
+    <a href="/">&lt; Back to Home</a>
   </div>
 
   <main>
   <div class="detail-page">
     <div class="detail-photo">
-      <img src="/public/images/<?php echo $record["plant_id"];?>.jpg" onerror=this.src="public/images/default.png" alt=""/>
+      <?php if (file_exists("public/images/" . $record["plant_id"] . ".jpg")) { ?>
+        <?php $image_url = "/public/images/" . $record["plant_id"] . ".jpg"; ?>
+      <?php } else { ?>
+        <!-- default.png is original work (created by Tammy Zhang) -->
+        <?php $image_url = "/public/images/default.png"; ?>
+      <?php } ?>
+      <img src="<?php echo $image_url; ?>" alt="Picture of plant."/>
     </div>
     <div class="detail-text">
       <div class="garden-list">

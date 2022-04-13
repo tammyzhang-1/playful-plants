@@ -23,7 +23,7 @@ $image_url = 'public/images/default.png';
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button"><a href="/admin">Log in</a></button>
+    <button type="button">Log in</button>
   </header>
 
   <main>
