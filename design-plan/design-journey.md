@@ -380,9 +380,34 @@ UPDATE entries SET
   ...
   WHERE (id=___);
 
-  DELETE FROM entries WHERE (id=___);
+DELETE FROM entries WHERE (id=___);
 
-  INSERT INTO entries (fields) VALUES (parameter markers using an array);
+INSERT INTO entries (fields) VALUES (parameter markers using an array);
+```
+
+```
+// adding a new plant
+// insert into entries table
+INSERT INTO entries (name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :hardiness_zone, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);
+
+array(
+  ':name' => $name,
+  ':scientific_name' => $scientific_name,
+  ':plant_id' => $plant_id,
+  ':hardiness_zone' => $hardiness_zone,
+  ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
+  ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
+  ':physical' => ($physical) ? 1 : 0,
+  ':imaginative' => ($imaginative) ? 1 : 0,
+  ':restorative' => ($restorative) ? 1 : 0,
+  ':expressive' => ($expressive) ? 1 : 0,
+  ':rules' => ($rules) ? 1 : 0,
+  ':bio' => ($bio) ? 1 : 0
+  )
+
+// insert into entry_tags table
+INSERT INTO entry_tags (entry_id, tag_id) VALUES (:entry_id, :tag_id);
+
 ```
 
 
@@ -550,6 +575,20 @@ if the admin clicks the edit button from catalog view:
   use hidden inputs to echo current data for that entry id into the edit form that comes up
   if the admin clicks save:
     update the database via database query where the id from the hidden input is used so the right entry is edited
+```
+
+```
+// adding an entry
+// similar to editing an entry (also needs variables + sticky variables for the gardening information to be added)
+// code from project 2 in place takes care of everything except for the gardening info
+
+if admin clicks the add plant button:
+  validate all fields
+  if at least one field is invalid
+    form_valid is false, set sticky values, show feedback messages
+  create array of tags selected
+  add plant info into entries table
+  access tags array and add those into the entry_tags table as foreign keys to the corresponding tables where entry_id = id of this plant being added and tags_id = ids of the tags in the array
 ```
 
 ```

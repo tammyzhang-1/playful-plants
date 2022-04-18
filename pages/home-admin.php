@@ -42,7 +42,6 @@
   $sticky_rules = '';
   $sticky_bio = '';
 
-  $check4 = isset($_POST['add-plant']);
   // code to be executed when add form submitted
   if (isset($_POST['add-plant'])) {
     $name = trim($_POST['plant-name']); //untrusted
@@ -380,7 +379,7 @@
                 <label for="add-annual">Annual</label>
               </div>
 
-              <div class="feedback <?php echo $shade_feedback_class; ?>">At least one type of light requirement is required.</div>
+              <div class="feedback <?php echo $shade_feedback_class; ?>">At least one type of light is required.</div>
               <div class="garden-type">
                 <input type="checkbox" name="add-full-sun" id="add-full-sun"/>
                 <label for="add-full-sun">Full Sun</label>
@@ -430,7 +429,7 @@
         <h2>Refine Results</h2>
         <!-- Form for filtering and sorting -->
         <div class="filter-sort-form">
-          <form id="filter-sort" method="get" action="/" novalidate>
+          <form id="filter-sort" method="get" action="/admin" novalidate>
             <!-- Filter section -->
             <div>
               <h3>Filter by:</h3>
