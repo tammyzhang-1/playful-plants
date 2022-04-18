@@ -105,7 +105,7 @@ input:hover {
     cursor: pointer;
 }
 
-.add-text input:hover {
+.add-text input:hover, .short-text input:hover {
     cursor: text;
 }
 

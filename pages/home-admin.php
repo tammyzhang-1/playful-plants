@@ -28,6 +28,16 @@
   $rules = '';
   $bio = '';
 
+  $perennial = '';
+  $annual = '';
+  $full_sun = '';
+  $partial_shade = '';
+  $full_shade = '';
+  $plant_type = '';
+
+  // variable tracking tags added with this plant
+  $tags = array();
+
   // add form sticky values
   $sticky_name = '';
   $sticky_scientific_name = '';
@@ -42,12 +52,26 @@
   $sticky_rules = '';
   $sticky_bio = '';
 
+  $sticky_perennial = '';
+  $sticky_annual = '';
+  $sticky_full_sun = '';
+  $sticky_partial_shade = '';
+  $sticky_full_shade = '';
+
+  $sticky_shrub = '';
+  $sticky_grass = '';
+  $sticky_vine = '';
+  $sticky_tree = '';
+  $sticky_flower = '';
+  $sticky_groundcover = '';
+  $sticky_other = '';
+
   // code to be executed when add form submitted
   if (isset($_POST['add-plant'])) {
     $name = trim($_POST['plant-name']); //untrusted
     $scientific_name = trim($_POST['scientific-name']); //untrusted
     $plant_id = trim($_POST['plant-id']); //untrusted
-    $hardiness_zone = trim($POST['hardiness-zone']); //untrusted
+    $hardiness_zone = trim($_POST['hardiness-zone']); //untrusted
     $exploratory_constructive = $_POST['add-exploratory-constructive']; //untrusted
     $exploratory_sensory = $_POST['add-exploratory-sensory']; //untrusted
     $physical = $_POST['add-physical']; //untrusted
@@ -56,6 +80,13 @@
     $expressive = $_POST['add-expressive']; //untrusted
     $rules = $_POST['add-rules']; //untrusted
     $bio = $_POST['add-bio']; //untrusted
+
+    $perennial = $_POST['add-perennial']; //untrusted
+    $annual = $_POST['add-annual']; //untrusted
+    $full_sun = $_POST['add-full-sun']; //untrusted
+    $partial_shade = $_POST['add-partial-shade']; //untrusted
+    $full_shade = $_POST['add-full-shade']; //untrusted
+    $plant_type = ucfirst($_POST['add-type-select']); //untrusted
 
     $add_form_valid = True;
 
@@ -99,13 +130,15 @@
       $add_form_valid = False;
       $shade_feedback_class = '';
     }
-    if (empty($shrub) && empty($grass) && empty($vine) && empty($tree) && empty($flower) && empty($groundcover) && empty($other)) {
+
+    if (!in_array($plant_type, array("Shrub", "Grass", "Vine", "Tree", "Flower", "Groundcover", "Other"))) {
       $add_form_valid = False;
       $plant_type_feedback_class = '';
     }
 
     if ($add_form_valid) {
       //form is valid; add record to database
+      //insert into entries table
       $result = exec_sql_query($db, "INSERT INTO entries (name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :hardiness_zone, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);",
         array(
           ':name' => $name,
@@ -122,10 +155,61 @@
           ':bio' => ($bio) ? 1 : 0
         )
       );
-      if ($result) {
+
+      // push id of tag into array if it is selected
+      if ($perennial) {
+        array_push($tags, 1);
+      }
+      if ($annual) {
+        array_push($tags, 2);
+      }
+      if ($full_sun) {
+        array_push($tags, 3);
+      }
+      if ($partial_shade) {
+        array_push($tags, 4);
+      }
+      if ($full_shade) {
+        array_push($tags, 5);
+      }
+      if ($plant_type == "Shrub") {
+        array_push($tags, 6);
+      }
+      if ($plant_type == "Grass") {
+        array_push($tags, 7);
+      }
+      if ($plant_type == "Vine") {
+        array_push($tags, 8);
+      }
+      if ($plant_type == "Tree") {
+        array_push($tags, 9);
+      }
+      if ($plant_type == "Flower") {
+        array_push($tags, 10);
+      }
+      if ($plant_type == "Groundcover") {
+        array_push($tags, 11);
+      }
+      if ($plant_type == "Other") {
+        array_push($tags, 12);
+      }
+
+      $new_entry_id = $db->lastInsertId('id');;
+
+      foreach ($tags as $tag) {
+        $result_tag = exec_sql_query($db, 'INSERT INTO entry_tags (entry_id, tag_id) VALUES (:entry_id, :tag_id);',
+          array(
+            'entry_id' => $new_entry_id,
+            'tag_id' => $tag
+          )
+        );
+      }
+
+      if ($result && $result_tag) {
         $plant_added = True;
         $show_confirmation = True;
       }
+
     } else {
       // add form is not valid; sticky values are set
       $sticky_name = $name; //untrusted
@@ -140,6 +224,20 @@
       $sticky_expressive = (empty($expressive) ? '' : 'checked');
       $sticky_rules = (empty($rules) ? '' : 'checked');
       $sticky_bio = (empty($bio) ? '' : 'checked');
+
+      $sticky_perennial = (empty($perennial) ? '' : 'checked');
+      $sticky_annual = (empty($annual) ? '' : 'checked');
+      $sticky_full_sun = (empty($full_sun) ? '' : 'checked');
+      $sticky_partial_shade = (empty($partial_shade) ? '' : 'checked');
+      $sticky_full_shade = (empty($full_shade) ? '' : 'checked');
+
+      $sticky_shrub = ($plant_type == 'Shrub' ? 'selected' : '');
+      $sticky_grass = ($plant_type == 'Grass' ? 'selected' : '');
+      $sticky_vine = ($plant_type == 'Vine' ? 'selected' : '');
+      $sticky_tree = ($plant_type == 'Tree' ? 'selected' : '');
+      $sticky_flower = ($plant_type == 'Flower' ? 'selected' : '');
+      $sticky_groundcover = ($plant_type == 'Groundcover' ? 'selected' : '');
+      $sticky_other = ($plant_type == 'Other' ? 'selected' : '');
     }
   }
 
@@ -371,25 +469,25 @@
               </div>
 
               <div class="garden-type">
-                <input type="checkbox" name="add-perennial" id="add-perennial"/>
+                <input type="checkbox" name="add-perennial" id="add-perennial" <?php echo $sticky_perennial; ?>/>
                 <label for="add-perennial">Perennial</label>
               </div>
               <div class="garden-type">
-                <input type="checkbox" name="add-annual" id="add-annual"/>
+                <input type="checkbox" name="add-annual" id="add-annual" <?php echo $sticky_annual; ?>/>
                 <label for="add-annual">Annual</label>
               </div>
 
               <div class="feedback <?php echo $shade_feedback_class; ?>">At least one type of light is required.</div>
               <div class="garden-type">
-                <input type="checkbox" name="add-full-sun" id="add-full-sun"/>
+                <input type="checkbox" name="add-full-sun" id="add-full-sun" <?php echo $sticky_full_sun; ?>/>
                 <label for="add-full-sun">Full Sun</label>
               </div>
               <div class="garden-type">
-                <input type="checkbox" name="add-partial-shade" id="add-partial-shade"/>
+                <input type="checkbox" name="add-partial-shade" id="add-partial-shade" <?php echo $sticky_partial_shade; ?>/>
                 <label for="add-partial-shade">Partial Shade</label>
               </div>
               <div class="garden-type">
-                <input type="checkbox" name="add-full-shade" id="add-full-shade"/>
+                <input type="checkbox" name="add-full-shade" id="add-full-shade" <?php echo $sticky_full_shade; ?>/>
                 <label for="add-full-shade">Full Shade</label>
               </div>
 
@@ -398,13 +496,13 @@
                 <label for="add-type-select">Plant type:  </label>
                   <select name="add-type-select" id="add-type-select">
                     <option value="none">None selected</option>
-                    <option value="shrub">Shrub</option>
-                    <option value="grass">Grass</option>
-                    <option value="vine">Vine</option>
-                    <option value="tree">Tree</option>
-                    <option value="flower">Flower</option>
-                    <option value="groundcover">Groundcover</option>
-                    <option value="other">Other</option>
+                    <option value="shrub" <?php echo $sticky_shrub; ?>>Shrub</option>
+                    <option value="grass" <?php echo $sticky_grass; ?>>Grass</option>
+                    <option value="vine" <?php echo $sticky_vine; ?>>Vine</option>
+                    <option value="tree" <?php echo $sticky_tree; ?>>Tree</option>
+                    <option value="flower" <?php echo $sticky_flower; ?>>Flower</option>
+                    <option value="groundcover" <?php echo $sticky_groundcover; ?>>Groundcover</option>
+                    <option value="other" <?php echo $sticky_other; ?>>Other</option>
                   </select>
               </div>
               <div class="submit">
