@@ -347,6 +347,14 @@ LATER REVISION 2 - play types will be moved back under entries instead of tags b
 
 REVISION 2 - category "hardiness zones" will be moved out of table "tags" and instead to "entries", because they function unlike the other fields in tags (are unique and not represented by boolean type data)
 
+REVISION 3 - new table to hold file upload information
+
+Table: documents
+
+- id: INTEGER {PK, U, NN, AI}
+- file_name: TEXT {NN}
+- file_ext: TEXT {NN}
+
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
 > Plan _all_ of your database queries. You may use natural language, pseudocode, or SQL.
@@ -412,8 +420,15 @@ INSERT INTO entry_tags (entry_id, tag_id) VALUES (:entry_id, :tag_id);
 ```
 
 ```
-// sorting on admin catalog view
-//
+// uploading image on add form / edit form
+$file_result = exec_sql_query(
+  $db,
+  "INSERT INTO documents (file_name, file_ext) VALUES (:file_name, :file_ext)",
+  array(
+    ':file_name' => $image_filename,
+    ':file_ext' => $image_ext,
+  )
+);
 ```
 
 
@@ -549,7 +564,55 @@ $sort_query = http_build_query(
     'bio-play' = $bio_filter ?: NULL
   )
 );
+```
 
+```
+// file uploads needed on the admin edit page and admin add form (on catalog view)
+// all images need to be moved to public/uploads/documents and renamed to [id].extension
+// table needs to be created with name "documents" to store file information
+
+define("MAX_FILE_SIZE", 1000000);
+
+$file_ext_feedback_class = 'hidden';
+if ext is not jpg or png:
+  $file_ext_feedback_class = '';
+
+$image_filename = '';
+$image_ext = '';
+
+if (add button OR edit button is pressed) {
+  $upload = $_FILES['image-file'];
+
+  if ($upload['error'] == UPLOAD_ERR_OK) {
+    $image_filename = basename($upload['name']);
+    $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+    if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+      $form_valid = False;
+    }
+  } else {
+    $form_valid = False;
+  }
+
+  if form_valid {
+    $file_result = db query that inserts file info into table "documents"
+    if $file_result {
+      $record_id = $db->lastInsertId('id');
+      $id_filename = 'public/uploads/documents/' . $record_id . '.' . $image_ext;
+      move_uploaded_file($upload["tmp_name"], $id_filename);
+    } else {
+      $file_ext_feedback_class = '';
+    }
+  }
+
+}
+
+<p class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</p>
+<form action="/admin" method="post" enctype="multipart/form-data" novalidate>
+  <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
+
+  <label for="upload-image">JPG or PNG file:</label>
+  <input id="upload-image" type="file" name="image-file" accept=".png, .jpg" />
+</form>
 ```
 
 
