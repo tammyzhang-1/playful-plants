@@ -34,14 +34,24 @@ h4 {
     margin-bottom: 0.5em;
 }
 
+h5 {
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+
 h2, h3 {
     color: #1b3515;
 }
 
+#filter-by {
+    margin-bottom: 0;
+}
+
 .sidebar {
     margin-top: 0.5em;
-    min-width: 23%;
-    padding-left: 6em;
+    min-width: 18%;
+    max-width: 23%;
+    padding-left: 4em;
     padding-right: 3em;
     padding-bottom: 3em;
     margin-left: 0.5em;
@@ -71,9 +81,22 @@ label {
 .add-text, .edit-text {
     display: flex;
     justify-content: space-between;
-    gap: 1em;
+    gap: 2em;
     margin-bottom: 1em;
     margin-top: 0.25em;
+}
+
+.add-text input {
+    width: 13.5em;
+}
+
+.file-upload {
+    display: flex;
+    justify-content: space-between;
+}
+
+#upload-image {
+    width: 14em;
 }
 
 .filter-option, .sort-option {
@@ -105,7 +128,7 @@ input:hover {
     cursor: pointer;
 }
 
-.add-text input:hover {
+.add-text input:hover, .short-text input:hover {
     cursor: text;
 }
 
@@ -152,7 +175,7 @@ input:hover {
     flex-wrap: wrap;
     row-gap: 0.5em;
     column-gap: 1em;
-    max-height: 50%;
+    max-height: 8em;
 }
 
 .garden-info {
@@ -160,6 +183,7 @@ input:hover {
     flex-direction: column;
     column-gap: 1em;
     row-gap: 0.2em;
+    min-width: 20%;
 }
 
 .add-body, #add-plant {
@@ -279,10 +303,14 @@ input:hover {
 
 #media-grid {
     display: flex;
-    width: 100%;
+    max-width: 100%;
     flex-wrap: wrap;
     gap: 1em;
     margin-left: 2em;
+}
+
+.catalog-body {
+    min-width: 66%;
 }
 
 .photo {
@@ -303,12 +331,14 @@ input:hover {
     align-items: center;
     padding-left: 2em;
     padding-right: 2em;
+    max-width: 100%;
 }
 
 .media-catalog {
     display: flex;
     height: 100%;
     justify-content: center;
+    max-width: 100%;
 }
 
 .detail-page {
@@ -384,6 +414,7 @@ input:hover {
     }
     .sidebar {
         padding-left: 3em;
+        min-width: 20%;
     }
     .detail-page {
         flex-direction: column;
@@ -429,5 +460,6 @@ input:hover {
     }
     .sidebar {
         margin-right: 0.5em;
+        max-width: 90%;
     }
 }

@@ -246,6 +246,7 @@ _Final Design:_
 
 - Increased spacing between images vertically to be less visually crowded in Abi's point of view
 - Added dropdown menu in filter because the type of plant is better suited to that than a list of checkboxes, given the type can only be one of a list
+- MINOR REVISION: change dropdown menu to checkboxes because Abi may want to look at more than one type of plant at a time
 
 3. Details page for consumers on mobile
 
@@ -346,6 +347,14 @@ LATER REVISION 2 - play types will be moved back under entries instead of tags b
 
 REVISION 2 - category "hardiness zones" will be moved out of table "tags" and instead to "entries", because they function unlike the other fields in tags (are unique and not represented by boolean type data)
 
+REVISION 3 - new table to hold file upload information
+
+Table: documents
+
+- id: INTEGER {PK, U, NN, AI}
+- file_name: TEXT {NN}
+- file_ext: TEXT {NN}
+
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
 > Plan _all_ of your database queries. You may use natural language, pseudocode, or SQL.
@@ -380,9 +389,46 @@ UPDATE entries SET
   ...
   WHERE (id=___);
 
-  DELETE FROM entries WHERE (id=___);
+DELETE FROM entries WHERE (id=___);
 
-  INSERT INTO entries (fields) VALUES (parameter markers using an array);
+INSERT INTO entries (fields) VALUES (parameter markers using an array);
+```
+
+```
+// adding a new plant
+// insert into entries table
+INSERT INTO entries (name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :hardiness_zone, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);
+
+array(
+  ':name' => $name,
+  ':scientific_name' => $scientific_name,
+  ':plant_id' => $plant_id,
+  ':hardiness_zone' => $hardiness_zone,
+  ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
+  ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
+  ':physical' => ($physical) ? 1 : 0,
+  ':imaginative' => ($imaginative) ? 1 : 0,
+  ':restorative' => ($restorative) ? 1 : 0,
+  ':expressive' => ($expressive) ? 1 : 0,
+  ':rules' => ($rules) ? 1 : 0,
+  ':bio' => ($bio) ? 1 : 0
+  )
+
+// insert into entry_tags table
+INSERT INTO entry_tags (entry_id, tag_id) VALUES (:entry_id, :tag_id);
+
+```
+
+```
+// uploading image on add form / edit form
+$file_result = exec_sql_query(
+  $db,
+  "INSERT INTO documents (file_name, file_ext) VALUES (:file_name, :file_ext)",
+  array(
+    ':file_name' => $image_filename,
+    ':file_ext' => $image_ext,
+  )
+);
 ```
 
 
@@ -390,6 +436,15 @@ UPDATE entries SET
 ```
 // filtering
 SELECT * FROM entries WHERE (the gardening conditions checked by the consumer is 1, indicating it is true for the plant);
+
+REVISION:
+SELECT *
+  FROM entry_tags
+	INNER JOIN tags ON entry_tags.tag_id = tags.id
+	INNER JOIN entries ON entry_tags.entry_id = entries.id
+  WHERE (entry_tags.tag_id = 1);
+// this returns a list of plants that have tag of id 1 (perennial)
+// replace 1 with variables and escape with array of parameter markers
 
 // sorting
 SELECT * FROM entries ORDER BY id DESC; // for most recent to oldest
@@ -475,6 +530,91 @@ if (empty($shrub) && empty($grass) && empty($vine) && empty($tree) && empty($flo
 }
 ```
 
+```
+// sorting entries in catalog view pseudocode
+4 types of sort:
+1. oldest to most recent (default)
+2. most recent to oldest
+3. alphabetical by common name A-Z
+4. alphabetical by common name Z-A
+
+// necessary query strings:
+1. &sort=id&order=asc
+2. &sort=id&order=desc
+3. &sort=name&order=asc
+4. &sort=name&order=desc
+
+make each <option> have an <a href="query string">
+revision: since option cannot have <a> elements, use onchange attribute
+
+These query strings need to be glued onto "admin/"
+$sort_query = one of the strings above;
+$sort_base = "/admin?" . $sort_query;
+
+however, $sort_query must also contain any strings to remember applied filters
+$sort_query = http_build_query(
+  array(
+    'exploratory-constructive-play' = $exploratory_constructive_filter ?: NULL,
+    'exploratory-sensory-play' = $exploratory_sensory_filter ?: NULL,
+    'physical-play' = $physical_filter ?: NULL,
+    'imaginative-play' = $imaginative_filter ?: NULL,
+    'restorative-play' = $restorative_filter ?: NULL,
+    'expressive-play' = $expressive_filter ?: NULL,
+    'rules-play' = $rules_filter ?: NULL,
+    'bio-play' = $bio_filter ?: NULL
+  )
+);
+```
+
+```
+// file uploads needed on the admin edit page and admin add form (on catalog view)
+// all images need to be moved to public/uploads/documents and renamed to [id].extension
+// table needs to be created with name "documents" to store file information
+
+define("MAX_FILE_SIZE", 1000000);
+
+$file_ext_feedback_class = 'hidden';
+if ext is not jpg or png:
+  $file_ext_feedback_class = '';
+
+$image_filename = '';
+$image_ext = '';
+
+if (add button OR edit button is pressed) {
+  $upload = $_FILES['image-file'];
+
+  if ($upload['error'] == UPLOAD_ERR_OK) {
+    $image_filename = basename($upload['name']);
+    $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+    if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+      $form_valid = False;
+    }
+  } else {
+    $form_valid = False;
+  }
+
+  if form_valid {
+    $file_result = db query that inserts file info into table "documents"
+    if $file_result {
+      $record_id = $db->lastInsertId('id');
+      $id_filename = 'public/uploads/documents/' . $record_id . '.' . $image_ext;
+      move_uploaded_file($upload["tmp_name"], $id_filename);
+    } else {
+      $file_ext_feedback_class = '';
+    }
+  }
+
+}
+
+<p class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</p>
+<form action="/admin" method="post" enctype="multipart/form-data" novalidate>
+  <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
+
+  <label for="upload-image">JPG or PNG file:</label>
+  <input id="upload-image" type="file" name="image-file" accept=".png, .jpg" />
+</form>
+```
+
 
 - Consumer catalog view
 
@@ -500,6 +640,144 @@ $records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
   <a href="/detail"><img src="public/images/ echo $plant_id .jpg" alt=""/></a>
   <a href="/detail"><p> echo $name </p></a>
 </div>
+```
+
+```
+// filtering and sorting
+// sort/filter SQL query base pieces
+  $filter_base = "SELECT * FROM entries";
+  $filter_where = '';
+  $garden_filter_options = array();
+  $filter_order = ' ORDER BY id ASC;';
+
+  // filter form values
+  $perennial_filter = '';
+  $annual_filter = '';
+  $full_sun_filter = '';
+  $partial_shade_filter = '';
+  $full_shade_filter = '';
+  $plant_type = '';
+
+  $show_filter_confirmation = False;
+
+  // filter form sticky values
+  $sticky_perennial_filter = '';
+  $sticky_annual_filter = '';
+  $sticky_full_sun_filter = '';
+  $sticky_partial_shade_filter = '';
+  $sticky_full_shade_filter = '';
+
+  $sticky_shrub_filter = '';
+  $sticky_grass_filter = '';
+  $sticky_vine_filter = '';
+  $sticky_tree_filter = '';
+  $sticky_flower_filter = '';
+  $sticky_groundcover_filter = '';
+  $sticky_other_filter = '';
+
+  // variables tracking if filter selected for each play type
+  $perennial_filter = $_GET['perennial-filter'];
+  $annual_filter = $_GET['annual-filter'];
+  $full_sun_filter = $_GET['full-sun-filter'];
+  $partial_shade_filter = $_GET['partial-shade-filter'];
+  $full_shade_filter = $_GET['full-shade-filter'];
+  $plant_type = $_GET['add-type-select'];
+
+  // make filter options chosen by user sticky
+  $sticky_perennial_filter = $perennial_filter ? "checked" : '';
+  $sticky_annual_filter = $annual_filter ? "checked" : '';
+  $sticky_full_sun_filter = $full_sun_filter ? "checked" : '';
+  $sticky_partial_shade_filter = $partial_shade_filter ? "checked" : '';
+  $sticky_full_shade_filter = $full_shade_filter ? "checked" : '';
+
+  $sticky_shrub_filter = ($plant_type == "shrub") ? "selected" : '';
+  $sticky_grass_filter = ($plant_type == "grass") ? "selected" : '';
+  $sticky_vine_filter = ($plant_type == "vine") ? "selected" : '';
+  $sticky_tree_filter = '($plant_type == "tree") ? "selected" : '';
+  $sticky_flower_filter = ($plant_type == "flower") ? "selected" : '';
+  $sticky_groundcover_filter = ($plant_type == "groundcover") ? "selected" : '';
+  $sticky_other_filter = ($plant_type == "other") ? "selected" : '';
+
+  $show_filter_confirmation = True;
+
+  // add selected filter options to array
+  if ($perennial_filter) {
+    array_push($garden_filter_options, "(perennial)");
+  }
+  if ($annual_filter) {
+    array_push($garden_filter_options, "(annual)");
+  }
+  if ($full_sun_filter) {
+    array_push($garden_filter_options, "(full sun)");
+  }
+  if ($partial_shade_filter) {
+    array_push($garden_filter_options, "(partial shade)");
+  }
+  if ($full_shade_filter) {
+    array_push($garden_filter_options, "(full shade)");
+  }
+
+  // display either all records containing at least one of the selected filters
+  // OR records containing all selected filters depending on if user checked inclusive option
+  if (count($garden_filter_options) > 0) {
+    if ($inclusive_filter) {
+      $filter_where = ' WHERE ' . implode(' AND ', $garden_filter_options);
+    } else {
+      $filter_where = ' WHERE ' . implode(' OR ', $garden_filter_options);
+    }
+  }
+
+  // sort section
+  $sort = $_GET['sort'];
+  $order = $_GET['order'];
+
+  $sql_order = '';
+
+  if ($order == "asc") {
+    $sql_order = "ASC";
+  } elseif ($order == "desc") {
+    $sql_order = "DESC";
+  } else {
+    $order= NULL;
+  }
+
+  if ($order && in_array($sort, array('id', 'name'))) {
+    if ($sort == 'id') {
+      $filter_order = ' ORDER BY id ' . $sql_order;
+    } elseif ($sort == 'name') {
+      $filter_order = ' ORDER BY name ' . $sql_order;
+  }
+}
+
+  // sticky sort values
+  $sticky_id_sort_asc = ($sort == "id" && $order == "asc") ? "selected" : "";
+  $sticky_id_sort_desc = ($sort == "id" && $order == "desc") ? "selected" : "";
+  $sticky_name_sort_asc = ($sort == "name" && $order == "asc") ? "selected" : "";
+  $sticky_name_sort_desc = ($sort == "name" && $order == "desc") ? "selected" : "";
+
+  $sort_query = http_build_query(
+    array(
+      'perennial-filter' => $perennial_filter ?: NULL,
+      'annual-filter' => $annual_filter ?: NULL,
+      'full-sun-filter' => $full_sun_filter ?: NULL,
+      'partial-shade-filter' => $partial_shade_filter ?: NULL,
+      'full-shade-filter' => $full_shade_filter ?: NULL,
+    )
+  );
+
+  $sort_base = "/?" . $sort_query;
+
+  // final filter/sort query
+  $filter_query = $filter_base . $filter_where . $filter_order;
+
+  $records = exec_sql_query($db, $filter_query) -> fetchAll();
+  $queries_matching = count($records);
+
+  // later in code:
+  // echo sticky values out in input so they can stay checked when selected (for both filters and sorting)
+  // hidden inputs in the filter form keeping track of sort
+  // hidden inputs under sort keeping track of filters
+
 ```
 
 
@@ -550,6 +828,20 @@ if the admin clicks the edit button from catalog view:
   use hidden inputs to echo current data for that entry id into the edit form that comes up
   if the admin clicks save:
     update the database via database query where the id from the hidden input is used so the right entry is edited
+```
+
+```
+// adding an entry
+// similar to editing an entry (also needs variables + sticky variables for the gardening information to be added)
+// code from project 2 in place takes care of everything except for the gardening info
+
+if admin clicks the add plant button:
+  validate all fields
+  if at least one field is invalid
+    form_valid is false, set sticky values, show feedback messages
+  create array of tags selected
+  add plant info into entries table
+  access tags array and add those into the entry_tags table as foreign keys to the corresponding tables where entry_id = id of this plant being added and tags_id = ids of the tags in the array
 ```
 
 ```
