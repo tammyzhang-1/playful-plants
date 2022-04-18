@@ -63,19 +63,19 @@ $show_filter_confirmation = True;
 
 // add selected filter options to array
 if ($perennial_filter) {
-  array_push($garden_filter_options, "(perennial)");
+  array_push($garden_filter_options, "(entry_tags.tag_id == 1)");
 }
 if ($annual_filter) {
-  array_push($garden_filter_options, "(annual)");
+  array_push($garden_filter_options, "(entry_tags.tag_id == 2)");
 }
 if ($full_sun_filter) {
-  array_push($garden_filter_options, "(full sun)");
+  array_push($garden_filter_options, "(entry_tags.tag_id == 3)");
 }
 if ($partial_shade_filter) {
-  array_push($garden_filter_options, "(partial shade)");
+  array_push($garden_filter_options, "(entry_tags.tag_id == 4)");
 }
 if ($full_shade_filter) {
-  array_push($garden_filter_options, "(full shade)");
+  array_push($garden_filter_options, "(entry_tags.tag_id == 5)");
 }
 
 // display either all records containing at least one of the selected filters
@@ -86,6 +86,7 @@ if (count($garden_filter_options) > 0) {
   } else {
     $filter_where = ' WHERE ' . implode(' OR ', $garden_filter_options);
   }
+  $filter_base = "SELECT * FROM entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id INNER JOIN entries ON entry_tags.entry_id = entries.id";
 }
 
 // sort section
@@ -95,9 +96,9 @@ $order = $_GET['order'];
 $sql_order = '';
 
 if ($order == "asc") {
-  $sql_order = "ASC";
+  $sql_order = "ASC ";
 } elseif ($order == "desc") {
-  $sql_order = "DESC";
+  $sql_order = "DESC ";
 } else {
   $order= NULL;
 }
@@ -129,7 +130,7 @@ $sort_query = http_build_query(
 $sort_base = "/?" . $sort_query;
 
 // final filter/sort query
-$filter_query = $filter_base . $filter_where . $filter_order;
+$filter_query = $filter_base . $filter_where . " GROUP BY entries.name " . $filter_order;
 
 $records = exec_sql_query($db, $filter_query) -> fetchAll();
 $queries_matching = count($records);
@@ -166,27 +167,27 @@ $image_url = 'public/images/default.png';
             <h3>Filter by:</h3>
 
             <div class="filter-option">
-              <input type="checkbox" name="perennial-filter" id="perennial-filter" />
+              <input type="checkbox" name="perennial-filter" id="perennial-filter" <?php echo $sticky_perennial_filter; ?>/>
               <label for="perennial-filter">Perennial</label>
             </div>
 
             <div class="filter-option">
-              <input type="checkbox" name="annual-filter" id="annual-filter" />
+              <input type="checkbox" name="annual-filter" id="annual-filter" <?php echo $sticky_annual_filter; ?>/>
               <label for="annual-filter">Annual</label>
             </div>
 
             <div class="filter-option">
-              <input type="checkbox" name="full-sun-filter" id="full-sun-filter" />
+              <input type="checkbox" name="full-sun-filter" id="full-sun-filter" <?php echo $sticky_full_sun_filter; ?>/>
               <label for="full-sun-filter">Full Sun</label>
             </div>
 
             <div class="filter-option">
-              <input type="checkbox" name="partial-shade-filter" id="partial-shade-filter" />
+              <input type="checkbox" name="partial-shade-filter" id="partial-shade-filter" <?php echo $sticky_partial_shade_filter; ?>/>
               <label for="partial-shade-filter">Partial Shade</label>
             </div>
 
             <div class="filter-option">
-              <input type="checkbox" name="full-shade-filter" id="full-shade-filter" />
+              <input type="checkbox" name="full-shade-filter" id="full-shade-filter" <?php echo $sticky_full_shade_filter; ?>/>
               <label for="full-shade-filter">Full Shade</label>
             </div>
 
@@ -216,7 +217,7 @@ $image_url = 'public/images/default.png';
         </div>
       </div>
 
-      <div>
+      <div class="catalog-body">
         <div class="catalog-header">
           <h2><?php echo $queries_matching; ?> Results</h2>
           <div>

@@ -40,8 +40,9 @@ h2, h3 {
 
 .sidebar {
     margin-top: 0.5em;
-    min-width: 23%;
-    padding-left: 6em;
+    min-width: 18%;
+    max-width: 23%;
+    padding-left: 4em;
     padding-right: 3em;
     padding-bottom: 3em;
     margin-left: 0.5em;
@@ -280,10 +281,14 @@ input:hover {
 
 #media-grid {
     display: flex;
-    width: 100%;
+    max-width: 100%;
     flex-wrap: wrap;
     gap: 1em;
     margin-left: 2em;
+}
+
+.catalog-body {
+    min-width: 66%;
 }
 
 .photo {
@@ -304,12 +309,14 @@ input:hover {
     align-items: center;
     padding-left: 2em;
     padding-right: 2em;
+    max-width: 100%;
 }
 
 .media-catalog {
     display: flex;
     height: 100%;
     justify-content: center;
+    max-width: 100%;
 }
 
 .detail-page {
@@ -385,6 +392,7 @@ input:hover {
     }
     .sidebar {
         padding-left: 3em;
+        min-width: 20%;
     }
     .detail-page {
         flex-direction: column;
@@ -430,5 +438,6 @@ input:hover {
     }
     .sidebar {
         margin-right: 0.5em;
+        max-width: 90%;
     }
 }
