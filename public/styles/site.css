@@ -34,8 +34,17 @@ h4 {
     margin-bottom: 0.5em;
 }
 
+h5 {
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+
 h2, h3 {
     color: #1b3515;
+}
+
+#filter-by {
+    margin-bottom: 0;
 }
 
 .sidebar {

@@ -17,13 +17,20 @@ $annual_filter = '';
 $full_sun_filter = '';
 $partial_shade_filter = '';
 $full_shade_filter = '';
-$plant_type = '';
+$shrub_filter = '';
+$grass_filter = '';
+$vine_filter = '';
+$tree_filter = '';
+$flower_filter = '';
+$groundcover_filter = '';
+$other_filter = '';
 
 $show_filter_confirmation = False;
 
 // filter form sticky values
 $sticky_perennial_filter = '';
 $sticky_annual_filter = '';
+
 $sticky_full_sun_filter = '';
 $sticky_partial_shade_filter = '';
 $sticky_full_shade_filter = '';
@@ -39,25 +46,34 @@ $sticky_other_filter = '';
 // variables tracking if filter selected for each play type
 $perennial_filter = $_GET['perennial-filter'];
 $annual_filter = $_GET['annual-filter'];
+
 $full_sun_filter = $_GET['full-sun-filter'];
 $partial_shade_filter = $_GET['partial-shade-filter'];
 $full_shade_filter = $_GET['full-shade-filter'];
-$plant_type = $_GET['type-select'];
+
+$shrub_filter = $_GET['shrub-filter'];
+$grass_filter = $_GET['grass-filter'];
+$vine_filter = $_GET['vine-filter'];
+$tree_filter = $_GET['tree-filter'];
+$flower_filter = $_GET['flower-filter'];
+$groundcover_filter = $_GET['groundcover-filter'];
+$other_filter = $_GET['other-filter'];
 
 // make filter options chosen by user sticky
 $sticky_perennial_filter = $perennial_filter ? "checked" : '';
 $sticky_annual_filter = $annual_filter ? "checked" : '';
+
 $sticky_full_sun_filter = $full_sun_filter ? "checked" : '';
 $sticky_partial_shade_filter = $partial_shade_filter ? "checked" : '';
 $sticky_full_shade_filter = $full_shade_filter ? "checked" : '';
 
-$sticky_shrub_filter = ($plant_type == "shrub") ? "selected" : '';
-$sticky_grass_filter = ($plant_type == "grass") ? "selected" : '';
-$sticky_vine_filter = ($plant_type == "vine") ? "selected" : '';
-$sticky_tree_filter = ($plant_type == "tree") ? "selected" : '';
-$sticky_flower_filter = ($plant_type == "flower") ? "selected" : '';
-$sticky_groundcover_filter = ($plant_type == "groundcover") ? "selected" : '';
-$sticky_other_filter = ($plant_type == "other") ? "selected" : '';
+$sticky_shrub_filter = $shrub_filter ? "checked" : '';
+$sticky_grass_filter = $grass_filter ? "checked" : '';
+$sticky_vine_filter = $vine_filter ? "checked" : '';
+$sticky_tree_filter =  $tree_filter ? "checked" : '';
+$sticky_flower_filter = $flower_filter ? "checked" : '';
+$sticky_groundcover_filter = $groundcover_filter ? "checked" : '';
+$sticky_other_filter = $other_filter ? "checked" : '';
 
 $show_filter_confirmation = True;
 
@@ -77,36 +93,32 @@ if ($partial_shade_filter) {
 if ($full_shade_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 5)");
 }
-if ($plant_type == "shrub") {
+if ($shrub_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 6)");
 }
-if ($plant_type == "grass") {
+if ($grass_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 7)");
 }
-if ($plant_type == "vine") {
+if ($vine_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 8)");
 }
-if ($plant_type == "tree") {
+if ($tree_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 9)");
 }
-if ($plant_type == "flower") {
+if ($flower_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 10)");
 }
-if ($plant_type == "groundcover") {
+if ($groundcover_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 11)");
 }
-if ($plant_type == "other") {
+if ($other_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 12)");
 }
 
 // display either all records containing at least one of the selected filters
 // OR records containing all selected filters depending on if user checked inclusive option
 if (count($garden_filter_options) > 0) {
-  if ($inclusive_filter) {
-    $filter_where = ' WHERE ' . implode(' AND ', $garden_filter_options);
-  } else {
-    $filter_where = ' WHERE ' . implode(' OR ', $garden_filter_options);
-  }
+  $filter_where = ' WHERE ' . implode(' OR ', $garden_filter_options);
   $filter_base = "SELECT * FROM entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id INNER JOIN entries ON entry_tags.entry_id = entries.id";
 }
 
@@ -145,6 +157,13 @@ $sort_query = http_build_query(
     'full-sun-filter' => $full_sun_filter ?: NULL,
     'partial-shade-filter' => $partial_shade_filter ?: NULL,
     'full-shade-filter' => $full_shade_filter ?: NULL,
+    'shrub-filter' => $shrub_filter ?: NULL,
+    'grass-filter' => $grass_filter ?: NULL,
+    'vine-filter' => $vine_filter ?: NULL,
+    'tree-filter' => $tree_filter ?: NULL,
+    'flower-filter' => $flower_filter ?: NULL,
+    'groundcover-filter' => $groundcover_filter ?: NULL,
+    'other-filter' => $other_filter ?: NULL
   )
 );
 
@@ -185,8 +204,9 @@ $image_url = 'public/images/default.png';
         <div class="filter-sort-form">
           <form id="filter-garden" method="get" action="/" novalidate>
             <!-- Filter section -->
-            <h3>Filter by:</h3>
+            <h3 id="filter-by">Filter by:</h3>
 
+            <h5>Seasonality</h5>
             <div class="filter-option">
               <input type="checkbox" name="perennial-filter" id="perennial-filter" <?php echo $sticky_perennial_filter; ?>/>
               <label for="perennial-filter">Perennial</label>
@@ -197,6 +217,7 @@ $image_url = 'public/images/default.png';
               <label for="annual-filter">Annual</label>
             </div>
 
+            <h5>Light Needs</h5>
             <div class="filter-option">
               <input type="checkbox" name="full-sun-filter" id="full-sun-filter" <?php echo $sticky_full_sun_filter; ?>/>
               <label for="full-sun-filter">Full Sun</label>
@@ -212,19 +233,40 @@ $image_url = 'public/images/default.png';
               <label for="full-shade-filter">Full Shade</label>
             </div>
 
-            <!-- referencing Mozilla select documentation -->
+            <h5>Plant Types</h5>
             <div class="filter-option">
-              <label for="type-select">Plant type:  </label>
-              <select name="type-select" id="type-select">
-                <option value="none">None selected</option>
-                <option value="shrub">Shrub</option>
-                <option value="grass">Grass</option>
-                <option value="vine">Vine</option>
-                <option value="tree">Tree</option>
-                <option value="flower">Flower</option>
-                <option value="groundcover">Groundcover</option>
-                <option value="other">Other</option>
-              </select>
+              <input type="checkbox" name="shrub-filter" id="shrub-filter" <?php echo $sticky_shrub_filter; ?>/>
+              <label for="shrub-filter">Shrub</label>
+            </div>
+
+            <div class="filter-option">
+              <input type="checkbox" name="grass-filter" id="grass-filter" <?php echo $sticky_grass_filter; ?>/>
+              <label for="grass-filter">Grass</label>
+            </div>
+
+            <div class="filter-option">
+              <input type="checkbox" name="vine-filter" id="vine-filter" <?php echo $sticky_vine_filter; ?>/>
+              <label for="vine-filter">Vine</label>
+            </div>
+
+            <div class="filter-option">
+              <input type="checkbox" name="tree-filter" id="tree-filter" <?php echo $sticky_tree_filter; ?>/>
+              <label for="tree-filter">Tree</label>
+            </div>
+
+            <div class="filter-option">
+              <input type="checkbox" name="flower-filter" id="flower-filter" <?php echo $sticky_flower_filter; ?>/>
+              <label for="flower-filter">Flower</label>
+            </div>
+
+            <div class="filter-option">
+              <input type="checkbox" name="groundcover-filter" id="groundcover-filter" <?php echo $sticky_groundcover_filter; ?>/>
+              <label for="groundcover-filter">Groundcover</label>
+            </div>
+
+            <div class="filter-option">
+              <input type="checkbox" name="other-filter" id="other-filter" <?php echo $sticky_other_filter; ?>/>
+              <label for="other-filter">Other</label>
             </div>
 
             <div class="submit">
