@@ -241,7 +241,7 @@
     }
   }
 
-  // sort/filter form section
+  // filter form section
 
   // sort/filter SQL query base pieces
   $filter_base = "SELECT * FROM entries";
@@ -249,7 +249,7 @@
   $play_filter_options = array();
   $filter_order = ' ORDER BY id ASC;';
 
-  // sort/filter form values
+  // filter form values
   $exploratory_constructive_filter = '';
   $exploratory_sensory_filter = '';
   $physical_filter = '';
@@ -258,14 +258,10 @@
   $expressive_filter = '';
   $rules_filter = '';
   $bio_filter = '';
-  $old_sort = '';
-  $recent_sort = '';
-  $alphabet_sort = '';
-  $inclusive_filter = '';
 
   $show_filter_confirmation = False;
 
-  // sort/filter form sticky values
+  // filter form sticky values
   $sticky_exploratory_constructive_filter = '';
   $sticky_exploratory_sensory_filter = '';
   $sticky_physical_filter = '';
@@ -274,76 +270,63 @@
   $sticky_expressive_filter = '';
   $sticky_rules_filter = '';
   $sticky_bio_filter = '';
-  $sticky_old_sort = 'checked'; // default sort value
-  $sticky_recent_sort = '';
-  $sticky_alphabet_sort = '';
-  $sticky_inclusive_filter = '';
 
-  // code to be executed when user submits filter/sort form
-  if (isset($_GET['filter-sort'])) {
-    // variables tracking if filter selected for each play type
-    $exploratory_constructive_filter = $_GET['exploratory-constructive-filter']; //untrusted
-    $exploratory_sensory_filter = $_GET['exploratory-sensory-filter']; //untrusted
-    $physical_filter = $_GET['physical-filter']; //untrusted
-    $imaginative_filter = $_GET['imaginative-filter']; //untrusted
-    $restorative_filter = $_GET['restorative-filter']; //untrusted
-    $expressive_filter = $_GET['expressive-filter']; //untrusted
-    $rules_filter = $_GET['rules-filter']; //untrusted
-    $bio_filter = $_GET['bio-filter']; //untrusted
-    // variable checking which sort option is selected
-    $sort = $_GET['sort']; //untrusted
-    $inclusive_filter = $_GET['inclusive-filter']; //untrusted
+  // variables tracking if filter selected for each play type
+  $exploratory_constructive_filter = $_GET['exploratory-constructive-filter']; //untrusted
+  $exploratory_sensory_filter = $_GET['exploratory-sensory-filter']; //untrusted
+  $physical_filter = $_GET['physical-filter']; //untrusted
+  $imaginative_filter = $_GET['imaginative-filter']; //untrusted
+  $restorative_filter = $_GET['restorative-filter']; //untrusted
+  $expressive_filter = $_GET['expressive-filter']; //untrusted
+  $rules_filter = $_GET['rules-filter']; //untrusted
+  $bio_filter = $_GET['bio-filter']; //untrusted
+  $inclusive_filter = $_GET['inclusive-filter']; //untrusted
 
-    // make filter and sorting options chosen by user sticky
-    $sticky_exploratory_constructive_filter = (empty($exploratory_constructive_filter) ? '' : 'checked');
-    $sticky_exploratory_sensory_filter = (empty($exploratory_sensory_filter) ? '' : 'checked');
-    $sticky_physical_filter = (empty($physical_filter) ? '' : 'checked');
-    $sticky_imaginative_filter = (empty($imaginative_filter) ? '' : 'checked');
-    $sticky_restorative_filter = (empty($restorative_filter) ? '' : 'checked');
-    $sticky_expressive_filter = (empty($expressive_filter) ? '' : 'checked');
-    $sticky_rules_filter = (empty($rules_filter) ? '' : 'checked');
-    $sticky_bio_filter = (empty($bio_filter) ? '' : 'checked');
+  // make filter options chosen by user sticky
+  $sticky_exploratory_constructive_filter = (empty($exploratory_constructive_filter) ? '' : 'checked');
+  $sticky_exploratory_sensory_filter = (empty($exploratory_sensory_filter) ? '' : 'checked');
+  $sticky_physical_filter = (empty($physical_filter) ? '' : 'checked');
+  $sticky_imaginative_filter = (empty($imaginative_filter) ? '' : 'checked');
+  $sticky_restorative_filter = (empty($restorative_filter) ? '' : 'checked');
+  $sticky_expressive_filter = (empty($expressive_filter) ? '' : 'checked');
+  $sticky_rules_filter = (empty($rules_filter) ? '' : 'checked');
+  $sticky_bio_filter = (empty($bio_filter) ? '' : 'checked');
 
-    $sticky_old_sort = ($sort == 'oldest' ? 'checked' : '');
-    $sticky_recent_sort = ($sort == 'recent' ? 'checked' : '');
-    $sticky_alphabet_sort = ($sort == 'alphabet' ? 'checked' : '');
+  $sticky_inclusive_filter = (empty($inclusive_filter) ? '' : 'checked');
 
-    $sticky_inclusive_filter = (empty($inclusive_filter) ? '' : 'checked');
+  $show_filter_confirmation = True;
 
-    $show_filter_confirmation = True;
+  // add selected filter options to array
+  if ($exploratory_constructive_filter) {
+    array_push($play_filter_options, "(exploratory_constructive_play)");
+  }
+  if ($exploratory_sensory_filter) {
+    array_push($play_filter_options, "(exploratory_sensory_play)");
+  }
+  if ($physical_filter) {
+    array_push($play_filter_options, "(physical_play)");
+  }
+  if ($imaginative_filter) {
+    array_push($play_filter_options, "(imaginative_play)");
+  }
+  if ($restorative_filter) {
+    array_push($play_filter_options, "(restorative_play)");
+  }
+  if ($expressive_filter) {
+    array_push($play_filter_options, "(expressive_play)");
+  }
+  if ($rules_filter) {
+    array_push($play_filter_options, "(play_with_rules)");
+  }
+  if ($bio_filter) {
+    array_push($play_filter_options, "(bio_play)");
+  }
 
-    // add selected filter options to array
-    if ($exploratory_constructive_filter) {
-      array_push($play_filter_options, "(exploratory_constructive_play)");
-    }
-    if ($exploratory_sensory_filter) {
-      array_push($play_filter_options, "(exploratory_sensory_play)");
-    }
-    if ($physical_filter) {
-      array_push($play_filter_options, "(physical_play)");
-    }
-    if ($imaginative_filter) {
-      array_push($play_filter_options, "(imaginative_play)");
-    }
-    if ($restorative_filter) {
-      array_push($play_filter_options, "(restorative_play)");
-    }
-    if ($expressive_filter) {
-      array_push($play_filter_options, "(expressive_play)");
-    }
-    if ($rules_filter) {
-      array_push($play_filter_options, "(play_with_rules)");
-    }
-    if ($bio_filter) {
-      array_push($play_filter_options, "(bio_play)");
-    }
-
-    // build SQL query based on selected sort option
-    if ($sort == 'recent') {
-      $filter_order = ' ORDER BY id DESC;';
-    } elseif ($sort == 'alphabet') {
-      $filter_order = ' ORDER BY name ASC;';
-    }
+  // build SQL query based on selected sort option
+  if ($sort == 'recent') {
+    $filter_order = ' ORDER BY id DESC;';
+  } elseif ($sort == 'alphabet') {
+    $filter_order = ' ORDER BY name ASC;';
   }
 
   // display either all records containing at least one of the selected filters
@@ -355,6 +338,50 @@
       $filter_where = ' WHERE ' . implode(' OR ', $play_filter_options);
     }
   }
+
+  // sort section
+  $sort = $_GET['sort'];
+  $order = $_GET['order'];
+
+  $sql_order = '';
+
+  if ($order == "asc") {
+    $sql_order = "ASC";
+  } elseif ($order == "desc") {
+    $sql_order = "DESC";
+  } else {
+    $order= NULL;
+  }
+
+  if ($order && in_array($sort, array('id', 'name'))) {
+    if ($sort == 'id') {
+      $filter_order = ' ORDER BY id ' . $sql_order;
+    } elseif ($sort == 'name') {
+      $filter_order = ' ORDER BY name ' . $sql_order;
+  }
+}
+
+  // sticky sort values
+  $sticky_id_sort_asc = ($sort == "id" && $order == "asc") ? "selected" : "";
+  $sticky_id_sort_desc = ($sort == "id" && $order == "desc") ? "selected" : "";
+  $sticky_name_sort_asc = ($sort == "name" && $order == "asc") ? "selected" : "";
+  $sticky_name_sort_desc = ($sort == "name" && $order == "desc") ? "selected" : "";
+
+  $sort_query = http_build_query(
+    array(
+      'exploratory-constructive-filter' => $exploratory_constructive_filter ?: NULL,
+      'exploratory-sensory-filter' => $exploratory_sensory_filter ?: NULL,
+      'physical-filter' => $physical_filter ?: NULL,
+      'imaginative-filter' => $imaginative_filter ?: NULL,
+      'restorative-filter' => $restorative_filter ?: NULL,
+      'expressive-filter' => $expressive_filter ?: NULL,
+      'rules-filter' => $rules_filter ?: NULL,
+      'bio-filter' => $bio_filter ?: NULL,
+      'inclusive-filter' => $inclusive_filter ?: NULL,
+    )
+  );
+
+  $sort_base = "/admin?" . $sort_query;
 
   // final filter/sort query
   $filter_query = $filter_base . $filter_where . $filter_order;
@@ -583,8 +610,12 @@
             </div>
 
             <div class="submit">
-              <input id="filter-sort-submit" type="submit" name="filter-sort" value="Apply" />
+              <button type="submit">Apply</button>
             </div>
+
+            <!-- hidden inputs to track sort values -->
+            <input type="hidden" name="sort" value="<?php echo $sort; ?>" />
+            <input type="hidden" name="order" value="<?php echo $order; ?>" />
           </form>
         </div>
       </section>
@@ -594,12 +625,26 @@
       <div class="catalog-header">
           <h2><?php echo $queries_matching; ?> results</h2>
           <div>
-            <select name="media-sort" id="media-sort">
-              <option value="default">Most recent to oldest</option>
-              <option value="oldest">Oldest to most recent</option>
-              <option value="alphabetical-asc">Alphabetical by name A-Z</option>
-              <option value="alphabetical-desc">Alphabetical by name Z-A</option>
+            <!-- referencing documentation: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onchange -->
+            <select name="sort-media" id="sort" onchange="location=this.value;">
+              <option value="" disabled>Sort by:</option>
+              <option value="<?php echo $sort_base . "&sort=id&order=asc"?>" <?php echo $sticky_id_sort_asc; ?>>Oldest to most recent (default)</option>
+              <option value="<?php echo $sort_base . "&sort=id&order=desc"?>" <?php echo $sticky_id_sort_desc; ?>>Most recent to oldest</option>
+              <option value="<?php echo $sort_base . "&sort=name&order=asc"?>" <?php echo $sticky_name_sort_asc; ?>>Alphabetical by name A-Z</option>
+              <option value="<?php echo $sort_base . "&sort=name&order=desc"?>" <?php echo $sticky_name_sort_desc; ?>>Alphabetical by name Z-A</option>
             </select>
+            <input type="hidden" name="sort" value =""/>
+            <input type="hidden" name="order" value=""/>
+
+            <input type="hidden" name="exploratory-constructive-filter" value="<?php echo $exploratory_constructive_filter; ?>" />
+            <input type="hidden" name="exploratory-sensory-filter" value="<?php echo $exploratory_sensory_filter; ?>" />
+            <input type="hidden" name="physical-filter" value="<?php echo $physical_filter; ?>" />
+            <input type="hidden" name="imaginative-filter" value="<?php echo $imaginative_filter; ?>" />
+            <input type="hidden" name="restorative-filter" value="<?php echo $restorative_filter; ?>" />
+            <input type="hidden" name="expressive-filter" value="<?php echo $expressive_filter; ?>" />
+            <input type="hidden" name="rules-filter" value="<?php echo $rules_filter; ?>" />
+            <input type="hidden" name="bio-filter" value="<?php echo $bio_filter; ?>" />
+            <input type="hidden" name="inclusive-filter" value="<?php echo $inclusive_filter; ?>" />
           </div>
         </div>
 
