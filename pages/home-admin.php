@@ -247,7 +247,7 @@
   $filter_base = "SELECT * FROM entries";
   $filter_where = '';
   $play_filter_options = array();
-  $filter_order = ' ORDER BY id ASC;';
+  $filter_order = ' ORDER BY id DESC;';
 
   // filter form values
   $exploratory_constructive_filter = '';
@@ -621,8 +621,8 @@
             <!-- referencing documentation: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onchange -->
             <select name="sort-media" id="sort" onchange="location=this.value;">
               <option value="" disabled>Sort by:</option>
-              <option value="<?php echo $sort_base . "&sort=id&order=asc"?>" <?php echo $sticky_id_sort_asc; ?>>Oldest to most recent (default)</option>
-              <option value="<?php echo $sort_base . "&sort=id&order=desc"?>" <?php echo $sticky_id_sort_desc; ?>>Most recent to oldest</option>
+              <option value="<?php echo $sort_base . "&sort=id&order=desc"?>" <?php echo $sticky_id_sort_desc; ?>>Most recent to oldest (default)</option>
+              <option value="<?php echo $sort_base . "&sort=id&order=asc"?>" <?php echo $sticky_id_sort_asc; ?>>Oldest to most recent</option>
               <option value="<?php echo $sort_base . "&sort=name&order=asc"?>" <?php echo $sticky_name_sort_asc; ?>>Alphabetical by name A-Z</option>
               <option value="<?php echo $sort_base . "&sort=name&order=desc"?>" <?php echo $sticky_name_sort_desc; ?>>Alphabetical by name Z-A</option>
             </select>

@@ -246,6 +246,7 @@ _Final Design:_
 
 - Increased spacing between images vertically to be less visually crowded in Abi's point of view
 - Added dropdown menu in filter because the type of plant is better suited to that than a list of checkboxes, given the type can only be one of a list
+- MINOR REVISION: change dropdown menu to checkboxes because Abi may want to look at more than one type of plant at a time
 
 3. Details page for consumers on mobile
 

@@ -9,7 +9,7 @@ $plant_id = '';
 $filter_base = "SELECT * FROM entries";
 $filter_where = '';
 $garden_filter_options = array();
-$filter_order = ' ORDER BY id ASC;';
+$filter_order = ' ORDER BY name ASC;';
 
 // filter form values
 $perennial_filter = '';
@@ -42,7 +42,7 @@ $annual_filter = $_GET['annual-filter'];
 $full_sun_filter = $_GET['full-sun-filter'];
 $partial_shade_filter = $_GET['partial-shade-filter'];
 $full_shade_filter = $_GET['full-shade-filter'];
-$plant_type = $_GET['add-type-select'];
+$plant_type = $_GET['type-select'];
 
 // make filter options chosen by user sticky
 $sticky_perennial_filter = $perennial_filter ? "checked" : '';
@@ -76,6 +76,27 @@ if ($partial_shade_filter) {
 }
 if ($full_shade_filter) {
   array_push($garden_filter_options, "(entry_tags.tag_id == 5)");
+}
+if ($plant_type == "shrub") {
+  array_push($garden_filter_options, "(entry_tags.tag_id == 6)");
+}
+if ($plant_type == "grass") {
+  array_push($garden_filter_options, "(entry_tags.tag_id == 7)");
+}
+if ($plant_type == "vine") {
+  array_push($garden_filter_options, "(entry_tags.tag_id == 8)");
+}
+if ($plant_type == "tree") {
+  array_push($garden_filter_options, "(entry_tags.tag_id == 9)");
+}
+if ($plant_type == "flower") {
+  array_push($garden_filter_options, "(entry_tags.tag_id == 10)");
+}
+if ($plant_type == "groundcover") {
+  array_push($garden_filter_options, "(entry_tags.tag_id == 11)");
+}
+if ($plant_type == "other") {
+  array_push($garden_filter_options, "(entry_tags.tag_id == 12)");
 }
 
 // display either all records containing at least one of the selected filters
@@ -224,10 +245,10 @@ $image_url = 'public/images/default.png';
             <!-- referencing documentation: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onchange -->
             <select name="sort-media" id="sort" onchange="location=this.value;">
               <option value="" disabled>Sort by:</option>
-              <option value="<?php echo $sort_base . "&sort=id&order=asc"?>" <?php echo $sticky_id_sort_asc; ?>>Oldest to most recent (default)</option>
-              <option value="<?php echo $sort_base . "&sort=id&order=desc"?>" <?php echo $sticky_id_sort_desc; ?>>Most recent to oldest</option>
-              <option value="<?php echo $sort_base . "&sort=name&order=asc"?>" <?php echo $sticky_name_sort_asc; ?>>Alphabetical by name A-Z</option>
+              <option value="<?php echo $sort_base . "&sort=name&order=asc"?>" <?php echo $sticky_name_sort_asc; ?>>Alphabetical by name A-Z (default)</option>
               <option value="<?php echo $sort_base . "&sort=name&order=desc"?>" <?php echo $sticky_name_sort_desc; ?>>Alphabetical by name Z-A</option>
+              <option value="<?php echo $sort_base . "&sort=id&order=asc"?>" <?php echo $sticky_id_sort_asc; ?>>Oldest to most recently added</option>
+              <option value="<?php echo $sort_base . "&sort=id&order=desc"?>" <?php echo $sticky_id_sort_desc; ?>>Most recently added to oldest</option>
             </select>
             <input type="hidden" name="sort" value =""/>
             <input type="hidden" name="order" value=""/>
