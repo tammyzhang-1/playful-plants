@@ -520,6 +520,7 @@ if (empty($shrub) && empty($grass) && empty($vine) && empty($tree) && empty($flo
 4. &sort=name&order=desc
 
 make each <option> have an <a href="query string">
+revision: since option cannot have <a> elements, use onchange attribute
 
 These query strings need to be glued onto "admin/"
 $sort_query = one of the strings above;
@@ -539,8 +540,6 @@ $sort_query = http_build_query(
   )
 );
 
-therefore each <option> in the sort dropdown will have:
-<a href=<?php echo $sort_base . "one string from the 4 above"; ?>>
 ```
 
 
@@ -568,6 +567,144 @@ $records = exec_sql_query($db, "SELECT * FROM entries;") -> fetchAll();
   <a href="/detail"><img src="public/images/ echo $plant_id .jpg" alt=""/></a>
   <a href="/detail"><p> echo $name </p></a>
 </div>
+```
+
+```
+// filtering and sorting
+// sort/filter SQL query base pieces
+  $filter_base = "SELECT * FROM entries";
+  $filter_where = '';
+  $garden_filter_options = array();
+  $filter_order = ' ORDER BY id ASC;';
+
+  // filter form values
+  $perennial_filter = '';
+  $annual_filter = '';
+  $full_sun_filter = '';
+  $partial_shade_filter = '';
+  $full_shade_filter = '';
+  $plant_type = '';
+
+  $show_filter_confirmation = False;
+
+  // filter form sticky values
+  $sticky_perennial_filter = '';
+  $sticky_annual_filter = '';
+  $sticky_full_sun_filter = '';
+  $sticky_partial_shade_filter = '';
+  $sticky_full_shade_filter = '';
+
+  $sticky_shrub_filter = '';
+  $sticky_grass_filter = '';
+  $sticky_vine_filter = '';
+  $sticky_tree_filter = '';
+  $sticky_flower_filter = '';
+  $sticky_groundcover_filter = '';
+  $sticky_other_filter = '';
+
+  // variables tracking if filter selected for each play type
+  $perennial_filter = $_GET['perennial-filter'];
+  $annual_filter = $_GET['annual-filter'];
+  $full_sun_filter = $_GET['full-sun-filter'];
+  $partial_shade_filter = $_GET['partial-shade-filter'];
+  $full_shade_filter = $_GET['full-shade-filter'];
+  $plant_type = $_GET['add-type-select'];
+
+  // make filter options chosen by user sticky
+  $sticky_perennial_filter = $perennial_filter ? "checked" : '';
+  $sticky_annual_filter = $annual_filter ? "checked" : '';
+  $sticky_full_sun_filter = $full_sun_filter ? "checked" : '';
+  $sticky_partial_shade_filter = $partial_shade_filter ? "checked" : '';
+  $sticky_full_shade_filter = $full_shade_filter ? "checked" : '';
+
+  $sticky_shrub_filter = ($plant_type == "shrub") ? "selected" : '';
+  $sticky_grass_filter = ($plant_type == "grass") ? "selected" : '';
+  $sticky_vine_filter = ($plant_type == "vine") ? "selected" : '';
+  $sticky_tree_filter = '($plant_type == "tree") ? "selected" : '';
+  $sticky_flower_filter = ($plant_type == "flower") ? "selected" : '';
+  $sticky_groundcover_filter = ($plant_type == "groundcover") ? "selected" : '';
+  $sticky_other_filter = ($plant_type == "other") ? "selected" : '';
+
+  $show_filter_confirmation = True;
+
+  // add selected filter options to array
+  if ($perennial_filter) {
+    array_push($garden_filter_options, "(perennial)");
+  }
+  if ($annual_filter) {
+    array_push($garden_filter_options, "(annual)");
+  }
+  if ($full_sun_filter) {
+    array_push($garden_filter_options, "(full sun)");
+  }
+  if ($partial_shade_filter) {
+    array_push($garden_filter_options, "(partial shade)");
+  }
+  if ($full_shade_filter) {
+    array_push($garden_filter_options, "(full shade)");
+  }
+
+  // display either all records containing at least one of the selected filters
+  // OR records containing all selected filters depending on if user checked inclusive option
+  if (count($garden_filter_options) > 0) {
+    if ($inclusive_filter) {
+      $filter_where = ' WHERE ' . implode(' AND ', $garden_filter_options);
+    } else {
+      $filter_where = ' WHERE ' . implode(' OR ', $garden_filter_options);
+    }
+  }
+
+  // sort section
+  $sort = $_GET['sort'];
+  $order = $_GET['order'];
+
+  $sql_order = '';
+
+  if ($order == "asc") {
+    $sql_order = "ASC";
+  } elseif ($order == "desc") {
+    $sql_order = "DESC";
+  } else {
+    $order= NULL;
+  }
+
+  if ($order && in_array($sort, array('id', 'name'))) {
+    if ($sort == 'id') {
+      $filter_order = ' ORDER BY id ' . $sql_order;
+    } elseif ($sort == 'name') {
+      $filter_order = ' ORDER BY name ' . $sql_order;
+  }
+}
+
+  // sticky sort values
+  $sticky_id_sort_asc = ($sort == "id" && $order == "asc") ? "selected" : "";
+  $sticky_id_sort_desc = ($sort == "id" && $order == "desc") ? "selected" : "";
+  $sticky_name_sort_asc = ($sort == "name" && $order == "asc") ? "selected" : "";
+  $sticky_name_sort_desc = ($sort == "name" && $order == "desc") ? "selected" : "";
+
+  $sort_query = http_build_query(
+    array(
+      'perennial-filter' => $perennial_filter ?: NULL,
+      'annual-filter' => $annual_filter ?: NULL,
+      'full-sun-filter' => $full_sun_filter ?: NULL,
+      'partial-shade-filter' => $partial_shade_filter ?: NULL,
+      'full-shade-filter' => $full_shade_filter ?: NULL,
+    )
+  );
+
+  $sort_base = "/?" . $sort_query;
+
+  // final filter/sort query
+  $filter_query = $filter_base . $filter_where . $filter_order;
+
+  $records = exec_sql_query($db, $filter_query) -> fetchAll();
+  $queries_matching = count($records);
+
+  // later in code:
+  // echo sticky values out in input so they can stay checked when selected (for both filters and sorting)
+  // hidden inputs in the filter form keeping track of sort
+  // hidden inputs under sort keeping track of filters
+
 ```
 
 

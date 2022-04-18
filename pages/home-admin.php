@@ -322,13 +322,6 @@
     array_push($play_filter_options, "(bio_play)");
   }
 
-  // build SQL query based on selected sort option
-  if ($sort == 'recent') {
-    $filter_order = ' ORDER BY id DESC;';
-  } elseif ($sort == 'alphabet') {
-    $filter_order = ' ORDER BY name ASC;';
-  }
-
   // display either all records containing at least one of the selected filters
   // OR records containing all selected filters depending on if user checked inclusive option
   if (count($play_filter_options) > 0) {
