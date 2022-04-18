@@ -603,7 +603,7 @@
             </div>
 
             <div class="submit">
-              <button type="submit">Apply</button>
+              <button class="submit" type="submit">Apply</button>
             </div>
 
             <!-- hidden inputs to track sort values -->

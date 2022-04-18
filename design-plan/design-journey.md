@@ -421,6 +421,15 @@ INSERT INTO entry_tags (entry_id, tag_id) VALUES (:entry_id, :tag_id);
 // filtering
 SELECT * FROM entries WHERE (the gardening conditions checked by the consumer is 1, indicating it is true for the plant);
 
+REVISION:
+SELECT *
+  FROM entry_tags
+	INNER JOIN tags ON entry_tags.tag_id = tags.id
+	INNER JOIN entries ON entry_tags.entry_id = entries.id
+  WHERE (entry_tags.tag_id = 1);
+// this returns a list of plants that have tag of id 1 (perennial)
+// replace 1 with variables and escape with array of parameter markers
+
 // sorting
 SELECT * FROM entries ORDER BY id DESC; // for most recent to oldest
 SELECT * FROM entries ORDER BY name ASC; // for alphabetical A-Z);
