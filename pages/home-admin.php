@@ -1,6 +1,11 @@
 <?php
   $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
+  define("MAX_FILE_SIZE", 1000000);
+  $file_ext_feedback_class = 'hidden';
+  $image_filename = '';
+  $image_ext = '';
+
   // add form feedback classes
   $name_feedback_class = 'hidden';
   $scientific_name_feedback_class = 'hidden';
@@ -34,6 +39,8 @@
   $partial_shade = '';
   $full_shade = '';
   $plant_type = '';
+
+  $upload = '';
 
   // variable tracking tags added with this plant
   $tags = array();
@@ -88,6 +95,9 @@
     $full_shade = $_POST['add-full-shade']; //untrusted
     $plant_type = ucfirst($_POST['add-type-select']); //untrusted
 
+    $upload = $_FILES['image-file'];
+
+
     $add_form_valid = True;
 
     // check validity of responses
@@ -135,6 +145,24 @@
       $add_form_valid = False;
       $plant_type_feedback_class = '';
     }
+
+    if ($upload) {
+      if ($upload['error'] == UPLOAD_ERR_OK) {
+        $image_filename = basename($upload['name']);
+        $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+        if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+          $add_form_valid = False;
+        }
+      } else {
+        $add_form_valid = False;
+      }
+    } else {
+      // no file was chosen
+      // use placeholder image for this new entry
+      $image_filename = "default";
+      $image_ext = "png";
+    }
+
 
     if ($add_form_valid) {
       //form is valid; add record to database
@@ -205,11 +233,29 @@
         );
       }
 
-      if ($result && $result_tag) {
-        $plant_added = True;
-        $show_confirmation = True;
+      $file_result = exec_sql_query(
+        $db,
+        "INSERT INTO documents (file_name, file_ext) VALUES (:file_name, :file_ext)",
+        array(
+          ':file_name' => $image_filename,
+          ':file_ext' => $image_ext,
+        )
+      );
+      if ($file_result) {
+        // only upload image if a file was selected
+        if ($upload) {
+          $id_filename = 'public/uploads/documents/' . $new_entry_id . '.' . $image_ext;
+          move_uploaded_file($upload["tmp_name"], $id_filename);
+        }
+      } else {
+        $file_ext_feedback_class = '';
       }
+    }
 
+
+    if ($result && $result_tag && $file_result) {
+      $plant_added = True;
+      $show_confirmation = True;
     } else {
       // add form is not valid; sticky values are set
       $sticky_name = $name; //untrusted
@@ -407,7 +453,7 @@
       </div>
 
       <div class="add-body">
-        <form id="add-plant" name = "add-plant" method="post" action="/admin" novalidate>
+        <form id="add-plant" name="add-plant" method="post" action="/admin" enctype="multipart/form-data" novalidate>
           <div class="main-add">
             <!-- div containing text fields of form -->
             <div class="text-fields">
@@ -429,6 +475,13 @@
               <div class="add-text">
                 <label for="plant-id">Plant ID:</label>
                 <input type="text" name="plant-id" id="plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
+              </div>
+
+              <div class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</div>
+              <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
+              <div class="file-upload">
+                <label for="upload-image">JPG or PNG image:</label>
+                <input id="upload-image" type="file" name="image-file" accept=".png, .jpg, .jpeg" />
               </div>
             </div>
 

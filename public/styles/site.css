@@ -81,9 +81,22 @@ label {
 .add-text, .edit-text {
     display: flex;
     justify-content: space-between;
-    gap: 1em;
+    gap: 2em;
     margin-bottom: 1em;
     margin-top: 0.25em;
+}
+
+.add-text input {
+    width: 13.5em;
+}
+
+.file-upload {
+    display: flex;
+    justify-content: space-between;
+}
+
+#upload-image {
+    width: 14em;
 }
 
 .filter-option, .sort-option {
