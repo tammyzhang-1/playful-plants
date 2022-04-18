@@ -410,6 +410,11 @@ INSERT INTO entry_tags (entry_id, tag_id) VALUES (:entry_id, :tag_id);
 
 ```
 
+```
+// sorting on admin catalog view
+//
+```
+
 
 - For consumer:
 ```
@@ -498,6 +503,44 @@ if (empty($shrub) && empty($grass) && empty($vine) && empty($tree) && empty($flo
   $add_form_valid = False;
   $plant_type_feedback_class = '';
 }
+```
+
+```
+// sorting entries in catalog view pseudocode
+4 types of sort:
+1. oldest to most recent (default)
+2. most recent to oldest
+3. alphabetical by common name A-Z
+4. alphabetical by common name Z-A
+
+// necessary query strings:
+1. &sort=id&order=asc
+2. &sort=id&order=desc
+3. &sort=name&order=asc
+4. &sort=name&order=desc
+
+make each <option> have an <a href="query string">
+
+These query strings need to be glued onto "admin/"
+$sort_query = one of the strings above;
+$sort_base = "/admin?" . $sort_query;
+
+however, $sort_query must also contain any strings to remember applied filters
+$sort_query = http_build_query(
+  array(
+    'exploratory-constructive-play' = $exploratory_constructive_filter ?: NULL,
+    'exploratory-sensory-play' = $exploratory_sensory_filter ?: NULL,
+    'physical-play' = $physical_filter ?: NULL,
+    'imaginative-play' = $imaginative_filter ?: NULL,
+    'restorative-play' = $restorative_filter ?: NULL,
+    'expressive-play' = $expressive_filter ?: NULL,
+    'rules-play' = $rules_filter ?: NULL,
+    'bio-play' = $bio_filter ?: NULL
+  )
+);
+
+therefore each <option> in the sort dropdown will have:
+<a href=<?php echo $sort_base . "one string from the 4 above"; ?>>
 ```
 
 

@@ -597,8 +597,8 @@
             <select name="media-sort" id="media-sort">
               <option value="default">Most recent to oldest</option>
               <option value="oldest">Oldest to most recent</option>
-              <option value="alphabetical-asc">Alphabetical by Name A-Z</option>
-              <option value="alphabetical-desc">Alphabetical by Name Z-A</option>
+              <option value="alphabetical-asc">Alphabetical by name A-Z</option>
+              <option value="alphabetical-desc">Alphabetical by name Z-A</option>
             </select>
           </div>
         </div>
