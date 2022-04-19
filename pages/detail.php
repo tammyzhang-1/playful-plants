@@ -3,7 +3,7 @@
 
   $id = $_GET["id"] ?? NULL;
 
-  $records = exec_sql_query($db, "SELECT * FROM entries WHERE (id=:id);", array(":id" => $id)) -> fetchAll();
+  $records = exec_sql_query($db, "SELECT * FROM entries INNER JOIN documents ON entries.id = documents.id WHERE (entries.id=:id);", array(":id" => $id)) -> fetchAll();
 
   $record = $records[0];
 
@@ -34,13 +34,8 @@
   <main>
   <div class="detail-page">
     <div class="detail-photo">
-      <?php if (file_exists("public/images/" . $record["plant_id"] . ".jpg")) { ?>
-        <?php $image_url = "/public/images/" . $record["plant_id"] . ".jpg"; ?>
-      <?php } else { ?>
-        <!-- default.png is original work (created by Tammy Zhang) -->
-        <?php $image_url = "/public/images/default.png"; ?>
-      <?php } ?>
-      <img src="<?php echo $image_url; ?>" alt="Picture of plant."/>
+      <!-- default.png is original work (created by Tammy Zhang) -->
+      <img src="<?php echo "/public/uploads/documents/" . $record["file_name"] . "." . $record["file_ext"]; ?>" alt="Picture of <?php echo $record["name"]; ?>."/>
     </div>
     <div class="detail-text">
       <div class="garden-list">

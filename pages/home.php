@@ -6,10 +6,10 @@ $plant_id = '';
 
 // filtering and sorting
 // sort/filter SQL query base pieces
-$filter_base = "SELECT * FROM entries";
+$filter_base = "SELECT * FROM entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id INNER JOIN entries ON entry_tags.entry_id = entries.id INNER JOIN documents on entries.id = documents.id";
 $filter_where = '';
 $garden_filter_options = array();
-$filter_order = ' ORDER BY name ASC;';
+$filter_order = ' ORDER BY entries.name ASC;';
 
 // filter form values
 $perennial_filter = '';
@@ -119,7 +119,6 @@ if ($other_filter) {
 // OR records containing all selected filters depending on if user checked inclusive option
 if (count($garden_filter_options) > 0) {
   $filter_where = ' WHERE ' . implode(' OR ', $garden_filter_options);
-  $filter_base = "SELECT * FROM entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id INNER JOIN entries ON entry_tags.entry_id = entries.id";
 }
 
 // sort section
@@ -138,9 +137,9 @@ if ($order == "asc") {
 
 if ($order && in_array($sort, array('id', 'name'))) {
   if ($sort == 'id') {
-    $filter_order = ' ORDER BY id ' . $sql_order;
+    $filter_order = ' ORDER BY entries.id ' . $sql_order;
   } elseif ($sort == 'name') {
-    $filter_order = ' ORDER BY name ' . $sql_order;
+    $filter_order = ' ORDER BY entries.name ' . $sql_order;
 }
 }
 
@@ -204,73 +203,77 @@ $image_url = 'public/images/default.png';
         <div class="filter-sort-form">
           <form id="filter-garden" method="get" action="/" novalidate>
             <!-- Filter section -->
-            <h3 id="filter-by">Filter by:</h3>
+            <div class="filter-options">
+              <div class="garden-info-filters">
+                <h5>Seasonality</h5>
+                <div class="filter-option">
+                  <input type="checkbox" name="perennial-filter" id="perennial-filter" <?php echo $sticky_perennial_filter; ?>/>
+                  <label for="perennial-filter">Perennial</label>
+                </div>
 
-            <h5>Seasonality</h5>
-            <div class="filter-option">
-              <input type="checkbox" name="perennial-filter" id="perennial-filter" <?php echo $sticky_perennial_filter; ?>/>
-              <label for="perennial-filter">Perennial</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="annual-filter" id="annual-filter" <?php echo $sticky_annual_filter; ?>/>
+                  <label for="annual-filter">Annual</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="annual-filter" id="annual-filter" <?php echo $sticky_annual_filter; ?>/>
-              <label for="annual-filter">Annual</label>
-            </div>
+                <h5>Light Needs</h5>
+                <div class="filter-option">
+                  <input type="checkbox" name="full-sun-filter" id="full-sun-filter" <?php echo $sticky_full_sun_filter; ?>/>
+                  <label for="full-sun-filter">Full Sun</label>
+                </div>
 
-            <h5>Light Needs</h5>
-            <div class="filter-option">
-              <input type="checkbox" name="full-sun-filter" id="full-sun-filter" <?php echo $sticky_full_sun_filter; ?>/>
-              <label for="full-sun-filter">Full Sun</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="partial-shade-filter" id="partial-shade-filter" <?php echo $sticky_partial_shade_filter; ?>/>
+                  <label for="partial-shade-filter">Partial Shade</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="partial-shade-filter" id="partial-shade-filter" <?php echo $sticky_partial_shade_filter; ?>/>
-              <label for="partial-shade-filter">Partial Shade</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="full-shade-filter" id="full-shade-filter" <?php echo $sticky_full_shade_filter; ?>/>
+                  <label for="full-shade-filter">Full Shade</label>
+                </div>
+              </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="full-shade-filter" id="full-shade-filter" <?php echo $sticky_full_shade_filter; ?>/>
-              <label for="full-shade-filter">Full Shade</label>
-            </div>
+              <div class="plant-type-filters">
+                <h5>Plant Types</h5>
+                <div class="filter-option">
+                  <input type="checkbox" name="shrub-filter" id="shrub-filter" <?php echo $sticky_shrub_filter; ?>/>
+                  <label for="shrub-filter">Shrub</label>
+                </div>
 
-            <h5>Plant Types</h5>
-            <div class="filter-option">
-              <input type="checkbox" name="shrub-filter" id="shrub-filter" <?php echo $sticky_shrub_filter; ?>/>
-              <label for="shrub-filter">Shrub</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="grass-filter" id="grass-filter" <?php echo $sticky_grass_filter; ?>/>
+                  <label for="grass-filter">Grass</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="grass-filter" id="grass-filter" <?php echo $sticky_grass_filter; ?>/>
-              <label for="grass-filter">Grass</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="vine-filter" id="vine-filter" <?php echo $sticky_vine_filter; ?>/>
+                  <label for="vine-filter">Vine</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="vine-filter" id="vine-filter" <?php echo $sticky_vine_filter; ?>/>
-              <label for="vine-filter">Vine</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="tree-filter" id="tree-filter" <?php echo $sticky_tree_filter; ?>/>
+                  <label for="tree-filter">Tree</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="tree-filter" id="tree-filter" <?php echo $sticky_tree_filter; ?>/>
-              <label for="tree-filter">Tree</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="flower-filter" id="flower-filter" <?php echo $sticky_flower_filter; ?>/>
+                  <label for="flower-filter">Flower</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="flower-filter" id="flower-filter" <?php echo $sticky_flower_filter; ?>/>
-              <label for="flower-filter">Flower</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="groundcover-filter" id="groundcover-filter" <?php echo $sticky_groundcover_filter; ?>/>
+                  <label for="groundcover-filter">Groundcover</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="groundcover-filter" id="groundcover-filter" <?php echo $sticky_groundcover_filter; ?>/>
-              <label for="groundcover-filter">Groundcover</label>
-            </div>
+                <div class="filter-option">
+                  <input type="checkbox" name="other-filter" id="other-filter" <?php echo $sticky_other_filter; ?>/>
+                  <label for="other-filter">Other</label>
+                </div>
 
-            <div class="filter-option">
-              <input type="checkbox" name="other-filter" id="other-filter" <?php echo $sticky_other_filter; ?>/>
-              <label for="other-filter">Other</label>
-            </div>
-
-            <div class="submit">
-              <button class="submit" type="submit">Apply</button>
+                <div class="submit">
+                  <button class="submit" type="submit">Apply</button>
+                </div>
+              </div>
             </div>
 
             <!-- hidden inputs to track sort values -->
@@ -307,12 +310,8 @@ $image_url = 'public/images/default.png';
           <?php
           foreach ($records as $record) { ?>
             <div class="photo">
-              <?php if (file_exists("public/images/" . $record["plant_id"] . ".jpg")) { ?>
-                <?php $image_url = "public/images/" . $record["plant_id"] . ".jpg"; ?>
-              <?php } ?>
-              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="<?php echo $image_url; ?>" alt="Picture of plant."/></a>
               <!-- default.png is original work (created by Tammy Zhang) -->
-              <?php $image_url = "public/images/default.png"; ?>
+              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="<?php echo "public/uploads/documents/" . $record["file_name"] . "." . $record["file_ext"]; ?>" alt="Picture of <?php echo $record["name"]; ?>."/></a>
               <a href="/detail?id=<?php echo $record["id"]; ?>"><p><?php echo ucwords($record["name"]); ?></p></a>
             </div>
           <?php } ?>

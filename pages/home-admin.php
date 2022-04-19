@@ -146,7 +146,7 @@
       $plant_type_feedback_class = '';
     }
 
-    if ($upload) {
+    if ($upload['size'] != 0) {
       if ($upload['error'] == UPLOAD_ERR_OK) {
         $image_filename = basename($upload['name']);
         $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
@@ -253,7 +253,7 @@
     }
 
 
-    if ($result && $result_tag && $file_result) {
+    if ($result && $result_tag) {
       $plant_added = True;
       $show_confirmation = True;
     } else {
