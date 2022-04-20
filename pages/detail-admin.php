@@ -64,6 +64,9 @@
   $sticky_full_shade = '';
   $sticky_plant_type = '';
 
+  $tags = array(); // keeps track of what tags are selected when the form is updated
+  $all_tags = array(1,2,3,4,5,6,7,8,9,10,11,12); // lists all tag ids possible
+
   if ($edit_plant || $id) {
     $records = exec_sql_query($db, "SELECT * FROM entries INNER JOIN documents ON entries.id = documents.id WHERE (entries.id=:id);", array(":id" => $id)) -> fetchAll();
 
@@ -71,7 +74,7 @@
     FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
     WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
 
-    $tag_list = array_column($tag_array, 'tags.id');
+    $tag_list = array_column($tag_array, 'tags.id'); // keeps track of previously selected tags
 
     if (count($records) > 0) {
       $record = $records[0];
@@ -259,58 +262,67 @@
           )
         );
 
-
-
         // push id of tag into array if it is selected
-        // if ($perennial && !in_array(1, $tags)) {
-        //   array_push($tags, 1);
-        // }
-        // if ($annual && !in_array(2, $tags)) {
-        //   array_push($tags, 2);
-        // }
-        // if ($full_sun && !in_array(3, $tags)) {
-        //   array_push($tags, 3);
-        // }
-        // if ($partial_shade && !in_array(4, $tags)) {
-        //   array_push($tags, 4);
-        // }
-        // if ($full_shade && !in_array(5, $tags)) {
-        //   array_push($tags, 5);
-        // }
-        // if ($plant_type == "Shrub" && !in_array(6, $tags)) {
-        //   array_push($tags, 6);
-        // }
-        // if ($plant_type == "Grass" && !in_array(7, $tags)) {
-        //   array_push($tags, 7);
-        // }
-        // if ($plant_type == "Vine" && !in_array(8, $tags)) {
-        //   array_push($tags, 8);
-        // }
-        // if ($plant_type == "Tree" && !in_array(9, $tags)) {
-        //   array_push($tags, 9);
-        // }
-        // if ($plant_type == "Flower" && !in_array(10, $tags)) {
-        //   array_push($tags, 10);
-        // }
-        // if ($plant_type == "Groundcover" && !in_array(11, $tags)) {
-        //   array_push($tags, 11);
-        // }
-        // if ($plant_type == "Other" && !in_array(12, $tags)) {
-        //   array_push($tags, 12);
-        // }
+        if ($perennial && !in_array(1, $tags)) {
+          array_push($tags, 1);
+        }
+        if ($annual && !in_array(2, $tags)) {
+          array_push($tags, 2);
+        }
+        if ($full_sun && !in_array(3, $tags)) {
+          array_push($tags, 3);
+        }
+        if ($partial_shade && !in_array(4, $tags)) {
+          array_push($tags, 4);
+        }
+        if ($full_shade && !in_array(5, $tags)) {
+          array_push($tags, 5);
+        }
+        if ($plant_type == "Shrub" && !in_array(6, $tags)) {
+          array_push($tags, 6);
+        }
+        if ($plant_type == "Grass" && !in_array(7, $tags)) {
+          array_push($tags, 7);
+        }
+        if ($plant_type == "Vine" && !in_array(8, $tags)) {
+          array_push($tags, 8);
+        }
+        if ($plant_type == "Tree" && !in_array(9, $tags)) {
+          array_push($tags, 9);
+        }
+        if ($plant_type == "Flower" && !in_array(10, $tags)) {
+          array_push($tags, 10);
+        }
+        if ($plant_type == "Groundcover" && !in_array(11, $tags)) {
+          array_push($tags, 11);
+        }
+        if ($plant_type == "Other" && !in_array(12, $tags)) {
+          array_push($tags, 12);
+        }
 
-        // $new_entry_id = $db->lastInsertId('id');
+        $new_entry_id = $db->lastInsertId('id');
 
-        // foreach ($tags as $tag) {
-        //   $result_tag = exec_sql_query($db, 'UPDATE entry_tags SET
-        //   entry_id = :entry_id,
-        //   tag_id = :tag_id,
-        //     array(
-        //       'entry_id' => $new_entry_id,
-        //       'tag_id' => $tag
-        //     )
-        //   );
-        // }
+        foreach ($all_tags as $tag) {
+          // iterate over each tag possible to check if it has been added/dropped
+          if (in_array($tag, $tag_list) && !in_array($tag, $tags)) {
+            // was in old tag list but not after editing - remove it
+            $remove_tag = exec_sql_query($db, 'DELETE FROM entry_tags WHERE (entry_id = :id AND tag_id = :tag_id);',
+              array(
+                ':id' => $id,
+                ':tag_id' => $tag
+              )
+            );
+          }
+          if (!in_array($tag, $tag_list) && in_array($tag, $tags)) {
+            // not in old tag list but was after editing - add it
+            $add_tag = exec_sql_query($db, 'INSERT INTO entry_tags (entry_id, tag_id) VALUES (:id, :tag_id);',
+              array(
+                ':id' => $id,
+                ':tag_id' => $tag
+              )
+            );
+          }
+        }
 
         // $file_result = exec_sql_query(
         //   $db,
