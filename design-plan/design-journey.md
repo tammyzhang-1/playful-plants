@@ -419,6 +419,8 @@ UPDATE entries SET
 DELETE FROM entries WHERE (id=___);
 
 INSERT INTO entries (fields) VALUES (parameter markers using an array);
+
+// editing the tags of a plant entry
 ```
 
 ```
@@ -1102,6 +1104,24 @@ if (isset($_POST['edit-plant'])) {
 <form id="edit-plant" method="post" action="<?php echo "/admin/edit?id=" . $record["id"]?>" novalidate>
 ...
 </form>
+```
+
+```
+// editing the tags of a plant
+// pseudocode:
+tags = array of numbers where each number = a tag id, indicating the plant has that tag
+
+new_tags = array of new numbers generated when the admin clicks "save changes" that looks at the tags now applied
+
+if # is in_array(tags) and not in_array(new_tags):
+  // admin wants to remove this tag
+  exec_sql_query($db, "sql code for removing the entry in table entry_tags where tag_id = # and entry_id = $id")
+
+if # is not in_array(tags) and is in_array(new_tags):
+  // admin wants to add this tag
+  exec_sql_query($db, "sql code for adding the entry in table entry_tags where tag_id = # and entry_id = $id")
+
+
 ```
 
 ```

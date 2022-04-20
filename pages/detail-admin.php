@@ -408,7 +408,7 @@
 
     <div class="detail-text">
     <section class="edit-plant-form">
-      <h2>Edit <?php echo ucwords(htmlspecialchars($record["name"])); ?></h2>
+      <h2>Edit <?php echo ucwords(htmlspecialchars($sticky_name)); ?></h2>
       <form id="edit-plant" method="post" action="<?php echo "/admin/edit?id=" . $record["id"]; ?>" enctype="multipart/form-data" novalidate>
 
         <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>
