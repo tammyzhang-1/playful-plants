@@ -35,7 +35,12 @@
   <div class="detail-page">
     <div class="detail-photo">
       <!-- default.png is original work (created by Tammy Zhang) -->
-      <img src="<?php echo "/public/uploads/documents/" . $record["file_name"] . "." . $record["file_ext"]; ?>" alt="Picture of <?php echo $record["name"]; ?>."/>
+      <?php if ($record['file_name'] == 'default.png') {
+        $image_url = '/public/uploads/documents/default.png';
+      } else {
+        $image_url = "/public/uploads/documents/" . $record["id"] . "." . $record["file_ext"];
+      } ?>
+      <img src="<?php echo $image_url; ?>" alt="Picture of <?php echo $record["name"]; ?>."/>
     </div>
     <div class="detail-text">
       <div class="garden-list">
@@ -52,30 +57,30 @@
       <div class="play-list">
         <h3>Types of play supported:</h3>
           <ul>
-          <?php if ($record["exploratory_constructive_play"]) { ?>
-                <li>Exploratory Constructive Play</li>
-              <?php } ?>
-              <?php if ($record["exploratory_sensory_play"]) { ?>
-                <li>Exploratory Sensory Play</li>
-              <?php } ?>
-              <?php if ($record["physical_play"]) { ?>
-                <li>Physical Play</li>
-              <?php } ?>
-              <?php if ($record["imaginative_play"]) { ?>
-                <li>Imaginative Play</li>
-              <?php } ?>
-              <?php if ($record["restorative_play"]) { ?>
-                <li>Restorative Play</li>
-              <?php } ?>
-              <?php if ($record["expressive_play"]) { ?>
-                <li>Expressive Play</li>
-              <?php } ?>
-              <?php if ($record["play_with_rules"]) { ?>
-                <li>Play with Rules</li>
-              <?php } ?>
-              <?php if ($record["bio_play"]) { ?>
-                <li>Bio Play</li>
-              <?php } ?>
+            <?php if ($record["exploratory_constructive_play"]) { ?>
+              <li>Exploratory Constructive Play</li>
+            <?php } ?>
+            <?php if ($record["exploratory_sensory_play"]) { ?>
+              <li>Exploratory Sensory Play</li>
+            <?php } ?>
+             <?php if ($record["physical_play"]) { ?>
+              <li>Physical Play</li>
+            <?php } ?>
+            <?php if ($record["imaginative_play"]) { ?>
+              <li>Imaginative Play</li>
+            <?php } ?>
+            <?php if ($record["restorative_play"]) { ?>
+              <li>Restorative Play</li>
+            <?php } ?>
+            <?php if ($record["expressive_play"]) { ?>
+              <li>Expressive Play</li>
+            <?php } ?>
+            <?php if ($record["play_with_rules"]) { ?>
+              <li>Play with Rules</li>
+            <?php } ?>
+            <?php if ($record["bio_play"]) { ?>
+              <li>Bio Play</li>
+            <?php } ?>
           </ul>
       </div>
     </div>

@@ -159,7 +159,7 @@
     } else {
       // no file was chosen
       // use placeholder image for this new entry
-      $image_filename = "default";
+      $image_filename = "default.png";
       $image_ext = "png";
     }
 
@@ -251,7 +251,6 @@
         $file_ext_feedback_class = '';
       }
     }
-
 
     if ($result && $result_tag) {
       $plant_added = True;

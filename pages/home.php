@@ -174,7 +174,6 @@ $filter_query = $filter_base . $filter_where . " GROUP BY entries.name " . $filt
 $records = exec_sql_query($db, $filter_query) -> fetchAll();
 $queries_matching = count($records);
 
-$image_url = 'public/images/default.png';
 ?>
 
 <!DOCTYPE html>
@@ -310,8 +309,13 @@ $image_url = 'public/images/default.png';
           <?php
           foreach ($records as $record) { ?>
             <div class="photo">
+              <?php if ($record['file_name'] == 'default.png') {
+                $image_url = 'public/uploads/documents/default.png';
+              } else {
+                $image_url = "public/uploads/documents/" . $record["id"] . "." . $record["file_ext"];
+              } ?>
               <!-- default.png is original work (created by Tammy Zhang) -->
-              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="<?php echo "public/uploads/documents/" . $record["file_name"] . "." . $record["file_ext"]; ?>" alt="Picture of <?php echo $record["name"]; ?>."/></a>
+              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="<?php echo $image_url; ?>" alt="Picture of <?php echo $record["name"]; ?>."/></a>
               <a href="/detail?id=<?php echo $record["id"]; ?>"><p><?php echo ucwords($record["name"]); ?></p></a>
             </div>
           <?php } ?>

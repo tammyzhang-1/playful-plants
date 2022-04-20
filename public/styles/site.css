@@ -315,10 +315,13 @@ input:hover {
 
 .photo {
     max-width: 30%;
+    max-height: 25%;
 }
 
 .photo img {
     max-width: 100%;
+    max-height: 100%;
+    object-fit: scale-down;
 }
 
 .photo p {

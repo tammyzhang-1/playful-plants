@@ -139,8 +139,13 @@
   <main>
   <div class="detail-page">
     <div class="detail-photo">
+      <?php if ($record['file_name'] == 'default.png') {
+          $image_url = '/public/uploads/documents/default.png';
+        } else {
+          $image_url = "/public/uploads/documents/" . $record["id"] . "." . $record["file_ext"];
+        } ?>
       <!-- default.png is original work (created by Tammy Zhang) -->
-      <img src="<?php echo "/public/uploads/documents/" . $record["file_name"] . "." . $record["file_ext"]; ?>" alt="Picture of <?php echo $record["name"]; ?>."/>
+      <img src="<?php echo $image_url; ?>" alt="Picture of <?php echo $record["name"]; ?>."/>
     </div>
 
     <div class="detail-text">
