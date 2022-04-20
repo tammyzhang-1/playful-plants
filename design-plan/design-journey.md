@@ -421,6 +421,9 @@ DELETE FROM entries WHERE (id=___);
 INSERT INTO entries (fields) VALUES (parameter markers using an array);
 
 // editing the tags of a plant entry
+DELETE FROM entry_tags WHERE (entry.id = $id AND $tags.id = __); // drop unwanted tag
+INSERT INTO entry_tags (entry.id, tags.id) VALUES ($id, __);
+then escape with parameter marker array
 ```
 
 ```
