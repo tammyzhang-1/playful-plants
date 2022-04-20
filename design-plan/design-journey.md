@@ -276,6 +276,7 @@ _Final Design:_
 - Decided to move form elements from being underneath the image to the side in a stacked layout with checkboxes being inline as needed, so that the form has good alignment and is filled out in a smooth vertical motion
 - This way Tim does not have to jump around the page to fill out all fields and the layout is more similar to the details page seen by the consumers
 - REVISION: will add fourth textbox so that there is a place to input hardiness zone data, which does not suit checkboxes or dropdowns
+- REVISION: will add small button under image for file uploads so that the image can be changed
 
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
@@ -372,7 +373,7 @@ SELECT * FROM entries WHERE (the play type(s) checked by the admin is 1, indicat
 
 // sorting
 SELECT * FROM entries ORDER BY id DESC; // for most recent to oldest
-SELECT * FROM entires ORDER BY name ASC; // for alphabetical A-Z);
+SELECT * FROM entries ORDER BY name ASC; // for alphabetical A-Z);
 ```
 
 ```
@@ -384,10 +385,36 @@ SELECT * FROM entries WHERE (id=$id);
 ```
 // editing a plant entry
 UPDATE entries SET
-  field1 = value1,
-  field2 = value2,
+  name = :name,
+  scientific_name = :scientific_name,
+  plant_id = :plant_id,
+  hardiness_zone = :hardiness_zone,
+  exploratory_constructive_play = :exploratory_constructive_play,
+  exploratory_sensory_play = :exploratory_sensory_play,
+  physical_play = :physical_play,
+  imaginative_play = :imaginative_play,
+  restorative_play = :restorative_play,
+  expressive_play = :expressive_play,
+  play_with_rules = :play_with_rules,
+  bio_play = :bio_play)
   ...
   WHERE (id=___);
+
+  array(
+    ':name' => $name,
+    ':scientific_name' => $scientific_name,
+    ':plant_id' => $plant_id,
+    ':hardiness_zone' => $hardiness_zone,
+    ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
+    ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
+    ':physical' => ($physical) ? 1 : 0,
+    ':imaginative' => ($imaginative) ? 1 : 0,
+    ':restorative' => ($restorative) ? 1 : 0,
+    ':expressive' => ($expressive) ? 1 : 0,
+    ':rules' => ($rules) ? 1 : 0,
+    ':bio' => ($bio) ? 1 : 0
+    )
+  );
 
 DELETE FROM entries WHERE (id=___);
 
@@ -615,6 +642,28 @@ if (add button OR edit button is pressed) {
 </form>
 ```
 
+```
+// adding an entry
+// similar to editing an entry (also needs variables + sticky variables for the gardening information to be added)
+// code from project 2 in place takes care of everything except for the gardening info
+
+if admin clicks the add plant button:
+  validate all fields
+  if at least one field is invalid
+    form_valid is false, set sticky values, show feedback messages
+  create array of tags selected
+  add plant info into entries table
+  access tags array and add those into the entry_tags table as foreign keys to the corresponding tables where entry_id = id of this plant being added and tags_id = ids of the tags in the array
+```
+
+```
+create form element where the submit button is the edit button
+<form method = "get" action="/admin/detail-admin">
+
+use hidden input to track what plant is being edited
+<input type="hidden" name="id" value="<?php echo $record["id"]; ?>"/>
+```
+
 
 - Consumer catalog view
 
@@ -828,28 +877,231 @@ if the admin clicks the edit button from catalog view:
   use hidden inputs to echo current data for that entry id into the edit form that comes up
   if the admin clicks save:
     update the database via database query where the id from the hidden input is used so the right entry is edited
-```
+    $updated_entries = exec_sql_query($db, UPDATE entries SET ....);
+    $updated_tags = exec_sql_query($db, UPDATE entry_tags SET ....);
+    $updated_documents = exec_sql_query($db, UPDATE documents SET ....);
 
-```
-// adding an entry
-// similar to editing an entry (also needs variables + sticky variables for the gardening information to be added)
-// code from project 2 in place takes care of everything except for the gardening info
+if (isset($_POST['edit-plant'])) {
+  // code to be executed when "save changes" button is pressed
+    $name = trim($_POST['edit-plant-name']); //untrusted
+    $scientific_name = trim($_POST['edit-scientific-name']); //untrusted
+    $plant_id = trim($_POST['edit-plant-id']); //untrusted
+    $hardiness_zone = trim($_POST['edit-hardiness-zone']); //untrusted
+    $exploratory_constructive = $_POST['edit-exploratory-constructive']; //untrusted
+    $exploratory_sensory = $_POST['edit-exploratory-sensory']; //untrusted
+    $physical = $_POST['edit-physical']; //untrusted
+    $imaginative = $_POST['edit-imaginative']; //untrusted
+    $restorative = $_POST['edit-restorative']; //untrusted
+    $expressive = $_POST['edit-expressive']; //untrusted
+    $rules = $_POST['edit-rules']; //untrusted
+    $bio = $_POST['edit-bio']; //untrusted
 
-if admin clicks the add plant button:
-  validate all fields
-  if at least one field is invalid
-    form_valid is false, set sticky values, show feedback messages
-  create array of tags selected
-  add plant info into entries table
-  access tags array and add those into the entry_tags table as foreign keys to the corresponding tables where entry_id = id of this plant being added and tags_id = ids of the tags in the array
-```
+    $perennial = $_POST['edit-perennial']; //untrusted
+    $annual = $_POST['edit-annual']; //untrusted
+    $full_sun = $_POST['edit-full-sun']; //untrusted
+    $partial_shade = $_POST['edit-partial-shade']; //untrusted
+    $full_shade = $_POST['edit-full-shade']; //untrusted
+    $plant_type = ucfirst($_POST['edit-type-select']); //untrusted
 
-```
-create form element where the submit button is the edit button
-<form method = "get" action="/admin/detail-admin">
+    $upload = $_FILES['edit-image-file'];
 
-use hidden input to track what plant is being edited
-<input type="hidden" name="id" value="<?php echo $record["id"]; ?>"/>
+
+    $edit_form_valid = True;
+
+    // check validity of responses
+    if (empty($name)) {
+      $edit_form_valid = False;
+      $name_feedback_class = '';
+    }
+
+    if (empty($scientific_name)) {
+      $edit_form_valid = False;
+      $scientific_name_feedback_class = '';
+    }
+
+    if (empty($plant_id)) {
+      $edit_form_valid = False;
+      $plant_id_feedback_class = '';
+    } else {
+      // check plant id is unique
+      $check_records = exec_sql_query($db, "SELECT * FROM entries WHERE (plant_id = :plant_id);",
+        array(
+          ':plant_id' => $plant_id
+        )
+      ) -> fetchAll();
+      if (count($check_records) > 0) {
+        $edit_form_valid = False;
+        $plant_id_unique_feedback_class = '';
+      }
+    }
+
+    if (empty($exploratory_constructive) && empty($exploratory_sensory) && empty($physical) && empty($imaginative) && empty($restorative) && empty($expressive ) && empty($rules) && empty($bio)) {
+      $edit_form_valid = False;
+      $play_type_feedback_class = '';
+    }
+
+    if (empty($hardiness_zone)) {
+      $edit_form_valid = False;
+      $hardiness_zone_feedback_class = '';
+    }
+    if (empty($full_sun) && empty($partial_shade) && empty($full_shade)) {
+      $edit_form_valid = False;
+      $shade_feedback_class = '';
+    }
+
+    if (!in_array($plant_type, array("Shrub", "Grass", "Vine", "Tree", "Flower", "Groundcover", "Other"))) {
+      $edit_form_valid = False;
+      $plant_type_feedback_class = '';
+    }
+
+    if ($upload['size'] != 0) {
+      if ($upload['error'] == UPLOAD_ERR_OK) {
+        $image_filename = basename($upload['name']);
+        $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+        if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+          $edit_form_valid = False;
+        }
+      } else {
+        $edit_form_valid = False;
+      }
+    } else {
+      // no file was chosen
+      // use placeholder image for this new entry
+      $image_filename = "default.png";
+      $image_ext = "png";
+    }
+
+
+    if ($edit_form_valid) {
+      //form is valid; edit record in database
+      $result = exec_sql_query($db, "UPDATE entries (name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (:name, :scientific_name, :plant_id, :hardiness_zone, :exploratory_constructive, :exploratory_sensory, :physical, :imaginative, :restorative, :expressive, :rules, :bio);",
+        array(
+          ':name' => $name,
+          ':scientific_name' => $scientific_name,
+          ':plant_id' => $plant_id,
+          ':hardiness_zone' => $hardiness_zone,
+          ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
+          ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
+          ':physical' => ($physical) ? 1 : 0,
+          ':imaginative' => ($imaginative) ? 1 : 0,
+          ':restorative' => ($restorative) ? 1 : 0,
+          ':expressive' => ($expressive) ? 1 : 0,
+          ':rules' => ($rules) ? 1 : 0,
+          ':bio' => ($bio) ? 1 : 0
+        )
+      );
+
+      // push id of tag into array if it is selected
+      if ($perennial && !in_array(1, $tags)) {
+        array_push($tags, 1);
+      }
+      if ($annual && !in_array(2, $tags)) {
+        array_push($tags, 2);
+      }
+      if ($full_sun && !in_array(3, $tags)) {
+        array_push($tags, 3);
+      }
+      if ($partial_shade && !in_array(4, $tags)) {
+        array_push($tags, 4);
+      }
+      if ($full_shade && !in_array(5, $tags)) {
+        array_push($tags, 5);
+      }
+      if ($plant_type == "Shrub" && !in_array(6, $tags)) {
+        array_push($tags, 6);
+      }
+      if ($plant_type == "Grass" && !in_array(7, $tags)) {
+        array_push($tags, 7);
+      }
+      if ($plant_type == "Vine" && !in_array(8, $tags)) {
+        array_push($tags, 8);
+      }
+      if ($plant_type == "Tree" && !in_array(9, $tags)) {
+        array_push($tags, 9);
+      }
+      if ($plant_type == "Flower" && !in_array(10, $tags)) {
+        array_push($tags, 10);
+      }
+      if ($plant_type == "Groundcover" && !in_array(11, $tags)) {
+        array_push($tags, 11);
+      }
+      if ($plant_type == "Other" && !in_array(12, $tags)) {
+        array_push($tags, 12);
+      }
+
+      $new_entry_id = $db->lastInsertId('id');;
+
+      foreach ($tags as $tag) {
+        $result_tag = exec_sql_query($db, 'UPDATE entry_tags SET
+        entry_id = :entry_id,
+        tag_id = :tag_id,
+          array(
+            'entry_id' => $new_entry_id,
+            'tag_id' => $tag
+          )
+        );
+      }
+
+      $file_result = exec_sql_query(
+        $db,
+        "UPDATE documents SET
+        file_name = :file_name,
+        file_ext = :file_ext,
+        array(
+          ':file_name' => $image_filename,
+          ':file_ext' => $image_ext,
+        )
+      );
+      if ($file_result) {
+        // only upload image if a file was selected
+        if ($upload) {
+          $id_filename = 'public/uploads/documents/' . $new_entry_id . '.' . $image_ext;
+          move_uploaded_file($upload["tmp_name"], $id_filename);
+        }
+      } else {
+        $file_ext_feedback_class = '';
+      }
+    }
+
+    if ($result && $result_tag && $file_result) {
+      $plant_edited = True;
+      $show_confirmation = True;
+    } else {
+      // edit form is not valid; sticky values are set
+      $sticky_name = $name; //untrusted
+      $sticky_scientific_name = $scientific_name; //untrusted
+      $sticky_plant_id = $plant_id; //untrusted
+      $sticky_hardiness_zone = $hardiness_zone; // untrusted
+      $sticky_exploratory_constructive = (empty($exploratory_constructive) ? '' : 'checked');
+      $sticky_exploratory_sensory = (empty($exploratory_sensory) ? '' : 'checked');
+      $sticky_physical = (empty($physical) ? '' : 'checked');
+      $sticky_imaginative = (empty($imaginative) ? '' : 'checked');
+      $sticky_restorative = (empty($restorative) ? '' : 'checked');
+      $sticky_expressive = (empty($expressive) ? '' : 'checked');
+      $sticky_rules = (empty($rules) ? '' : 'checked');
+      $sticky_bio = (empty($bio) ? '' : 'checked');
+
+      $sticky_perennial = (empty($perennial) ? '' : 'checked');
+      $sticky_annual = (empty($annual) ? '' : 'checked');
+      $sticky_full_sun = (empty($full_sun) ? '' : 'checked');
+      $sticky_partial_shade = (empty($partial_shade) ? '' : 'checked');
+      $sticky_full_shade = (empty($full_shade) ? '' : 'checked');
+
+      $sticky_shrub = ($plant_type == 'Shrub' ? 'selected' : '');
+      $sticky_grass = ($plant_type == 'Grass' ? 'selected' : '');
+      $sticky_vine = ($plant_type == 'Vine' ? 'selected' : '');
+      $sticky_tree = ($plant_type == 'Tree' ? 'selected' : '');
+      $sticky_flower = ($plant_type == 'Flower' ? 'selected' : '');
+      $sticky_groundcover = ($plant_type == 'Groundcover' ? 'selected' : '');
+      $sticky_other = ($plant_type == 'Other' ? 'selected' : '');
+    }
+  }
+
+}
+
+<form id="edit-plant" method="post" action="<?php echo "/admin/edit?id=" . $record["id"]?>" novalidate>
+...
+</form>
 ```
 
 ```
