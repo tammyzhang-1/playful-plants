@@ -368,14 +368,31 @@ input:hover {
     margin-bottom: 3em;
 }
 
-.seasonality, .sun-needs {
+.seasonality {
     display: flex;
     gap: 1em;
-    margin-bottom: 0.75em;
+}
+
+.seasonality, .sun-needs-container {
+    margin-bottom: 1em;
+}
+
+.sun-needs-container {
+    display: flex;
+    gap: 1em;
 }
 
 .edit-plant-form h3 {
     margin-top: 2em;
+}
+
+.edit-plant-form .edit-text input {
+    width: 13.5em;
+
+}
+
+#edit-file {
+    gap: 5em;
 }
 
 @media print {

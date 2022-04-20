@@ -372,10 +372,10 @@
   if (count($play_filter_options) > 0) {
     if ($inclusive_filter) {
       $filter_where = ' WHERE ' . implode(' AND ', $play_filter_options);
-    } else {
-      $filter_where = ' WHERE ' . implode(' OR ', $play_filter_options);
+      } else {
+        $filter_where = ' WHERE ' . implode(' OR ', $play_filter_options);
+      }
     }
-  }
 
   // sort section
   $sort = $_GET['sort'];
@@ -396,8 +396,8 @@
       $filter_order = ' ORDER BY id ' . $sql_order;
     } elseif ($sort == 'name') {
       $filter_order = ' ORDER BY name ' . $sql_order;
+    }
   }
-}
 
   // sticky sort values
   $sticky_id_sort_asc = ($sort == "id" && $order == "asc") ? "selected" : "";

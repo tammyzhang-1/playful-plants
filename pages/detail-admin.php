@@ -1,6 +1,8 @@
 <?php
   $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
+  define("MAX_FILE_SIZE", 1000000);
+
   $id = $_GET["id"] ?? NULL;
 
   $records = exec_sql_query($db, "SELECT * FROM entries INNER JOIN documents ON entries.id = documents.id WHERE (entries.id=:id);", array(":id" => $id)) -> fetchAll();
@@ -14,6 +16,20 @@
   $tag_list = array_column($tag_array, 'tags.id');
 
   // initialize variables needed to keep track of plant data
+  // add form feedback classes
+  $name_feedback_class = 'hidden';
+  $scientific_name_feedback_class = 'hidden';
+  $plant_id_feedback_class = 'hidden';
+  $plant_id_unique_feedback_class = 'hidden';
+  $play_type_feedback_class = 'hidden';
+  $hardiness_zone_feedback_class = 'hidden';
+  $shade_feedback_class = 'hidden';
+  $plant_type_feedback_class = 'hidden';
+  $file_ext_feedback_class = 'hidden';
+
+  $show_confirmation = False;
+  $plant_added = False;
+
   $name = '';
   $scientific_name = '';
   $plant_id = '';
@@ -114,6 +130,7 @@
   $sticky_flower = $flower ? 'selected' : '';
   $sticky_groundcover = $groundcover ? 'selected' : '';
   $sticky_other = $other ? 'selected' : '';
+
 ?>
 
 <!DOCTYPE html>
@@ -137,6 +154,10 @@
   </div>
 
   <main>
+  <?php if ($show_confirmation) { ?>
+      <!-- confirmation after successfully adding a plant, hidden by default -->
+      <div class="confirmation">Changes saved successfully.</div>
+    <?php } ?>
   <div class="detail-page">
     <div class="detail-photo">
       <?php if ($record['file_name'] == 'default.png') {
@@ -151,28 +172,39 @@
     <div class="detail-text">
     <section class="edit-plant-form">
       <h2>Edit <?php echo ucwords(htmlspecialchars($record["name"])); ?></h2>
-      <form id="edit-plant" method="post" action="/" novalidate>
+      <form id="edit-plant" method="post" action="<?php echo "/admin/edit?id=" . $record["id"]; ?>" enctype="multipart/form-data" novalidate>
 
+        <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>
         <div class="edit-text">
           <label for="edit-plant-name">Plant Name (Colloquial):</label>
           <input type="text" name="edit-plant-name" id="edit-plant-name" value="<?php echo ucwords(htmlspecialchars($record["name"])); ?>"/>
         </div>
 
+        <div class="feedback <?php echo $scientific_name_feedback_class; ?>">A scientific name is required.</div>
         <div class="edit-text">
           <label for="edit-scientific-name">Plant Name (Scientific):</label>
           <input type="text" name="edit-scientific-name" id="edit-scientific-name" value="<?php echo htmlspecialchars($record["scientific_name"]); ?>" />
         </div>
 
+        <div class="feedback <?php echo $plant_id_feedback_class; ?>">A plant ID is required.</div>
+        <div class="feedback <?php echo $plant_id_unique_feedback_class; ?>">A plant with that ID already exists.</div>
         <div class="edit-text">
           <label for="edit-plant-id">Plant ID:</label>
             <input type="text" name="edit-plant-id" id="edit-plant-id" value="<?php echo htmlspecialchars($record["plant_id"]); ?>" />
         </div>
 
-        <h3>Gardening Characteristics:</h3>
+          <div class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</div>
+          <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
+          <div class="file-upload" id="edit-file">
+            <label for="upload-image">JPG or PNG image:</label>
+            <input id="upload-image" type="file" name="edit-image-file" accept=".png, .jpg, .jpeg" />
+          </div>
 
+        <h3>Gardening Characteristics:</h3>
+        <div class="feedback <?php echo $hardiness_zone_feedback_class; ?>">Hardiness zone is required.</div>
         <div class="edit-text-short">
           <label for="edit-hardiness-zone">Hardiness Zone:</label>
-            <input type="text" name="edit-hardiness-zone" id="edit-hardiness-zone" value="<?php echo htmlspecialchars($record["hardiness_zone"]); ?>" />
+          <input type="text" name="edit-hardiness-zone" id="edit-hardiness-zone" value="<?php echo htmlspecialchars($record["hardiness_zone"]); ?>" />
         </div>
 
         <div class="seasonality">
@@ -185,7 +217,9 @@
             <label for="edit-annual">Annual</label>
           </div>
         </div>
-        <div class="sun-needs">
+
+        <div class="feedback <?php echo $shade_feedback_class; ?>">At least one type of light is required.</div>
+        <div class="sun-needs-container">
           <div>
             <input type="checkbox" name="edit-full-sun" id="edit-full-sun" <?php echo $sticky_full_sun; ?>/>
             <label for="edit-full-sun">Full Sun</label>
@@ -201,6 +235,7 @@
         </div>
 
         <div>
+          <div class="feedback <?php echo $plant_type_feedback_class; ?>">A plant type is required.</div>
           <label for="edit-type-select">Plant type:  </label>
             <select name="edit-type-select" id="edit-type-select">
               <option value="none">None selected</option>
@@ -217,6 +252,7 @@
         <!-- div containing multiple select section of form for play types -->
         <h3>Types of Play Supported:</h3>
         <div>
+          <div class="feedback <?php echo $play_type_feedback_class; ?>">At least one play type is required.</div>
           <div class="edit-play-checkboxes">
             <div class="play-type">
               <input type="checkbox" name="edit-exploratory-constructive" id="edit-exploratory-constructive" <?php echo $sticky_exploratory_constructive; ?>/>
