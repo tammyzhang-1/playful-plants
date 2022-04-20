@@ -4,19 +4,10 @@
   define("MAX_FILE_SIZE", 1000000);
 
   $id = $_GET["id"] ?? NULL;
-
-  $records = exec_sql_query($db, "SELECT * FROM entries INNER JOIN documents ON entries.id = documents.id WHERE (entries.id=:id);", array(":id" => $id)) -> fetchAll();
-  $record = $records[0];
-
-  $tag_array = exec_sql_query($db, "SELECT tags.id AS 'tags.id'
-  FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
-  WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
-
-  // list of tags associated with this plant
-  $tag_list = array_column($tag_array, 'tags.id');
+  $edit_plant = $_POST["edit-plant"];
 
   // initialize variables needed to keep track of plant data
-  // add form feedback classes
+  // edit form feedback classes
   $name_feedback_class = 'hidden';
   $scientific_name_feedback_class = 'hidden';
   $plant_id_feedback_class = 'hidden';
@@ -73,63 +64,308 @@
   $sticky_full_shade = '';
   $sticky_plant_type = '';
 
-  // to be put under a conditional statement
-  // assign initialized variables a value based on data retrieved from table
-  $name = $record["name"];
-  $scientific_name = $record["scientific_name"];
-  $plant_id = $record["plant_id"];
-  $hardiness_zone = $record["hardiness_zone"];
+  if ($edit_plant || $id) {
+    $records = exec_sql_query($db, "SELECT * FROM entries INNER JOIN documents ON entries.id = documents.id WHERE (entries.id=:id);", array(":id" => $id)) -> fetchAll();
 
-  $exploratory_constructive = $record["exploratory_constructive_play"];
-  $exploratory_sensory = $record["exploratory_sensory_play"];
-  $physical = $record["physical_play"];
-  $imaginative = $record["imaginative_play"];
-  $restorative = $record["restorative_play"];
-  $expressive = $record["expressive_play"];
-  $rules = $record["play_with_rules"];
-  $bio = $record["bio_play"];
+    $tag_array = exec_sql_query($db, "SELECT tags.id AS 'tags.id'
+    FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
+    WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
 
-  $perennial = in_array(1, $tag_list);
-  $annual = in_array(2, $tag_list);;
-  $full_sun = in_array(3, $tag_list);;
-  $partial_shade = in_array(4, $tag_list);;
-  $full_shade = in_array(5, $tag_list);;
+    $tag_list = array_column($tag_array, 'tags.id');
 
-  $shrub = in_array(6, $tag_list);
-  $grass = in_array(7, $tag_list);
-  $vine = in_array(8, $tag_list);
-  $tree = in_array(9, $tag_list);
-  $flower = in_array(10, $tag_list);
-  $groundcover = in_array(11, $tag_list);
-  $other = in_array(12, $tag_list);
+    if (count($records) > 0) {
+      $record = $records[0];
+    }
+  }
 
-  // set sticky values
-  $sticky_name = $name;
-  $sticky_scientific_name = $scientific_name;
-  $sticky_plant_id = $plant_id;
-  $sticky_hardiness_zone = $hardiness_zone;
-  $sticky_exploratory_constructive = $exploratory_constructive ? 'checked' : '';
-  $sticky_exploratory_sensory = $exploratory_sensory ? 'checked' : '';
-  $sticky_physical = $physical ? 'checked' : '';
-  $sticky_imaginative = $imaginative ? 'checked' : '';
-  $sticky_restorative = $restorative ? 'checked' : '';
-  $sticky_expressive = $expressive ? 'checked' : '';
-  $sticky_rules = $rules ? 'checked' : '';
-  $sticky_bio = $bio ? 'checked' : '';
+  if ($record) {
+    // assign initialized variables a value based on data retrieved from table
+    $name = $record["name"];
+    $scientific_name = $record["scientific_name"];
+    $plant_id = $record["plant_id"];
+    $hardiness_zone = $record["hardiness_zone"];
 
-  $sticky_perennial = $perennial ? 'checked' : '';
-  $sticky_annual = $annual ? 'checked' : '';
-  $sticky_full_sun = $full_sun ? 'checked' : '';
-  $sticky_partial_shade = $partial_shade ? 'checked' : '';
-  $sticky_full_shade = $full_shade ? 'checked' : '';
+    $exploratory_constructive = $record["exploratory_constructive_play"];
+    $exploratory_sensory = $record["exploratory_sensory_play"];
+    $physical = $record["physical_play"];
+    $imaginative = $record["imaginative_play"];
+    $restorative = $record["restorative_play"];
+    $expressive = $record["expressive_play"];
+    $rules = $record["play_with_rules"];
+    $bio = $record["bio_play"];
 
-  $sticky_shrub = $shrub ? 'selected' : '';
-  $sticky_grass = $grass ? 'selected' : '';
-  $sticky_vine = $vine ? 'selected' : '';
-  $sticky_tree = $tree ? 'selected' : '';
-  $sticky_flower = $flower ? 'selected' : '';
-  $sticky_groundcover = $groundcover ? 'selected' : '';
-  $sticky_other = $other ? 'selected' : '';
+    $perennial = in_array(1, $tag_list);
+    $annual = in_array(2, $tag_list);;
+    $full_sun = in_array(3, $tag_list);;
+    $partial_shade = in_array(4, $tag_list);;
+    $full_shade = in_array(5, $tag_list);;
+
+    $shrub = in_array(6, $tag_list);
+    $grass = in_array(7, $tag_list);
+    $vine = in_array(8, $tag_list);
+    $tree = in_array(9, $tag_list);
+    $flower = in_array(10, $tag_list);
+    $groundcover = in_array(11, $tag_list);
+    $other = in_array(12, $tag_list);
+
+    // set sticky values
+    $sticky_name = $name;
+    $sticky_scientific_name = $scientific_name;
+    $sticky_plant_id = $plant_id;
+    $sticky_hardiness_zone = $hardiness_zone;
+    $sticky_exploratory_constructive = $exploratory_constructive ? 'checked' : '';
+    $sticky_exploratory_sensory = $exploratory_sensory ? 'checked' : '';
+    $sticky_physical = $physical ? 'checked' : '';
+    $sticky_imaginative = $imaginative ? 'checked' : '';
+    $sticky_restorative = $restorative ? 'checked' : '';
+    $sticky_expressive = $expressive ? 'checked' : '';
+    $sticky_rules = $rules ? 'checked' : '';
+    $sticky_bio = $bio ? 'checked' : '';
+
+    $sticky_perennial = $perennial ? 'checked' : '';
+    $sticky_annual = $annual ? 'checked' : '';
+    $sticky_full_sun = $full_sun ? 'checked' : '';
+    $sticky_partial_shade = $partial_shade ? 'checked' : '';
+    $sticky_full_shade = $full_shade ? 'checked' : '';
+
+    $sticky_shrub = $shrub ? 'selected' : '';
+    $sticky_grass = $grass ? 'selected' : '';
+    $sticky_vine = $vine ? 'selected' : '';
+    $sticky_tree = $tree ? 'selected' : '';
+    $sticky_flower = $flower ? 'selected' : '';
+    $sticky_groundcover = $groundcover ? 'selected' : '';
+    $sticky_other = $other ? 'selected' : '';
+
+    // edit form code when "save changes" is pressed
+    if ($edit_plant) {
+      // code to be executed when "save changes" button is pressed
+      $name = trim($_POST['edit-plant-name']); //untrusted
+      $scientific_name = trim($_POST['edit-scientific-name']); //untrusted
+      $plant_id = trim($_POST['edit-plant-id']); //untrusted
+      $hardiness_zone = trim($_POST['edit-hardiness-zone']); //untrusted
+      $exploratory_constructive = $_POST['edit-exploratory-constructive']; //untrusted
+      $exploratory_sensory = $_POST['edit-exploratory-sensory']; //untrusted
+      $physical = $_POST['edit-physical']; //untrusted
+      $imaginative = $_POST['edit-imaginative']; //untrusted
+      $restorative = $_POST['edit-restorative']; //untrusted
+      $expressive = $_POST['edit-expressive']; //untrusted
+      $rules = $_POST['edit-rules']; //untrusted
+      $bio = $_POST['edit-bio']; //untrusted
+
+      $perennial = $_POST['edit-perennial']; //untrusted
+      $annual = $_POST['edit-annual']; //untrusted
+      $full_sun = $_POST['edit-full-sun']; //untrusted
+      $partial_shade = $_POST['edit-partial-shade']; //untrusted
+      $full_shade = $_POST['edit-full-shade']; //untrusted
+      $plant_type = ucfirst($_POST['edit-type-select']); //untrusted
+
+      //$upload = $_FILES['edit-image-file'];
+
+      $edit_form_valid = True;
+
+      // check validity of responses
+      if (empty($name)) {
+        $edit_form_valid = False;
+        $name_feedback_class = '';
+      }
+
+      if (empty($scientific_name)) {
+        $edit_form_valid = False;
+        $scientific_name_feedback_class = '';
+      }
+
+      if (empty($plant_id)) {
+        $edit_form_valid = False;
+        $plant_id_feedback_class = '';
+      } else {
+        // check plant id is unique
+        $check_records = exec_sql_query($db, "SELECT * FROM entries WHERE (plant_id = :plant_id);",
+          array(
+            ':plant_id' => $plant_id
+          )
+        ) -> fetchAll();
+        if (count($check_records) > 0 && $check_records[0]['id'] != $id) {
+          $edit_form_valid = False;
+          $plant_id_unique_feedback_class = '';
+        }
+      }
+
+      if (empty($exploratory_constructive) && empty($exploratory_sensory) && empty($physical) && empty($imaginative) && empty($restorative) && empty($expressive ) && empty($rules) && empty($bio)) {
+        $edit_form_valid = False;
+        $play_type_feedback_class = '';
+      }
+
+      if (empty($hardiness_zone)) {
+        $edit_form_valid = False;
+        $hardiness_zone_feedback_class = '';
+      }
+      if (empty($full_sun) && empty($partial_shade) && empty($full_shade)) {
+        $edit_form_valid = False;
+        $shade_feedback_class = '';
+      }
+
+      if (!in_array($plant_type, array("Shrub", "Grass", "Vine", "Tree", "Flower", "Groundcover", "Other"))) {
+        $edit_form_valid = False;
+        $plant_type_feedback_class = '';
+      }
+
+      // if ($upload['size'] != 0) {
+      //   if ($upload['error'] == UPLOAD_ERR_OK) {
+      //     $image_filename = basename($upload['name']);
+      //     $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+      //     if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+      //       $edit_form_valid = False;
+      //     }
+      //   } else {
+      //     $edit_form_valid = False;
+      //   }
+      // } else {
+      //   // no file was chosen
+      //   // use placeholder image for this new entry
+      //   $image_filename = "default.png";
+      //   $image_ext = "png";
+      // }
+
+      if ($edit_form_valid) {
+        //form is valid; edit record in database
+        $result = exec_sql_query($db, "UPDATE entries SET
+        name = :name,
+        scientific_name = :scientific_name,
+        plant_id = :plant_id,
+        hardiness_zone = :hardiness_zone,
+        exploratory_constructive_play = :exploratory_constructive,
+        exploratory_sensory_play = :exploratory_sensory,
+        physical_play = :physical,
+        imaginative_play = :imaginative,
+        restorative_play = :restorative,
+        expressive_play = :expressive,
+        play_with_rules = :rules,
+        bio_play = :bio
+        WHERE (id=:id);",
+        array(
+          ':name' => $name,
+          ':scientific_name' => $scientific_name,
+          ':plant_id' => $plant_id,
+          ':hardiness_zone' => $hardiness_zone,
+          ':exploratory_constructive' => ($exploratory_constructive) ? 1 : 0,
+          ':exploratory_sensory' => ($exploratory_sensory) ? 1 : 0,
+          ':physical' => ($physical) ? 1 : 0,
+          ':imaginative' => ($imaginative) ? 1 : 0,
+          ':restorative' => ($restorative) ? 1 : 0,
+          ':expressive' => ($expressive) ? 1 : 0,
+          ':rules' => ($rules) ? 1 : 0,
+          ':bio' => ($bio) ? 1 : 0,
+          ':id' => ($id)
+          )
+        );
+
+
+
+        // push id of tag into array if it is selected
+        // if ($perennial && !in_array(1, $tags)) {
+        //   array_push($tags, 1);
+        // }
+        // if ($annual && !in_array(2, $tags)) {
+        //   array_push($tags, 2);
+        // }
+        // if ($full_sun && !in_array(3, $tags)) {
+        //   array_push($tags, 3);
+        // }
+        // if ($partial_shade && !in_array(4, $tags)) {
+        //   array_push($tags, 4);
+        // }
+        // if ($full_shade && !in_array(5, $tags)) {
+        //   array_push($tags, 5);
+        // }
+        // if ($plant_type == "Shrub" && !in_array(6, $tags)) {
+        //   array_push($tags, 6);
+        // }
+        // if ($plant_type == "Grass" && !in_array(7, $tags)) {
+        //   array_push($tags, 7);
+        // }
+        // if ($plant_type == "Vine" && !in_array(8, $tags)) {
+        //   array_push($tags, 8);
+        // }
+        // if ($plant_type == "Tree" && !in_array(9, $tags)) {
+        //   array_push($tags, 9);
+        // }
+        // if ($plant_type == "Flower" && !in_array(10, $tags)) {
+        //   array_push($tags, 10);
+        // }
+        // if ($plant_type == "Groundcover" && !in_array(11, $tags)) {
+        //   array_push($tags, 11);
+        // }
+        // if ($plant_type == "Other" && !in_array(12, $tags)) {
+        //   array_push($tags, 12);
+        // }
+
+        // $new_entry_id = $db->lastInsertId('id');
+
+        // foreach ($tags as $tag) {
+        //   $result_tag = exec_sql_query($db, 'UPDATE entry_tags SET
+        //   entry_id = :entry_id,
+        //   tag_id = :tag_id,
+        //     array(
+        //       'entry_id' => $new_entry_id,
+        //       'tag_id' => $tag
+        //     )
+        //   );
+        // }
+
+        // $file_result = exec_sql_query(
+        //   $db,
+        //   "UPDATE documents SET
+        //   file_name = :file_name,
+        //   file_ext = :file_ext,
+        //   array(
+        //     ':file_name' => $image_filename,
+        //     ':file_ext' => $image_ext,
+        //   )
+        // );
+        // if ($file_result) {
+        //   // only upload image if a file was selected
+        //   if ($upload) {
+        //     $id_filename = 'public/uploads/documents/' . $new_entry_id . '.' . $image_ext;
+        //     move_uploaded_file($upload["tmp_name"], $id_filename);
+        //   }
+        // } else {
+        //   $file_ext_feedback_class = '';
+        // }
+      }
+
+      if ($result) {
+        $plant_edited = True;
+        $show_confirmation = True;
+      }
+      // edit form is not valid; sticky values are set
+      $sticky_name = $name; //untrusted
+      $sticky_scientific_name = $scientific_name; //untrusted
+      $sticky_plant_id = $plant_id; //untrusted
+      $sticky_hardiness_zone = $hardiness_zone; // untrusted
+      $sticky_exploratory_constructive = (empty($exploratory_constructive) ? '' : 'checked');
+      $sticky_exploratory_sensory = (empty($exploratory_sensory) ? '' : 'checked');
+      $sticky_physical = (empty($physical) ? '' : 'checked');
+      $sticky_imaginative = (empty($imaginative) ? '' : 'checked');
+      $sticky_restorative = (empty($restorative) ? '' : 'checked');
+      $sticky_expressive = (empty($expressive) ? '' : 'checked');
+      $sticky_rules = (empty($rules) ? '' : 'checked');
+      $sticky_bio = (empty($bio) ? '' : 'checked');
+
+      $sticky_perennial = (empty($perennial) ? '' : 'checked');
+      $sticky_annual = (empty($annual) ? '' : 'checked');
+      $sticky_full_sun = (empty($full_sun) ? '' : 'checked');
+      $sticky_partial_shade = (empty($partial_shade) ? '' : 'checked');
+      $sticky_full_shade = (empty($full_shade) ? '' : 'checked');
+
+      $sticky_shrub = ($plant_type == 'Shrub' ? 'selected' : '');
+      $sticky_grass = ($plant_type == 'Grass' ? 'selected' : '');
+      $sticky_vine = ($plant_type == 'Vine' ? 'selected' : '');
+      $sticky_tree = ($plant_type == 'Tree' ? 'selected' : '');
+      $sticky_flower = ($plant_type == 'Flower' ? 'selected' : '');
+      $sticky_groundcover = ($plant_type == 'Groundcover' ? 'selected' : '');
+      $sticky_other = ($plant_type == 'Other' ? 'selected' : '');
+    }
+  }
 
 ?>
 
@@ -163,6 +399,7 @@
       <?php if ($record['file_name'] == 'default.png') {
           $image_url = '/public/uploads/documents/default.png';
         } else {
+          $check1 = $record['file_name'];
           $image_url = "/public/uploads/documents/" . $record["id"] . "." . $record["file_ext"];
         } ?>
       <!-- default.png is original work (created by Tammy Zhang) -->
@@ -177,20 +414,20 @@
         <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>
         <div class="edit-text">
           <label for="edit-plant-name">Plant Name (Colloquial):</label>
-          <input type="text" name="edit-plant-name" id="edit-plant-name" value="<?php echo ucwords(htmlspecialchars($record["name"])); ?>"/>
+          <input type="text" name="edit-plant-name" id="edit-plant-name" value="<?php echo ucwords(htmlspecialchars($sticky_name)); ?>"/>
         </div>
 
         <div class="feedback <?php echo $scientific_name_feedback_class; ?>">A scientific name is required.</div>
         <div class="edit-text">
           <label for="edit-scientific-name">Plant Name (Scientific):</label>
-          <input type="text" name="edit-scientific-name" id="edit-scientific-name" value="<?php echo htmlspecialchars($record["scientific_name"]); ?>" />
+          <input type="text" name="edit-scientific-name" id="edit-scientific-name" value="<?php echo htmlspecialchars($sticky_scientific_name); ?>" />
         </div>
 
         <div class="feedback <?php echo $plant_id_feedback_class; ?>">A plant ID is required.</div>
         <div class="feedback <?php echo $plant_id_unique_feedback_class; ?>">A plant with that ID already exists.</div>
         <div class="edit-text">
           <label for="edit-plant-id">Plant ID:</label>
-            <input type="text" name="edit-plant-id" id="edit-plant-id" value="<?php echo htmlspecialchars($record["plant_id"]); ?>" />
+            <input type="text" name="edit-plant-id" id="edit-plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
         </div>
 
           <div class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</div>
@@ -204,7 +441,7 @@
         <div class="feedback <?php echo $hardiness_zone_feedback_class; ?>">Hardiness zone is required.</div>
         <div class="edit-text-short">
           <label for="edit-hardiness-zone">Hardiness Zone:</label>
-          <input type="text" name="edit-hardiness-zone" id="edit-hardiness-zone" value="<?php echo htmlspecialchars($record["hardiness_zone"]); ?>" />
+          <input type="text" name="edit-hardiness-zone" id="edit-hardiness-zone" value="<?php echo htmlspecialchars($sticky_hardiness_zone); ?>" />
         </div>
 
         <div class="seasonality">
@@ -296,7 +533,8 @@
           </div>
         </div>
         <div class="submit">
-          <input id="edit-submit" type="submit" name="edit-plant" value="Save Changes" />
+          <input type="hidden" name="edit-plant" value="<?php echo htmlspecialchars($id); ?>" />
+          <button id="edit-submit" type="submit">Save Changes</button>
         </div>
         </form>
     </section>
