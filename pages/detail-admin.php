@@ -162,7 +162,7 @@
       $full_shade = $_POST['edit-full-shade']; //untrusted
       $plant_type = ucfirst($_POST['edit-type-select']); //untrusted
 
-      //$upload = $_FILES['edit-image-file'];
+      $upload = $_FILES['edit-image-file'];
 
       $edit_form_valid = True;
 
@@ -211,23 +211,6 @@
         $edit_form_valid = False;
         $plant_type_feedback_class = '';
       }
-
-      // if ($upload['size'] != 0) {
-      //   if ($upload['error'] == UPLOAD_ERR_OK) {
-      //     $image_filename = basename($upload['name']);
-      //     $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
-      //     if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
-      //       $edit_form_valid = False;
-      //     }
-      //   } else {
-      //     $edit_form_valid = False;
-      //   }
-      // } else {
-      //   // no file was chosen
-      //   // use placeholder image for this new entry
-      //   $image_filename = "default.png";
-      //   $image_ext = "png";
-      // }
 
       if ($edit_form_valid) {
         //form is valid; edit record in database
@@ -324,61 +307,74 @@
           }
         }
 
-        // $file_result = exec_sql_query(
-        //   $db,
-        //   "UPDATE documents SET
-        //   file_name = :file_name,
-        //   file_ext = :file_ext,
-        //   array(
-        //     ':file_name' => $image_filename,
-        //     ':file_ext' => $image_ext,
-        //   )
-        // );
-        // if ($file_result) {
-        //   // only upload image if a file was selected
-        //   if ($upload) {
-        //     $id_filename = 'public/uploads/documents/' . $new_entry_id . '.' . $image_ext;
-        //     move_uploaded_file($upload["tmp_name"], $id_filename);
-        //   }
-        // } else {
-        //   $file_ext_feedback_class = '';
-        // }
+        if ($upload['error'] == UPLOAD_ERR_OK) {
+          $image_filename = basename($upload['name']);
+          $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+
+          if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+            $add_form_valid = False;
+            $file_ext_feedback_class = '';
+          }
+        } else {
+          // upload was not successful
+          $add_form_valid = False;
+          $file_feedback_class = '';
+        }
+
+        $new_img_name = "$id" . "." . "$image_ext";
+
+        $file_result = exec_sql_query(
+          $db,
+          "UPDATE documents SET
+          file_name = :file_name,
+          file_ext = :file_ext WHERE (id=:id);",
+          array(
+            ':file_name' => $new_img_name,
+            ':file_ext' => $image_ext,
+            ':id' => $id
+          )
+        );
+
+        if ($file_result) {
+          $id_filename = 'public/uploads/documents/' . $id . '.' . $image_ext;
+          move_uploaded_file($upload["tmp_name"], $id_filename);
+        }
+
+        if ($result) {
+          $plant_edited = True;
+          $show_confirmation = True;
+        }
+
+        // edit form is not valid; sticky values are set
+        $sticky_name = $name; //untrusted
+        $sticky_scientific_name = $scientific_name; //untrusted
+        $sticky_plant_id = $plant_id; //untrusted
+        $sticky_hardiness_zone = $hardiness_zone; // untrusted
+        $sticky_exploratory_constructive = (empty($exploratory_constructive) ? '' : 'checked');
+        $sticky_exploratory_sensory = (empty($exploratory_sensory) ? '' : 'checked');
+        $sticky_physical = (empty($physical) ? '' : 'checked');
+        $sticky_imaginative = (empty($imaginative) ? '' : 'checked');
+        $sticky_restorative = (empty($restorative) ? '' : 'checked');
+        $sticky_expressive = (empty($expressive) ? '' : 'checked');
+        $sticky_rules = (empty($rules) ? '' : 'checked');
+        $sticky_bio = (empty($bio) ? '' : 'checked');
+
+        $sticky_perennial = (empty($perennial) ? '' : 'checked');
+        $sticky_annual = (empty($annual) ? '' : 'checked');
+        $sticky_full_sun = (empty($full_sun) ? '' : 'checked');
+        $sticky_partial_shade = (empty($partial_shade) ? '' : 'checked');
+        $sticky_full_shade = (empty($full_shade) ? '' : 'checked');
+
+        $sticky_shrub = ($plant_type == 'Shrub' ? 'selected' : '');
+        $sticky_grass = ($plant_type == 'Grass' ? 'selected' : '');
+        $sticky_vine = ($plant_type == 'Vine' ? 'selected' : '');
+        $sticky_tree = ($plant_type == 'Tree' ? 'selected' : '');
+        $sticky_flower = ($plant_type == 'Flower' ? 'selected' : '');
+        $sticky_groundcover = ($plant_type == 'Groundcover' ? 'selected' : '');
+        $sticky_other = ($plant_type == 'Other' ? 'selected' : '');
       }
-
-      if ($result) {
-        $plant_edited = True;
-        $show_confirmation = True;
-      }
-      // edit form is not valid; sticky values are set
-      $sticky_name = $name; //untrusted
-      $sticky_scientific_name = $scientific_name; //untrusted
-      $sticky_plant_id = $plant_id; //untrusted
-      $sticky_hardiness_zone = $hardiness_zone; // untrusted
-      $sticky_exploratory_constructive = (empty($exploratory_constructive) ? '' : 'checked');
-      $sticky_exploratory_sensory = (empty($exploratory_sensory) ? '' : 'checked');
-      $sticky_physical = (empty($physical) ? '' : 'checked');
-      $sticky_imaginative = (empty($imaginative) ? '' : 'checked');
-      $sticky_restorative = (empty($restorative) ? '' : 'checked');
-      $sticky_expressive = (empty($expressive) ? '' : 'checked');
-      $sticky_rules = (empty($rules) ? '' : 'checked');
-      $sticky_bio = (empty($bio) ? '' : 'checked');
-
-      $sticky_perennial = (empty($perennial) ? '' : 'checked');
-      $sticky_annual = (empty($annual) ? '' : 'checked');
-      $sticky_full_sun = (empty($full_sun) ? '' : 'checked');
-      $sticky_partial_shade = (empty($partial_shade) ? '' : 'checked');
-      $sticky_full_shade = (empty($full_shade) ? '' : 'checked');
-
-      $sticky_shrub = ($plant_type == 'Shrub' ? 'selected' : '');
-      $sticky_grass = ($plant_type == 'Grass' ? 'selected' : '');
-      $sticky_vine = ($plant_type == 'Vine' ? 'selected' : '');
-      $sticky_tree = ($plant_type == 'Tree' ? 'selected' : '');
-      $sticky_flower = ($plant_type == 'Flower' ? 'selected' : '');
-      $sticky_groundcover = ($plant_type == 'Groundcover' ? 'selected' : '');
-      $sticky_other = ($plant_type == 'Other' ? 'selected' : '');
     }
   }
-
 ?>
 
 <!DOCTYPE html>
@@ -421,6 +417,8 @@
     <div class="detail-text">
     <section class="edit-plant-form">
       <h2>Edit <?php echo ucwords(htmlspecialchars($sticky_name)); ?></h2>
+      <p>(Note for Milestone 3: bug where Save Changes button must be pressed twice to successfully update)</p>
+
       <form id="edit-plant" method="post" action="<?php echo "/admin/edit?id=" . $record["id"]; ?>" enctype="multipart/form-data" novalidate>
 
         <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>

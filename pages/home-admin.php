@@ -3,6 +3,7 @@
 
   define("MAX_FILE_SIZE", 1000000);
   $file_ext_feedback_class = 'hidden';
+  $file_feedback_class = 'hidden';
   $image_filename = '';
   $image_ext = '';
 
@@ -71,11 +72,14 @@
   $sticky_tree = '';
   $sticky_flower = '';
   $sticky_groundcover = '';
+
   $sticky_other = '';
 
+  $add_plant = $_POST['add-plant'];
+
   // code to be executed when add form submitted
-  if (isset($_POST['add-plant'])) {
-    $name = trim($_POST['plant-name']); //untrusted
+  if ($add_plant) {
+    $name = trim(ucwords(($_POST['plant-name']))); //untrusted
     $scientific_name = trim($_POST['scientific-name']); //untrusted
     $plant_id = trim($_POST['plant-id']); //untrusted
     $hardiness_zone = trim($_POST['hardiness-zone']); //untrusted
@@ -97,8 +101,21 @@
 
     $upload = $_FILES['image-file'];
 
-
     $add_form_valid = True;
+
+    if ($upload['error'] == UPLOAD_ERR_OK) {
+      $image_filename = basename($upload['name']);
+      $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+
+      if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+        $add_form_valid = False;
+        $file_ext_feedback_class = '';
+      }
+    } else {
+      // upload was not successful
+      $add_form_valid = False;
+      $file_feedback_class = '';
+    }
 
     // check validity of responses
     if (empty($name)) {
@@ -145,24 +162,6 @@
       $add_form_valid = False;
       $plant_type_feedback_class = '';
     }
-
-    if ($upload['size'] != 0) {
-      if ($upload['error'] == UPLOAD_ERR_OK) {
-        $image_filename = basename($upload['name']);
-        $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
-        if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
-          $add_form_valid = False;
-        }
-      } else {
-        $add_form_valid = False;
-      }
-    } else {
-      // no file was chosen
-      // use placeholder image for this new entry
-      $image_filename = "default.png";
-      $image_ext = "png";
-    }
-
 
     if ($add_form_valid) {
       //form is valid; add record to database
@@ -222,7 +221,7 @@
         array_push($tags, 12);
       }
 
-      $new_entry_id = $db->lastInsertId('id');;
+      $new_entry_id = $db->lastInsertId('id');
 
       foreach ($tags as $tag) {
         $result_tag = exec_sql_query($db, 'INSERT INTO entry_tags (entry_id, tag_id) VALUES (:entry_id, :tag_id);',
@@ -233,28 +232,29 @@
         );
       }
 
+      $new_img_name = "$new_entry_id" . "." . "$image_ext";
+
       $file_result = exec_sql_query(
         $db,
         "INSERT INTO documents (file_name, file_ext) VALUES (:file_name, :file_ext)",
         array(
-          ':file_name' => $image_filename,
+          ':file_name' => $new_img_name,
           ':file_ext' => $image_ext,
         )
       );
-      if ($file_result) {
-        // only upload image if a file was selected
-        if ($upload) {
-          $id_filename = 'public/uploads/documents/' . $new_entry_id . '.' . $image_ext;
-          move_uploaded_file($upload["tmp_name"], $id_filename);
-        }
-      } else {
-        $file_ext_feedback_class = '';
-      }
-    }
 
-    if ($result && $result_tag) {
-      $plant_added = True;
-      $show_confirmation = True;
+      if ($file_result) {
+        $id_filename = 'public/uploads/documents/' . $new_entry_id . '.' . $image_ext;
+        move_uploaded_file($upload["tmp_name"], $id_filename);
+      }
+
+      if ($result) {
+        $plant_added = True;
+        $show_confirmation = True;
+      }
+
+
+
     } else {
       // add form is not valid; sticky values are set
       $sticky_name = $name; //untrusted
@@ -426,6 +426,32 @@
 
   $records = exec_sql_query($db, $filter_query) -> fetchAll();
   $queries_matching = count($records);
+
+  // delete button functionality
+  $delete_plant = $_POST["id-delete"];
+  $show_delete_confirmation = False;
+
+
+  if ($delete_plant) {
+    $delete_entry = exec_sql_query($db, "DELETE FROM entries WHERE (id=:id);",
+      array(
+        ':id' => $delete_plant
+      )
+    );
+
+    $delete_tags = exec_sql_query($db, "DELETE FROM entry_tags WHERE (entry_id=:id);",
+      array (
+        ':id' => $delete_plant
+      )
+    );
+
+    $delete_img = exec_sql_query($db, "DELETE FROM documents WHERE (id=:id);",
+    array (
+      ':id' => $delete_plant
+    )
+  );
+    $show_delete_confirmation = True;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -449,6 +475,7 @@
     <div id="add-plant-form">
       <div>
         <h2>Add new plant</h2>
+        <p> (Note for Milestone 3: bug where submit button must be clicked twice to add entry successfully)</p>
       </div>
 
       <div class="add-body">
@@ -476,8 +503,9 @@
                 <input type="text" name="plant-id" id="plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
               </div>
 
-              <div class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</div>
               <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
+              <div class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</div>
+              <div class="feedback <?php echo $file_feedback_class; ?>">File required.</div>
               <div class="file-upload">
                 <label for="upload-image">JPG or PNG image:</label>
                 <input id="upload-image" type="file" name="image-file" accept=".png, .jpg, .jpeg" />
@@ -592,6 +620,11 @@
       <div class="confirmation">New plant "<?php echo htmlspecialchars($name); ?>" successfully added to database.</div>
     <?php } ?>
 
+    <?php if ($show_delete_confirmation) { ?>
+      <!-- confirmation after successfully adding a plant, hidden by default -->
+      <div class="confirmation">Plant with ID "<?php echo htmlspecialchars($delete_plant); ?>" successfully deleted.</div>
+    <?php } ?>
+
     <!-- section underneath the adding form, includes the filtering/sorting sidebar and catalog data itself -->
     <div class="catalog">
       <!-- sidebar -->
@@ -703,7 +736,10 @@
                   <input type="hidden" name="id" value="<?php echo $record["id"]; ?>" />
                   <button type="submit">Edit</button>
                 </form>
-                <button type="button">Delete</button>
+                <form method="post" action="/admin">
+                  <input type="hidden" name="id-delete" value="<?php echo $record["id"]; ?>" />
+                  <button type="submit">Delete</button>
+                </form>
               </div>
             </div>
             <p>Plant ID: <?php echo htmlspecialchars($record["plant_id"]); ?><p>
