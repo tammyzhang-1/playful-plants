@@ -30,7 +30,8 @@ CREATE TABLE entry_tags (
 CREATE TABLE users (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
     username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    is_admin INTEGER NOT NULL
 );
 
 CREATE TABLE documents (
@@ -38,6 +39,14 @@ CREATE TABLE documents (
     file_name TEXT NOT NULL,
     file_ext TEXT NOT NULL
 );
+
+CREATE TABLE sessions (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    user_id INTEGER NOT NULL,
+    session TEXT NOT NULL UNIQUE,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)
+
 
 INSERT INTO entries (id, name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (1, "Cutleaf Weeping Birch", "Betula pendula 'Dalecarlica'", "TR_07", "2-7", 1, 1, 1, 1, 1, 0, 0, 1);
 INSERT INTO entries (id, name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (2, "High mallow", "Malva sylvestris", "FL_27", "4-8", 0, 1, 1, 1, 0, 0, 0, 1);
@@ -133,9 +142,7 @@ INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (59, 4, 12);
 INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (60, 12, 12);
 
 
-INSERT INTO users (id, username, password) VALUES (1, 'user1', 'password1');
-INSERT INTO users (id, username, password) VALUES (2, 'user2', 'password2');
-INSERT INTO users (id, username, password) VALUES (3, 'user3', 'password3');
+INSERT INTO users (id, username, password) VALUES (1, 'admin', '$2y$10$QtCybkpkzh7x5VN11APHned4J8fu78.eFXlyAMmahuAaNcbwZ7FH.', 1)
 
 INSERT INTO documents (id, file_name, file_ext) VALUES (1, 'default.png', 'png');
 INSERT INTO documents (id, file_name, file_ext) VALUES (2, '2.jpg', 'jpg');
