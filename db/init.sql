@@ -45,7 +45,7 @@ CREATE TABLE sessions (
     user_id INTEGER NOT NULL,
     session TEXT NOT NULL UNIQUE,
     FOREIGN KEY (user_id) REFERENCES users(id)
-)
+);
 
 
 INSERT INTO entries (id, name, scientific_name, plant_id, hardiness_zone, exploratory_constructive_play, exploratory_sensory_play, physical_play, imaginative_play, restorative_play, expressive_play, play_with_rules, bio_play) VALUES (1, "Cutleaf Weeping Birch", "Betula pendula 'Dalecarlica'", "TR_07", "2-7", 1, 1, 1, 1, 1, 0, 0, 1);
@@ -142,7 +142,7 @@ INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (59, 4, 12);
 INSERT INTO entry_tags (id, entry_id, tag_id) VALUES (60, 12, 12);
 
 
-INSERT INTO users (id, username, password) VALUES (1, 'admin', '$2y$10$QtCybkpkzh7x5VN11APHned4J8fu78.eFXlyAMmahuAaNcbwZ7FH.', 1)
+INSERT INTO users (id, username, password, is_admin) VALUES (1, 'admin', '$2y$10$QtCybkpkzh7x5VN11APHned4J8fu78.eFXlyAMmahuAaNcbwZ7FH.', 1);
 
 INSERT INTO documents (id, file_name, file_ext) VALUES (1, 'default.png', 'png');
 INSERT INTO documents (id, file_name, file_ext) VALUES (2, '2.jpg', 'jpg');

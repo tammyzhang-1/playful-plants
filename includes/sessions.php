@@ -24,23 +24,6 @@ function find_user($db, $user_id)
   return NULL;
 }
 
-
-// find group's record from user_id
-function find_group($db, $group_id)
-{
-  $records = exec_sql_query(
-    $db,
-    "SELECT * FROM groups WHERE id = :group_id;",
-    array(':group_id' => $group_id)
-  )->fetchAll();
-  if ($records) {
-    // groups are unique, there should only be 1 record
-    return $records[0];
-  }
-  return NULL;
-}
-
-
 // find user's record from session hash
 function find_session($db, $session)
 {
@@ -78,7 +61,7 @@ function is_user_logged_in()
 
 
 // is the user a member
-function is_user_member_of($db, $group_id)
+function is_admin($db, $current_user)
 {
   global $current_user;
   if ($current_user === NULL) {
@@ -87,10 +70,9 @@ function is_user_member_of($db, $group_id)
 
   $records = exec_sql_query(
     $db,
-    "SELECT id FROM memberships WHERE (group_id = :group_id) AND (user_id = :user_id);",
+    "SELECT is_admin FROM users WHERE (is_admin = 1) AND (id = :id);",
     array(
-      ':group_id' => $group_id,
-      ':user_id' => $current_user['id']
+      ':id' => $current_user['id']
     )
   )->fetchAll();
   if ($records) {

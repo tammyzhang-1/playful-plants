@@ -4,8 +4,9 @@
   define("MAX_FILE_SIZE", 1000000);
   $file_ext_feedback_class = 'hidden';
   $file_feedback_class = 'hidden';
-  $image_filename = '';
-  $image_ext = '';
+
+  $image_filename = NULL;
+  $image_ext = NULL;
 
   // add form feedback classes
   $name_feedback_class = 'hidden';
