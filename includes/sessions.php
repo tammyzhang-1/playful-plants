@@ -60,7 +60,7 @@ function is_user_logged_in()
 }
 
 
-// is the user a member
+// is the user an admin
 function is_admin($db, $current_user)
 {
   global $current_user;

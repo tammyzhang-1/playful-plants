@@ -278,6 +278,11 @@ _Final Design:_
 - REVISION: will add fourth textbox so that there is a place to input hardiness zone data, which does not suit checkboxes or dropdowns
 - REVISION: will add small button under image for file uploads so that the image can be changed
 
+Plans for minor additions:
+- A link at the top of admin catalog and detail pages that goes to consumer view
+- Log in button and delete button open modal boxes, one with log in form and one with confirmation request
+
+
 ### Design Pattern Explanation/Reflection (Milestone 1)
 
 > Write a one paragraph (6-8 sentences) reflection explaining how you used design patterns for media catalogs in your site's final design.
@@ -1287,6 +1292,37 @@ $sticky_flower = ($plant_type == 'Flower' ? 'selected' : '');
 $sticky_groundcover = ($plant_type == 'Groundcover' ? 'selected' : '');
 $sticky_other = ($plant_type == 'Other' ? 'selected' : '');
 // echo sticky values in option elements in html dropdown menu code
+```
+
+```
+// planning log in and user access controls
+<?php if (!is_user_logged_in()) { ?>
+  // code for log in button here
+  <?php
+    echo_login_form('/', $session_messages);
+  ?>
+<?php } ?>
+alternatively, if user is logged in, display logout button
+// used on consumer catalog and consumer detail view
+
+// enclose all admin catalog and admin detail page php with
+if (is_user_logged_in()) { ...}
+
+// enclose all admin catalog and admin detail page html with
+<?php if (is_user_logged_in()) { ?>
+  ...
+<?php } ?>
+
+// else, display message that the user has to sign in to see that page
+<p>Sign in to view this page.</p>
+// with "Sign in" linked to a modal box popup with login form, or with login form directly displayed on page
+
+modal box planning:
+  create div that contains centered log in form, background dark with lowered opacity and z-index 2, hidden by default
+  in javascript: when "log in" button is clicked, remove hidden from div with log in form
+
+  <script src="scripts/jquery-3.6.0.js" type="text/javascript"></script>
+  <script src="scripts/login.js" type="text/javascript"></script>
 ```
 
 
