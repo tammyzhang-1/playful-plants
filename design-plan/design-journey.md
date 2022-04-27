@@ -333,14 +333,15 @@ Table: tags
 Table: entry_tags
 
 - id: INTEGER {PK, U, NN, AI}
-- entry_id: {NN} FOREIGN KEY REFERENCES entries
-- tag_id: {NN} FOREIGN KEY REFERENCES tags
+- entry_id: {NN} FOREIGN KEY REFERENCES entries.id
+- tag_id: {NN} FOREIGN KEY REFERENCES tags.id
 
 Table: users
 
 - id: INTEGER {PK, U, NN, AI}
 - username: TEXT {U, NN}
 - password: TEXT {NN}
+- is_admin: INTEGER {NN}
 
 LATER REVISION - play types will instead be included under tags, which removes all of the play type fields from table "entries". Examples of possible records under "name" in table "tags" would be "bio play", "restorative play", "shrub", "partial shade" and other information that is not the main plant data (plant name, scientific name, plant id).
 
@@ -355,6 +356,14 @@ Table: documents
 - id: INTEGER {PK, U, NN, AI}
 - file_name: TEXT {NN}
 - file_ext: TEXT {NN}
+
+REVISION 4 - new tables to create login function, add is_admin field to users table where 1 = is admin and 0 = not admin
+
+Table: sessions
+
+- id: INTEGER {PK, U, NN, AI}
+- user_id: INTEGER {NN} FOREIGN KEY REFERENCES users.id
+- session: TEXT (U, NN)
 
 
 ### Database Query Plan (Milestone 1, Milestone 2, Milestone 3, Final Submission)
