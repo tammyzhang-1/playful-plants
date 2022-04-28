@@ -60,29 +60,6 @@ function is_user_logged_in()
 }
 
 
-// is the user an admin
-function is_admin($db, $current_user)
-{
-  global $current_user;
-  if ($current_user === NULL) {
-    return False;
-  }
-
-  $records = exec_sql_query(
-    $db,
-    "SELECT is_admin FROM users WHERE (is_admin = 1) AND (id = :id);",
-    array(
-      ':id' => $current_user['id']
-    )
-  )->fetchAll();
-  if ($records) {
-    return True;
-  } else {
-    return False;
-  }
-}
-
-
 // login with username and password
 function password_login($db, &$messages, $username, $password)
 {
@@ -213,7 +190,7 @@ function echo_login_form($action, $messages)
   <ul class="login">
     <?php
     foreach ($messages as $message) {
-      echo "<li class=\"feedback\"><strong>" . htmlspecialchars($message) . "</strong></li>\n";
+      echo "<li class=\"feedback login-feedback\"><strong>" . htmlspecialchars($message) . "</strong></li>\n";
     } ?>
   </ul>
 

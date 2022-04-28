@@ -1,5 +1,4 @@
 <?php
-  $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
   define("MAX_FILE_SIZE", 1000000);
 
@@ -391,7 +390,15 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button">Log out</button>
+    <?php if (is_user_logged_in()) { ?>
+      <div class="admin-welcome">
+        <p>Welcome, <?php echo $current_user["username"]; ?>! You are currently on edit view.</p>
+        <a class="admin-nav" href="<?php echo "/detail?id=" . $id; ?>">Go to Consumer View</a>
+      </div>
+      <a class="logout-button" href="<?php echo logout_url(); ?>">Sign Out</a>
+    <?php } else { ?>
+      <button class="login-button" type="button">Log in</button>
+    <?php } ?>
   </header>
   <div class="breadcrumb">
     <a href="/admin">&lt; Back to Catalog View</a>

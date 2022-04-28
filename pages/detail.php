@@ -1,6 +1,4 @@
 <?php
-  $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
-
   $id = $_GET["id"] ?? NULL;
 
   $records = exec_sql_query($db, "SELECT * FROM entries INNER JOIN documents ON entries.id = documents.id WHERE (entries.id=:id);", array(":id" => $id)) -> fetchAll();
@@ -25,7 +23,15 @@
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button">Log in</button>
+    <?php if (is_user_logged_in()) { ?>
+      <div class="admin-welcome">
+        <p>Welcome, <?php echo $current_user["username"]; ?>! You are currently on consumer view.</p>
+        <a class="admin-nav" href="<?php echo "/admin/edit?id=" . $id; ?>">Go to Edit Mode</a>
+      </div>
+      <a class="logout-button" href="<?php echo logout_url(); ?>">Sign Out</a>
+    <?php } else { ?>
+      <button class="login-button" type="button">Log in</button>
+    <?php } ?>
   </header>
   <div class="breadcrumb">
     <a href="/">&lt; Back to Home</a>

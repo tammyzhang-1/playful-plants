@@ -5,7 +5,7 @@ $db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 include_once("includes/sessions.php");
 $session_messages = array();
 process_session_params($db, $session_messages);
-$is_admin = is_admin($db, $current_user);
+
 
 function match_routes($uri, $routes)
 {

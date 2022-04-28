@@ -1,5 +1,4 @@
 <?php
-$db = init_sqlite_db('db/site.sqlite', 'db/init.sql');
 
 $name = '';
 $plant_id = '';
@@ -189,8 +188,28 @@ $queries_matching = count($records);
 <body>
   <header>
     <h1>Playful Plants</h1>
-    <button type="button">Log in</button>
+    <?php if (is_user_logged_in()) { ?>
+      <div class="admin-welcome">
+        <p>Welcome, <?php echo $current_user["username"]; ?>! You are currently on consumer view.</p>
+        <a class="admin-nav" href="/admin">Go to Edit Mode</a>
+      </div>
+      <a class="logout-button" href="<?php echo logout_url(); ?>">Sign Out</a>
+    <?php } else { ?>
+      <button class="login-button" type="button">Log in</button>
+    <?php } ?>
   </header>
+
+  <div class="hidden modal">
+    <div class="hidden login-box">
+      <?php if (!is_user_logged_in()) { ?>
+        <button class="close-button" id="modal-close">x</button>
+        <h2>Sign in to your Playful Plants account</h2>
+        <p>Add plants, edit entries, and more.</p>
+        <?php echo_login_form("/", $session_messages); ?>
+      <?php } ?>
+    </div>
+  </div>
+
 
   <main>
     <!-- section including the sidebar and catalog data itself -->
@@ -324,6 +343,8 @@ $queries_matching = count($records);
     </div>
   </main>
 
+  <script src="public/scripts/jquery-3.6.0.js" type="text/javascript"></script>
+  <script src="public/scripts/login.js" type="text/javascript"></script>
 </body>
 
 </html>

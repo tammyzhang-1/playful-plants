@@ -44,6 +44,7 @@ CREATE TABLE sessions (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
     user_id INTEGER NOT NULL,
     session TEXT NOT NULL UNIQUE,
+    last_login TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
