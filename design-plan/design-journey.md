@@ -1316,7 +1316,11 @@ if (is_user_logged_in()) { ...}
 // else, display message that the user has to sign in to see that page
 <p>Sign in to view this page.</p>
 // with "Sign in" linked to a modal box popup with login form, or with login form directly displayed on page
+```
 
+- Javascript planning
+
+```
 modal box planning:
   create div that contains centered log in form, background dark with lowered opacity and z-index 2, hidden by default
   in javascript: when "log in" button is clicked, remove hidden from div with log in form
@@ -1324,6 +1328,14 @@ modal box planning:
   <script src="scripts/jquery-3.6.0.js" type="text/javascript"></script>
   <script src="scripts/login.js" type="text/javascript"></script>
 ```
+
+```
+// make modal box pop up to confirm deletion of a plant
+in js: when delete button is clicked, remove hidden from a div containing "Are you sure that you want to delete [plant name]?" with two buttons, "Cancel" and "Confirm"
+When confirm button is clicked, execute sql code to delete that plant from the database
+```
+
+
 
 
 ### Accessibility Audit (Final Submission)
