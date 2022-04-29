@@ -5,6 +5,8 @@
 
   $record = $records[0];
 
+
+
   $tag_list = exec_sql_query($db, "SELECT tags.id, tags.name
   FROM (entry_tags INNER JOIN tags ON entry_tags.tag_id = tags.id)
   WHERE (entry_tags.entry_id = :id);", array(":id" => $id)) -> fetchAll();
@@ -30,9 +32,24 @@
       </div>
       <a class="logout-button" href="<?php echo logout_url(); ?>">Sign Out</a>
     <?php } else { ?>
-      <button class="login-button" type="button">Log in</button>
+      <?php if ($logged_out == "") { ?>
+        <div class="hidden logout-confirm">Logged out successfully.</div>
+      <?php } ?>
+      <button class="login-button" type="button">Sign in</button>
     <?php } ?>
   </header>
+
+  <div class="hidden modal">
+    <div class="hidden login-box">
+      <?php if (!is_user_logged_in()) { ?>
+        <button class="close-button" id="modal-close">x</button>
+        <h2>Sign in to your Playful Plants account</h2>
+        <p>Add plants, edit entries, and more.</p>
+        <?php echo_login_form("/detail?id=" . $id, $session_messages); ?>
+      <?php } ?>
+    </div>
+  </div>
+
   <div class="breadcrumb">
     <a href="/">&lt; Back to Home</a>
   </div>
@@ -93,6 +110,8 @@
   </div>
   </main>
 
+  <script src="public/scripts/jquery-3.6.0.js" type="text/javascript"></script>
+  <script src="public/scripts/login.js" type="text/javascript"></script>
 </body>
 
 </html>

@@ -152,9 +152,17 @@ function cookie_login($db, $session)
 
 
 // logout
-function logout()
+function logout($db, $session)
 {
-  // Note: You can delete the record in the sessions table, but it's considered better practice to have a "cron" job that cleans up expired sessions.
+  if ($session) {
+    // Delete session from database.
+    // Note: You probably also need a "cron" job that cleans up expired sessions.
+    exec_sql_query(
+      $db,
+      "DELETE FROM sessions WHERE (session = :session_id);",
+      array(':session_id' => $session['session'])
+    );
+  }
 
   // Remove the session from the cookie and force it to expire (go back in time).
   setcookie('session', '', time() - SESSION_COOKIE_DURATION, '/');
@@ -166,19 +174,21 @@ function logout()
   error_log("  logout successful");
 }
 
-
 // logout url for the current page
 function logout_url()
 {
+  $request_uri = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
+
   // Add a logout query string parameter
   $params = $_GET;
   $params['logout'] = '';
 
   // Add logout param to current page URL.
-  $logout_url = htmlspecialchars($_SERVER['REQUEST_URI']) . '?' . http_build_query($params);
+  $logout_url = htmlspecialchars($request_uri) . '?' . http_build_query($params);
 
   return $logout_url;
 }
+
 
 
 // echo login form
@@ -228,7 +238,7 @@ function process_session_params($db, &$messages)
 
   if (isset($_GET['logout']) || isset($_POST['logout'])) { // Check if we should logout the user
     error_log("  attempting to logout...");
-    logout();
+    logout($db, $session);
   } else if (isset($_POST['login'])) { // Check if we should login the user
     error_log("  attempting to login with username and password...");
     password_login($db, $messages, $_POST['login_username'], $_POST['login_password']);

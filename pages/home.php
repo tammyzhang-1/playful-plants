@@ -173,6 +173,8 @@ $filter_query = $filter_base . $filter_where . " GROUP BY entries.name " . $filt
 $records = exec_sql_query($db, $filter_query) -> fetchAll();
 $queries_matching = count($records);
 
+$logged_out = $_GET['logout'] ?? NULL;
+
 ?>
 
 <!DOCTYPE html>
@@ -195,7 +197,10 @@ $queries_matching = count($records);
       </div>
       <a class="logout-button" href="<?php echo logout_url(); ?>">Sign Out</a>
     <?php } else { ?>
-      <button class="login-button" type="button">Log in</button>
+      <?php if ($logged_out == "") { ?>
+        <div class="hidden logout-confirm">Logged out successfully.</div>
+      <?php } ?>
+      <button class="login-button" type="button">Sign in</button>
     <?php } ?>
   </header>
 

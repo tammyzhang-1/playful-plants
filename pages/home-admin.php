@@ -424,34 +424,39 @@
     // final filter/sort query
     $filter_query = $filter_base . $filter_where . $filter_order;
 
-    $records = exec_sql_query($db, $filter_query) -> fetchAll();
-    $queries_matching = count($records);
-
     // delete button functionality
-    $delete_plant = $_POST["id-delete"];
+    $delete_plant_id = $_POST["id-delete"];
+    $delete_plant = $_POST["delete-confirmed"];
+    $id_delete_confirmed = $_POST["id-delete-confirmed"];
     $show_delete_confirmation = False;
 
 
     if ($delete_plant) {
       $delete_entry = exec_sql_query($db, "DELETE FROM entries WHERE (id=:id);",
         array(
-          ':id' => $delete_plant
+          ':id' => $id_delete_confirmed
         )
       );
 
       $delete_tags = exec_sql_query($db, "DELETE FROM entry_tags WHERE (entry_id=:id);",
         array (
-          ':id' => $delete_plant
+          ':id' => $id_delete_confirmed
         )
       );
 
       $delete_img = exec_sql_query($db, "DELETE FROM documents WHERE (id=:id);",
-      array (
-        ':id' => $delete_plant
-      )
-    );
-      $show_delete_confirmation = True;
+        array (
+        ':id' => $id_delete_confirmed
+        )
+      );
+
+      if ($delete_entry && $delete_tags && $delete_img) {
+        $show_delete_confirmation = True;
+      }
     }
+
+    $records = exec_sql_query($db, $filter_query) -> fetchAll();
+    $queries_matching = count($records);
   }
 ?>
 
@@ -473,11 +478,36 @@
         <p>Welcome, <?php echo $current_user["username"]; ?>! You are currently on edit view.</p>
         <a class="admin-nav" href="/">Go to Consumer View</a>
       </div>
-      <a class="logout-button" href="<?php echo logout_url(); ?>">Sign Out</a>
+      <a class="logout-button" href="/?logout=">Sign Out</a>
     <?php } else { ?>
-      <button class="login-button" type="button">Log in</button>
+      <button class="login-button" type="button">Sign in</button>
     <?php } ?>
   </header>
+
+  <?php if (!is_user_logged_in()) { ?>
+    <div class="hidden modal">
+      <div class="hidden login-box">
+        <button class="close-button" id="modal-close">x</button>
+        <h2>Sign in to your Playful Plants account</h2>
+        <p>Add plants, edit entries, and more.</p>
+        <?php echo_login_form("/", $session_messages); ?>
+      </div>
+    </div>
+  <?php } ?>
+
+  <?php if (is_user_logged_in() && $delete_plant_id) { ?>
+    <div class="modal">
+      <div class="delete-confirm-popup">
+        <h2>Confirm Entry Deletion</h2>
+        <p>Are you sure you want to delete <?php echo $delete_plant_id; ?>?</p>
+        <p>Cancel</p>
+        <form method="post" action="/admin">
+          <input type="hidden" name="id-delete-confirmed" value="<?php echo $delete_plant_id;?>" />
+          <button type="submit" name="delete-confirmed" value="submitted">Delete</button>
+        </form>
+      </div>
+    </div>
+  <?php } ?>
 
   <?php if (is_user_logged_in()) { ?>
     <main>
@@ -632,7 +662,7 @@
 
       <?php if ($show_delete_confirmation) { ?>
         <!-- confirmation after successfully adding a plant, hidden by default -->
-        <div class="confirmation">Plant with ID "<?php echo htmlspecialchars($delete_plant); ?>" successfully deleted.</div>
+        <div class="confirmation">Plant with ID "<?php echo htmlspecialchars($id_delete_confirmed); ?>" successfully deleted.</div>
       <?php } ?>
 
       <!-- section underneath the adding form, includes the filtering/sorting sidebar and catalog data itself -->
@@ -736,6 +766,7 @@
             </div>
           </div>
 
+
           <?php
           foreach ($records as $record) { ?>
             <div class="entry">
@@ -746,9 +777,11 @@
                     <input type="hidden" name="id" value="<?php echo $record["id"]; ?>" />
                     <button type="submit">Edit</button>
                   </form>
-                  <form method="post" action="/admin">
+
+                  <form method="post" action="/admin" id="delete-entry">
                     <input type="hidden" name="id-delete" value="<?php echo $record["id"]; ?>" />
-                    <button type="submit">Delete</button>
+                    <div class="delete-button"><button type="submit">Delete</button></div>
+
                   </form>
                 </div>
               </div>
@@ -785,7 +818,17 @@
         </section>
       </div>
     </main>
+  <?php } else { ?>
+    <main>
+      <div class="error-message">
+        <h2>Page not found</h2>
+        <p>This page does not exist. <a href="/">Go back to the home page?</a></p>
+      </div>
+    </main>
   <?php } ?>
+
+  <script src="public/scripts/jquery-3.6.0.js" type="text/javascript"></script>
+  <script src="public/scripts/login.js" type="text/javascript"></script>
 </body>
 
 </html>

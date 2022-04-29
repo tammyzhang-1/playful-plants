@@ -14,7 +14,7 @@
     </header>
 
     <main>
-      <div id="error-message">
+      <div class="error-message">
         <h2>Page not found</h2>
         <p>This page does not exist. <a href="/">Go back to the home page?</a></p>
       </div>

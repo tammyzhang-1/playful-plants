@@ -53,6 +53,7 @@ h2, h3 {
     width: 100%;
     z-index: 1;
     top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -91,6 +92,23 @@ ul.login {
     padding-right: 0.5em;
     color: rgb(175, 175, 175);
     font-size: 2em;
+}
+
+.logout-confirm {
+    border: thin solid rgb(30, 97, 40);
+    border-radius: 0.25em;
+    background-color:rgb(183, 214, 165);
+    padding: 0.5em 4em 0.5em 4em;
+    color:rgb(4, 103, 18);
+}
+
+.delete-confirm-popup {
+    z-index: 2;
+    background-color:rgba(255, 255, 255);
+    padding: 2em 5em 4em 5em;
+    margin: auto;
+    text-align: center;
+    position: fixed;
 }
 
 .admin-nav {
@@ -293,7 +311,6 @@ input:hover, button:hover {
     margin-bottom: 1em;
 }
 
-
 .confirmation {
     text-align: center;
     padding-top: 1em;
@@ -367,9 +384,17 @@ input:hover, button:hover {
     margin-top: 1em;
 }
 
-#error-message {
+.error-message {
     padding: 2em;
     background-color: #deeadc;
+}
+
+.error-message .login-button {
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    color: rgb(41, 101, 32);
 }
 
 .hidden {
