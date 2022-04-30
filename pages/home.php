@@ -223,7 +223,8 @@ $logged_out = $_GET['logout'] ?? NULL;
       <div class="sidebar">
         <div class="filter-toggle">
           <h2>Refine Results</h2>
-          <img id="toggle-filter-form" src="public/images/down.png"/>
+          <!-- toggle icons are original work, source: Tammy Zhang -->
+          <img id="toggle-filter-form" src="public/images/down.png" alt="filter menu toggle icon"/>
         </div>
         <!-- Form for filtering and sorting -->
         <div class="filter-sort-form">

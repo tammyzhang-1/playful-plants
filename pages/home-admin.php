@@ -515,7 +515,8 @@
   <?php if (is_user_logged_in()) { ?>
     <main>
       <!-- form for adding a plant to the catalog -->
-      <div class="center"><h3>Add plant</h3> <img id="toggle-add-form" src="public/images/add-image.png"/></div>
+      <!-- toggle icons are original work, source: Tammy Zhang -->
+      <div class="center"><h3>Add plant</h3> <img id="toggle-add-form" src="public/images/add-image.png" alt="Add form toggle icon."/></div>
       <div id="add-plant-form" class="hidden">
         <div>
           <h2>Add new plant</h2>

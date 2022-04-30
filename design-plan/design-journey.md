@@ -1355,7 +1355,7 @@ make div clickable by changing how the cursor appears
 > Tell us what issues you discovered during your accessibility audit.
 > What do you do to improve the accessibility of your site?
 
-TODO
+The only issues I discovered during my accessibility audit were that several images (used in the toggle menus) did not have an "alt" set, so I added a short phrase to these icons.
 
 
 ## Reflection (Final Submission)
