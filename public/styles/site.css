@@ -162,6 +162,21 @@ a.admin-nav, a.logout-button {
     margin-bottom: 0;
 }
 
+.filter-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.filter-toggle:hover {
+    cursor: pointer;
+}
+
+#toggle-filter-form {
+    display: none;
+}
+
 .sidebar {
     margin-top: 0.5em;
     min-width: 18%;
@@ -193,6 +208,10 @@ label {
     line-height: 1.4em;
 }
 
+.entry-header a {
+    text-decoration: none;
+}
+
 .add-text, .edit-text {
     display: flex;
     justify-content: space-between;
@@ -203,6 +222,14 @@ label {
 
 .add-text input {
     width: 13.5em;
+}
+
+.edit-text input:hover, .edit-text-short input:hover {
+    cursor: text;
+}
+
+select:hover {
+    cursor: pointer;
 }
 
 .file-upload {
@@ -273,7 +300,23 @@ input:hover, button:hover, #sort:hover {
     margin: 0.5em;
 }
 
+.center {
+    text-align: center;
+    background-color:rgb(194, 217, 181);
+    padding: 0.25em;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    border: solid thin;
+    border-color:rgb(175, 175, 175);
+}
 
+.center:hover {
+    background-color:rgb(176, 200, 161);
+    cursor: pointer;
+}
 
 .main-add {
     display: flex;
@@ -679,9 +722,16 @@ a:visited {
     .sidebar {
         margin-right: 0.5em;
         max-width: 90%;
+        padding-bottom: 0.5em;
     }
     .filter-options {
         display: flex;
         justify-content: space-around;
+    }
+    .filter-sort-form {
+        display: none;
+    }
+    #toggle-filter-form {
+        display: block;
     }
 }

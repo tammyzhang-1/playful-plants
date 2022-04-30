@@ -1351,8 +1351,6 @@ make div clickable by changing how the cursor appears
 ```
 
 
-
-
 ### Accessibility Audit (Final Submission)
 > Tell us what issues you discovered during your accessibility audit.
 > What do you do to improve the accessibility of your site?

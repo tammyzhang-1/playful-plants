@@ -306,37 +306,39 @@
             }
           }
 
-          if ($upload['error'] == UPLOAD_ERR_OK) {
-            $image_filename = basename($upload['name']);
-            $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+          if ($upload['size'] > 0) {
+            if ($upload['error'] == UPLOAD_ERR_OK) {
+              $image_filename = basename($upload['name']);
+              $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
 
-            if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+              if (!in_array($image_ext, array('jpg', 'jpeg', 'png', 'gif'))) {
+                $add_form_valid = False;
+                $file_ext_feedback_class = '';
+              }
+            } else {
+              // upload was not successful
               $add_form_valid = False;
-              $file_ext_feedback_class = '';
+              $file_feedback_class = '';
             }
-          } else {
-            // upload was not successful
-            $add_form_valid = False;
-            $file_feedback_class = '';
-          }
 
-          $new_img_name = "$id" . "." . "$image_ext";
+            $new_img_name = "$id" . "." . "$image_ext";
 
-          $file_result = exec_sql_query(
-            $db,
-            "UPDATE documents SET
-            file_name = :file_name,
-            file_ext = :file_ext WHERE (id=:id);",
-            array(
-              ':file_name' => $new_img_name,
-              ':file_ext' => $image_ext,
-              ':id' => $id
-            )
-          );
+            $file_result = exec_sql_query(
+              $db,
+              "UPDATE documents SET
+              file_name = :file_name,
+              file_ext = :file_ext WHERE (id=:id);",
+              array(
+                ':file_name' => $new_img_name,
+                ':file_ext' => $image_ext,
+                ':id' => $id
+              )
+            );
 
-          if ($file_result) {
-            $id_filename = 'public/uploads/documents/' . $id . '.' . $image_ext;
-            move_uploaded_file($upload["tmp_name"], $id_filename);
+            if ($file_result) {
+              $id_filename = 'public/uploads/documents/' . $id . '.' . $image_ext;
+              move_uploaded_file($upload["tmp_name"], $id_filename);
+            }
           }
 
           if ($result) {
@@ -393,10 +395,10 @@
     <h1>Playful Plants</h1>
     <?php if (is_user_logged_in()) { ?>
       <div class="admin-welcome">
-        <p>Welcome, <?php echo $current_user["username"]; ?>! You are currently on edit view.</p>
-        <a class="admin-nav" href="<?php echo "/detail?id=" . $id; ?>">Go to Consumer View</a>
+        <p>Welcome, <?php echo htmlspecialchars($current_user["username"]); ?>! You are currently on edit view.</p>
+        <a class="admin-nav" href="<?php echo htmlspecialchars("/detail?id=" . $id); ?>">Go to Consumer View</a>
       </div>
-      <a class="logout-button" href="<?php echo "/detail?id=" . $id . htmlspecialchars("&logout="); ?>">Sign Out</a>
+      <a class="logout-button" href="<?php echo htmlspecialchars("/detail?id=" . $id . "&logout="); ?>">Sign Out</a>
     <?php } ?>
   </header>
 
@@ -415,48 +417,46 @@
         <?php if ($record['file_name'] == 'default.png') {
             $image_url = '/public/uploads/documents/default.png';
           } else {
-            $check1 = $record['file_name'];
             $image_url = "/public/uploads/documents/" . $record["id"] . "." . $record["file_ext"];
           } ?>
         <!-- default.png is original work (created by Tammy Zhang) -->
-        <img src="<?php echo $image_url; ?>" alt="Picture of <?php echo $record["name"]; ?>."/>
+        <img src="<?php echo htmlspecialchars($image_url); ?>" alt="Picture of <?php echo htmlspecialchars($record["name"]); ?>."/>
       </div>
 
       <div class="detail-text">
       <section class="edit-plant-form">
         <h2>Edit <?php echo ucwords(htmlspecialchars($sticky_name)); ?></h2>
-        <p>(Note for Milestone 3: bug where Save Changes button must be pressed twice to successfully update)</p>
 
-        <form id="edit-plant" method="post" action="<?php echo "/admin/edit?id=" . $record["id"]; ?>" enctype="multipart/form-data" novalidate>
+        <form id="edit-plant" method="post" action="<?php echo htmlspecialchars("/admin/edit?id=" . $record["id"]); ?>" enctype="multipart/form-data" novalidate>
 
-          <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>
+          <div class="feedback <?php echo htmlspecialchars($name_feedback_class); ?>">A colloquial name is required.</div>
           <div class="edit-text">
             <label for="edit-plant-name">Plant Name (Colloquial):</label>
             <input type="text" name="edit-plant-name" id="edit-plant-name" value="<?php echo ucwords(htmlspecialchars($sticky_name)); ?>"/>
           </div>
 
-          <div class="feedback <?php echo $scientific_name_feedback_class; ?>">A scientific name is required.</div>
+          <div class="feedback <?php echo htmlspecialchars($scientific_name_feedback_class); ?>">A scientific name is required.</div>
           <div class="edit-text">
             <label for="edit-scientific-name">Plant Name (Scientific):</label>
             <input type="text" name="edit-scientific-name" id="edit-scientific-name" value="<?php echo htmlspecialchars($sticky_scientific_name); ?>" />
           </div>
 
-          <div class="feedback <?php echo $plant_id_feedback_class; ?>">A plant ID is required.</div>
-          <div class="feedback <?php echo $plant_id_unique_feedback_class; ?>">A plant with that ID already exists.</div>
+          <div class="feedback <?php echo htmlspecialchars($plant_id_feedback_class); ?>">A plant ID is required.</div>
+          <div class="feedback <?php echo htmlspecialchars($plant_id_unique_feedback_class); ?>">A plant with that ID already exists.</div>
           <div class="edit-text">
             <label for="edit-plant-id">Plant ID:</label>
               <input type="text" name="edit-plant-id" id="edit-plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
           </div>
 
-            <div class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</div>
+            <div class="feedback <?php echo htmlspecialchars($file_ext_feedback_class); ?>">File is required to be in .jpg, .png, or .gif format.</div>
             <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
             <div class="file-upload" id="edit-file">
-              <label for="upload-image">JPG or PNG image:</label>
-              <input id="upload-image" type="file" name="edit-image-file" accept=".png, .jpg, .jpeg" />
+              <label for="upload-image">JPG, PNG, or GIF:</label>
+              <input id="upload-image" type="file" name="edit-image-file" accept=".png, .jpg, .jpeg, .gif" />
             </div>
 
           <h3>Gardening Characteristics:</h3>
-          <div class="feedback <?php echo $hardiness_zone_feedback_class; ?>">Hardiness zone is required.</div>
+          <div class="feedback <?php echo htmlspecialchars($hardiness_zone_feedback_class); ?>">Hardiness zone is required.</div>
           <div class="edit-text-short">
             <label for="edit-hardiness-zone">Hardiness Zone:</label>
             <input type="text" name="edit-hardiness-zone" id="edit-hardiness-zone" value="<?php echo htmlspecialchars($sticky_hardiness_zone); ?>" />
@@ -464,88 +464,88 @@
 
           <div class="seasonality">
             <div>
-              <input type="checkbox" name="edit-perennial" id="edit-perennial" <?php echo $sticky_perennial; ?>/>
+              <input type="checkbox" name="edit-perennial" id="edit-perennial" <?php echo htmlspecialchars($sticky_perennial); ?>/>
               <label for="edit-perennial">Perennial</label>
             </div>
             <div>
-              <input type="checkbox" name="edit-annual" id="edit-annual" <?php echo $sticky_annual; ?>/>
+              <input type="checkbox" name="edit-annual" id="edit-annual" <?php echo htmlspecialchars($sticky_annual); ?>/>
               <label for="edit-annual">Annual</label>
             </div>
           </div>
 
-          <div class="feedback <?php echo $shade_feedback_class; ?>">At least one type of light is required.</div>
+          <div class="feedback <?php echo htmlspecialchars($shade_feedback_class); ?>">At least one type of light is required.</div>
           <div class="sun-needs-container">
             <div>
-              <input type="checkbox" name="edit-full-sun" id="edit-full-sun" <?php echo $sticky_full_sun; ?>/>
+              <input type="checkbox" name="edit-full-sun" id="edit-full-sun" <?php echo htmlspecialchars($sticky_full_sun); ?>/>
               <label for="edit-full-sun">Full Sun</label>
             </div>
             <div>
-              <input type="checkbox" name="edit-partial-shade" id="edit-partial-shade" <?php echo $sticky_partial_shade; ?>/>
+              <input type="checkbox" name="edit-partial-shade" id="edit-partial-shade" <?php echo htmlspecialchars($sticky_partial_shade); ?>/>
               <label for="edit-partial-shade">Partial Shade</label>
             </div>
             <div>
-              <input type="checkbox" name="edit-full-shade" id="edit-full-shade" <?php echo $sticky_full_shade; ?>/>
+              <input type="checkbox" name="edit-full-shade" id="edit-full-shade" <?php echo htmlspecialchars($sticky_full_shade); ?>/>
               <label for="edit-full-shade">Full Shade</label>
             </div>
           </div>
 
           <div>
-            <div class="feedback <?php echo $plant_type_feedback_class; ?>">A plant type is required.</div>
+            <div class="feedback <?php echo htmlspecialchars($plant_type_feedback_class); ?>">A plant type is required.</div>
             <label for="edit-type-select">Plant type:  </label>
               <select name="edit-type-select" id="edit-type-select">
                 <option value="none">None selected</option>
-                <option value="shrub" <?php echo $sticky_shrub; ?>>Shrub</option>
-                <option value="grass" <?php echo $sticky_grass; ?>>Grass</option>
-                <option value="vine" <?php echo $sticky_vine; ?>>Vine</option>
-                <option value="tree" <?php echo $sticky_tree; ?>>Tree</option>
-                <option value="flower" <?php echo $sticky_flower; ?>>Flower</option>
-                <option value="groundcover" <?php echo $sticky_groundcover; ?>>Groundcover</option>
-                <option value="other" <?php echo $sticky_other; ?>>Other</option>
+                <option value="shrub" <?php echo htmlspecialchars($sticky_shrub); ?>>Shrub</option>
+                <option value="grass" <?php echo htmlspecialchars($sticky_grass); ?>>Grass</option>
+                <option value="vine" <?php echo htmlspecialchars($sticky_vine); ?>>Vine</option>
+                <option value="tree" <?php echo htmlspecialchars($sticky_tree); ?>>Tree</option>
+                <option value="flower" <?php echo htmlspecialchars($sticky_flower); ?>>Flower</option>
+                <option value="groundcover" <?php echo htmlspecialchars($sticky_groundcover); ?>>Groundcover</option>
+                <option value="other" <?php echo htmlspecialchars($sticky_other); ?>>Other</option>
               </select>
             </div>
 
           <!-- div containing multiple select section of form for play types -->
           <h3>Types of Play Supported:</h3>
           <div>
-            <div class="feedback <?php echo $play_type_feedback_class; ?>">At least one play type is required.</div>
+            <div class="feedback <?php echo htmlspecialchars($play_type_feedback_class); ?>">At least one play type is required.</div>
             <div class="edit-play-checkboxes">
               <div class="play-type">
-                <input type="checkbox" name="edit-exploratory-constructive" id="edit-exploratory-constructive" <?php echo $sticky_exploratory_constructive; ?>/>
+                <input type="checkbox" name="edit-exploratory-constructive" id="edit-exploratory-constructive" <?php echo htmlspecialchars($sticky_exploratory_constructive); ?>/>
                 <label for="edit-exploratory-constructive">Exploratory Constructive Play</label>
               </div>
 
               <div class="play-type">
-                <input type="checkbox" name="edit-exploratory-sensory" id="edit-exploratory-sensory" <?php echo $sticky_exploratory_sensory; ?>/>
+                <input type="checkbox" name="edit-exploratory-sensory" id="edit-exploratory-sensory" <?php echo htmlspecialchars($sticky_exploratory_sensory); ?>/>
                 <label for="edit-exploratory-sensory">Exploratory Sensory Play</label>
               </div>
 
               <div class="play-type">
-                <input type="checkbox" name="edit-physical" id="edit-physical" <?php echo $sticky_physical; ?>/>
+                <input type="checkbox" name="edit-physical" id="edit-physical" <?php echo htmlspecialchars($sticky_physical); ?>/>
                 <label for="edit-physical">Physical Play</label>
               </div>
 
               <div class="play-type">
-                <input type="checkbox" name="edit-imaginative" id="edit-imaginative" <?php echo $sticky_imaginative; ?>/>
+                <input type="checkbox" name="edit-imaginative" id="edit-imaginative" <?php echo htmlspecialchars($sticky_imaginative); ?>/>
                 <label for="edit-imaginative">Imaginative Play</label>
               </div>
 
               <div class="play-type">
-                <input type="checkbox" name="edit-restorative" id="edit-restorative" <?php echo $sticky_restorative; ?>/>
+                <input type="checkbox" name="edit-restorative" id="edit-restorative" <?php echo htmlspecialchars($sticky_restorative); ?>/>
                 <label for="edit-restorative">Restorative Play</label>
               </div>
 
               <div class="play-type">
-                <input type="checkbox" name="edit-expressive" id="edit-expressive" <?php echo $sticky_expressive; ?>/>
+                <input type="checkbox" name="edit-expressive" id="edit-expressive" <?php echo htmlspecialchars($sticky_expressive); ?>/>
                 <label for="edit-expressive">Expressive Play</label>
               </div>
 
               <div class="play-type">
-                <input type="checkbox" name="edit-rules" id="edit-rules" <?php echo $sticky_rules; ?>/>
+                <input type="checkbox" name="edit-rules" id="edit-rules" <?php echo htmlspecialchars($sticky_rules); ?>/>
                 <label for="edit-rules">Play with Rules</label>
               </div>
 
               <div class="play-type">
-                <input type="checkbox" name="edit-bio" id="edit-bio" <?php echo $sticky_bio; ?>/>
+                <input type="checkbox" name="edit-bio" id="edit-bio" <?php echo htmlspecialchars($sticky_bio); ?>/>
                 <label for="edit-bio">Bio Play</label>
               </div>
             </div>
@@ -568,8 +568,8 @@
     </main>
   <?php } ?>
 
-  <script src="public/scripts/jquery-3.6.0.js" type="text/javascript"></script>
-  <script src="public/scripts/login.js" type="text/javascript"></script>
+  <script src="/public/scripts/jquery-3.6.0.js" type="text/javascript"></script>
+  <script src="/public/scripts/login.js" type="text/javascript"></script>
 </body>
 
 </html>

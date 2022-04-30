@@ -107,7 +107,7 @@
         $image_filename = basename($upload['name']);
         $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
 
-        if (!in_array($image_ext, array('jpg', 'jpeg', 'png'))) {
+        if (!in_array($image_ext, array('jpg', 'jpeg', 'png', 'gif'))) {
           $add_form_valid = False;
           $file_ext_feedback_class = '';
         }
@@ -477,7 +477,7 @@
     <h1>Playful Plants</h1>
     <?php if (is_user_logged_in()) { ?>
       <div class="admin-welcome">
-        <p>Welcome, <?php echo $current_user["username"]; ?>! You are currently on edit view.</p>
+        <p>Welcome, <?php echo htmlspecialchars($current_user["username"]); ?>! You are currently on edit view.</p>
         <a class="admin-nav" href="/">Go to Consumer View</a>
       </div>
       <a class="logout-button" href="/?logout=">Sign Out</a>
@@ -489,13 +489,13 @@
       <div class="delete-confirm-popup">
         <button class="close-button" id="delete-close">x</button>
         <h2>Confirm Entry Deletion</h2>
-        <p>Are you sure you want to delete <strong><?php echo $delete_plant_name; ?>?</strong> </p>
+        <p>Are you sure you want to delete <strong><?php echo htmlspecialchars($delete_plant_name); ?>?</strong> </p>
         <p>This action is not reversible.</p>
         <div class="delete-buttons">
           <button type="button" id="delete-cancel">Cancel</button>
           <form method="post" action="/admin">
-            <input type="hidden" name="id-delete-confirmed" value="<?php echo $delete_plant_id;?>" />
-            <input type="hidden" name="name-delete-confirmed" value="<?php echo $delete_plant_name;?>" />
+            <input type="hidden" name="id-delete-confirmed" value="<?php echo htmlspecialchars($delete_plant_id);?>" />
+            <input type="hidden" name="name-delete-confirmed" value="<?php echo htmlspecialchars($delete_plant_name);?>" />
             <button type="submit" name="delete-confirmed" value="submitted">Delete</button>
           </form>
         </div>
@@ -506,7 +506,7 @@
   <?php if (is_user_logged_in()) { ?>
     <main>
       <!-- form for adding a plant to the catalog -->
-
+      <div class="center"><h3>Add plant</h3> <img id="toggle-add-form" src="public/images/add-image.png"/></div>
       <div id="add-plant-form" class="hidden">
         <div>
           <h2>Add new plant</h2>
@@ -518,76 +518,76 @@
               <!-- div containing text fields of form -->
               <div class="text-fields">
                 <h3>Basic Information</h3>
-                <div class="feedback <?php echo $name_feedback_class; ?>">A colloquial name is required.</div>
+                <div class="feedback <?php echo htmlspecialchars($name_feedback_class); ?>">A colloquial name is required.</div>
                 <div class="add-text">
                   <label for="plant-name">Plant Name (Colloquial):</label>
                   <input type="text" name="plant-name" id="plant-name" value="<?php echo htmlspecialchars($sticky_name); ?>"/>
                 </div>
 
-                <div class="feedback <?php echo $scientific_name_feedback_class; ?>">A scientific name is required.</div>
+                <div class="feedback <?php echo htmlspecialchars($scientific_name_feedback_class); ?>">A scientific name is required.</div>
                 <div class="add-text">
                   <label for="scientific-name">Plant Name (Scientific):</label>
                   <input type="text" name="scientific-name" id="scientific-name" value="<?php echo htmlspecialchars($sticky_scientific_name); ?>" />
                 </div>
 
-                <div class="feedback <?php echo $plant_id_feedback_class; ?>">A plant ID is required.</div>
-                <div class="feedback <?php echo $plant_id_unique_feedback_class; ?>">A plant with that ID already exists.</div>
+                <div class="feedback <?php echo htmlspecialchars($plant_id_feedback_class); ?>">A plant ID is required.</div>
+                <div class="feedback <?php echo htmlspecialchars($plant_id_unique_feedback_class); ?>">A plant with that ID already exists.</div>
                 <div class="add-text">
                   <label for="plant-id">Plant ID:</label>
                   <input type="text" name="plant-id" id="plant-id" value="<?php echo htmlspecialchars($sticky_plant_id); ?>" />
                 </div>
 
                 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
-                <div class="feedback <?php echo $file_ext_feedback_class; ?>">File is required to be in .jpg or .png format.</div>
-                <div class="feedback <?php echo $file_feedback_class; ?>">File required.</div>
+                <div class="feedback <?php echo htmlspecialchars($file_ext_feedback_class); ?>">File is required to be in .jpg or .png format.</div>
+                <div class="feedback <?php echo htmlspecialchars($file_feedback_class); ?>">File required.</div>
                 <div class="file-upload">
-                  <label for="upload-image">JPG or PNG image:</label>
-                  <input id="upload-image" type="file" name="image-file" accept=".png, .jpg, .jpeg" />
+                  <label for="upload-image">JPG, PNG, or GIF image:</label>
+                  <input id="upload-image" type="file" name="image-file" accept=".png, .jpg, .jpeg, .gif" />
                 </div>
               </div>
 
               <!-- div containing multiple select section of form for play types -->
               <div class="add-play-type">
                 <h3>Supported Play Types</h3>
-                <div class="feedback <?php echo $play_type_feedback_class; ?>">At least one play type is required.</div>
+                <div class="feedback <?php echo htmlspecialchars($play_type_feedback_class); ?>">At least one play type is required.</div>
                 <div class="play-checkboxes">
                   <div class="play-type">
-                    <input type="checkbox" name="add-exploratory-constructive" id="add-exploratory-constructive" <?php echo $sticky_exploratory_constructive; ?>/>
+                    <input type="checkbox" name="add-exploratory-constructive" id="add-exploratory-constructive" <?php echo htmlspecialchars($sticky_exploratory_constructive); ?>/>
                     <label for="add-exploratory-constructive">Exploratory Constructive Play</label>
                   </div>
 
                   <div class="play-type">
-                    <input type="checkbox" name="add-exploratory-sensory" id="add-exploratory-sensory" <?php echo $sticky_exploratory_sensory; ?>/>
+                    <input type="checkbox" name="add-exploratory-sensory" id="add-exploratory-sensory" <?php echo htmlspecialchars($sticky_exploratory_sensory); ?>/>
                     <label for="add-exploratory-sensory">Exploratory Sensory Play</label>
                   </div>
 
                   <div class="play-type">
-                    <input type="checkbox" name="add-physical" id="add-physical" <?php echo $sticky_physical; ?>/>
+                    <input type="checkbox" name="add-physical" id="add-physical" <?php echo htmlspecialchars($sticky_physical); ?>/>
                     <label for="add-physical">Physical Play</label>
                   </div>
 
                   <div class="play-type">
-                    <input type="checkbox" name="add-imaginative" id="add-imaginative" <?php echo $sticky_imaginative; ?>/>
+                    <input type="checkbox" name="add-imaginative" id="add-imaginative" <?php echo htmlspecialchars($sticky_imaginative); ?>/>
                     <label for="add-imaginative">Imaginative Play</label>
                   </div>
 
                   <div class="play-type">
-                    <input type="checkbox" name="add-restorative" id="add-restorative" <?php echo $sticky_restorative; ?>/>
+                    <input type="checkbox" name="add-restorative" id="add-restorative" <?php echo htmlspecialchars($sticky_restorative); ?>/>
                     <label for="add-restorative">Restorative Play</label>
                   </div>
 
                   <div class="play-type">
-                    <input type="checkbox" name="add-expressive" id="add-expressive" <?php echo $sticky_expressive; ?>/>
+                    <input type="checkbox" name="add-expressive" id="add-expressive" <?php echo htmlspecialchars($sticky_expressive); ?>/>
                     <label for="add-expressive">Expressive Play</label>
                   </div>
 
                   <div class="play-type">
-                    <input type="checkbox" name="add-rules" id="add-rules" <?php echo $sticky_rules; ?>/>
+                    <input type="checkbox" name="add-rules" id="add-rules" <?php echo htmlspecialchars($sticky_rules); ?>/>
                     <label for="add-rules">Play with Rules</label>
                   </div>
 
                   <div class="play-type">
-                    <input type="checkbox" name="add-bio" id="add-bio" <?php echo $sticky_bio; ?>/>
+                    <input type="checkbox" name="add-bio" id="add-bio" <?php echo htmlspecialchars($sticky_bio); ?>/>
                     <label for="add-bio">Bio Play</label>
                   </div>
                 </div>
@@ -596,47 +596,47 @@
               <div class="garden-info">
                 <h3>Gardening Information</h3>
 
-                <div class="feedback <?php echo $hardiness_zone_feedback_class; ?>">Hardiness zone is required.</div>
+                <div class="feedback <?php echo htmlspecialchars($hardiness_zone_feedback_class); ?>">Hardiness zone is required.</div>
                 <div class="short-text">
                   <label for="hardiness-zone">Hardiness Zone:</label>
                   <input type="text" name="hardiness-zone" id="hardiness-zone" value="<?php echo htmlspecialchars($sticky_hardiness_zone); ?>" />
                 </div>
 
                 <div class="garden-type">
-                  <input type="checkbox" name="add-perennial" id="add-perennial" <?php echo $sticky_perennial; ?>/>
+                  <input type="checkbox" name="add-perennial" id="add-perennial" <?php echo htmlspecialchars($sticky_perennial); ?>/>
                   <label for="add-perennial">Perennial</label>
                 </div>
                 <div class="garden-type">
-                  <input type="checkbox" name="add-annual" id="add-annual" <?php echo $sticky_annual; ?>/>
+                  <input type="checkbox" name="add-annual" id="add-annual" <?php echo htmlspecialchars($sticky_annual); ?>/>
                   <label for="add-annual">Annual</label>
                 </div>
 
-                <div class="feedback <?php echo $shade_feedback_class; ?>">At least one type of light is required.</div>
+                <div class="feedback <?php echo htmlspecialchars($shade_feedback_class); ?>">At least one type of light is required.</div>
                 <div class="garden-type">
-                  <input type="checkbox" name="add-full-sun" id="add-full-sun" <?php echo $sticky_full_sun; ?>/>
+                  <input type="checkbox" name="add-full-sun" id="add-full-sun" <?php echo htmlspecialchars($sticky_full_sun); ?>/>
                   <label for="add-full-sun">Full Sun</label>
                 </div>
                 <div class="garden-type">
-                  <input type="checkbox" name="add-partial-shade" id="add-partial-shade" <?php echo $sticky_partial_shade; ?>/>
+                  <input type="checkbox" name="add-partial-shade" id="add-partial-shade" <?php echo htmlspecialchars($sticky_partial_shade); ?>/>
                   <label for="add-partial-shade">Partial Shade</label>
                 </div>
                 <div class="garden-type">
-                  <input type="checkbox" name="add-full-shade" id="add-full-shade" <?php echo $sticky_full_shade; ?>/>
+                  <input type="checkbox" name="add-full-shade" id="add-full-shade" <?php echo htmlspecialchars($sticky_full_shade); ?>/>
                   <label for="add-full-shade">Full Shade</label>
                 </div>
 
-                <div class="feedback <?php echo $plant_type_feedback_class; ?>">A plant type is required.</div>
+                <div class="feedback <?php echo htmlspecialchars($plant_type_feedback_class); ?>">A plant type is required.</div>
                 <div class="garden-type">
                   <label for="add-type-select">Plant type:  </label>
                     <select name="add-type-select" id="add-type-select">
                       <option value="none">None selected</option>
-                      <option value="shrub" <?php echo $sticky_shrub; ?>>Shrub</option>
-                      <option value="grass" <?php echo $sticky_grass; ?>>Grass</option>
-                      <option value="vine" <?php echo $sticky_vine; ?>>Vine</option>
-                      <option value="tree" <?php echo $sticky_tree; ?>>Tree</option>
-                      <option value="flower" <?php echo $sticky_flower; ?>>Flower</option>
-                      <option value="groundcover" <?php echo $sticky_groundcover; ?>>Groundcover</option>
-                      <option value="other" <?php echo $sticky_other; ?>>Other</option>
+                      <option value="shrub" <?php echo htmlspecialchars($sticky_shrub); ?>>Shrub</option>
+                      <option value="grass" <?php echo htmlspecialchars($sticky_grass); ?>>Grass</option>
+                      <option value="vine" <?php echo htmlspecialchars($sticky_vine); ?>>Vine</option>
+                      <option value="tree" <?php echo htmlspecialchars($sticky_tree); ?>>Tree</option>
+                      <option value="flower" <?php echo htmlspecialchars($sticky_flower); ?>>Flower</option>
+                      <option value="groundcover" <?php echo htmlspecialchars($sticky_groundcover); ?>>Groundcover</option>
+                      <option value="other" <?php echo htmlspecialchars($sticky_other); ?>>Other</option>
                     </select>
                 </div>
                 <div class="submit">
@@ -735,28 +735,28 @@
         <!-- Actual database section -->
         <section class="table">
           <div class="catalog-header">
-            <h2><?php echo $queries_matching; ?> results</h2>
+            <h2><?php echo htmlspecialchars($queries_matching); ?> results</h2>
             <div>
               <!-- referencing documentation: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onchange -->
               <select name="sort-media" id="sort" onchange="location=this.value;">
                 <option value="" disabled>Sort by:</option>
-                <option value="<?php echo $sort_base . "&sort=id&order=desc"?>" <?php echo $sticky_id_sort_desc; ?>>Most recent to oldest (default)</option>
-                <option value="<?php echo $sort_base . "&sort=id&order=asc"?>" <?php echo $sticky_id_sort_asc; ?>>Oldest to most recent</option>
-                <option value="<?php echo $sort_base . "&sort=name&order=asc"?>" <?php echo $sticky_name_sort_asc; ?>>Alphabetical by name A-Z</option>
-                <option value="<?php echo $sort_base . "&sort=name&order=desc"?>" <?php echo $sticky_name_sort_desc; ?>>Alphabetical by name Z-A</option>
+                <option value="<?php echo htmlspecialchars($sort_base . "&sort=id&order=desc")?>" <?php echo htmlspecialchars($sticky_id_sort_desc); ?>>Most recent to oldest (default)</option>
+                <option value="<?php echo htmlspecialchars($sort_base . "&sort=id&order=asc")?>" <?php echo htmlspecialchars($sticky_id_sort_asc); ?>>Oldest to most recent</option>
+                <option value="<?php echo htmlspecialchars($sort_base . "&sort=name&order=asc")?>" <?php echo htmlspecialchars($sticky_name_sort_asc); ?>>Alphabetical by name A-Z</option>
+                <option value="<?php echo htmlspecialchars($sort_base . "&sort=name&order=desc")?>" <?php echo htmlspecialchars($sticky_name_sort_desc); ?>>Alphabetical by name Z-A</option>
               </select>
               <input type="hidden" name="sort" value =""/>
               <input type="hidden" name="order" value=""/>
 
-              <input type="hidden" name="exploratory-constructive-filter" value="<?php echo $exploratory_constructive_filter; ?>" />
-              <input type="hidden" name="exploratory-sensory-filter" value="<?php echo $exploratory_sensory_filter; ?>" />
-              <input type="hidden" name="physical-filter" value="<?php echo $physical_filter; ?>" />
-              <input type="hidden" name="imaginative-filter" value="<?php echo $imaginative_filter; ?>" />
-              <input type="hidden" name="restorative-filter" value="<?php echo $restorative_filter; ?>" />
-              <input type="hidden" name="expressive-filter" value="<?php echo $expressive_filter; ?>" />
-              <input type="hidden" name="rules-filter" value="<?php echo $rules_filter; ?>" />
-              <input type="hidden" name="bio-filter" value="<?php echo $bio_filter; ?>" />
-              <input type="hidden" name="inclusive-filter" value="<?php echo $inclusive_filter; ?>" />
+              <input type="hidden" name="exploratory-constructive-filter" value="<?php echo htmlspecialchars($exploratory_constructive_filter); ?>" />
+              <input type="hidden" name="exploratory-sensory-filter" value="<?php echo htmlspecialchars($exploratory_sensory_filter); ?>" />
+              <input type="hidden" name="physical-filter" value="<?php echo htmlspecialchars($physical_filter); ?>" />
+              <input type="hidden" name="imaginative-filter" value="<?php echo htmlspecialchars($imaginative_filter); ?>" />
+              <input type="hidden" name="restorative-filter" value="<?php echo htmlspecialchars($restorative_filter); ?>" />
+              <input type="hidden" name="expressive-filter" value="<?php echo htmlspecialchars($expressive_filter); ?>" />
+              <input type="hidden" name="rules-filter" value="<?php echo htmlspecialchars($rules_filter); ?>" />
+              <input type="hidden" name="bio-filter" value="<?php echo htmlspecialchars($bio_filter); ?>" />
+              <input type="hidden" name="inclusive-filter" value="<?php echo htmlspecialchars($inclusive_filter); ?>" />
             </div>
           </div>
 
@@ -764,16 +764,16 @@
           foreach ($records as $record) { ?>
             <div class="entry">
               <div class="entry-header">
-                <h4><?php echo ucwords(htmlspecialchars($record["name"])); ?><em> (<?php echo htmlspecialchars($record["scientific_name"]); ?>)</em></h4>
+                <a href="<?php echo htmlspecialchars("/admin/edit?id=" . $record["id"]); ?>"><h4><?php echo ucwords(htmlspecialchars($record["name"])); ?><em> (<?php echo htmlspecialchars($record["scientific_name"]); ?>)</em></h4></a>
                 <div class="entry-edit-buttons">
                   <form method="get" action="/admin/edit">
-                    <input type="hidden" name="id" value="<?php echo $record["id"]; ?>" />
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($record["id"]); ?>" />
                     <button type="submit">Edit</button>
                   </form>
 
                   <form method="post" action="/admin" id="delete-entry">
-                    <input type="hidden" name="id-delete" value="<?php echo $record["id"]; ?>" />
-                    <input type="hidden" name="name-delete" value="<?php echo $record["name"]; ?>" />
+                    <input type="hidden" name="id-delete" value="<?php echo htmlspecialchars($record["id"]); ?>" />
+                    <input type="hidden" name="name-delete" value="<?php echo htmlspecialchars($record["name"]); ?>" />
                     <div class="delete-button"><button type="submit">Delete</button></div>
 
                   </form>

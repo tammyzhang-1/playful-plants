@@ -192,7 +192,7 @@ $logged_out = $_GET['logout'] ?? NULL;
     <h1>Playful Plants</h1>
     <?php if (is_user_logged_in()) { ?>
       <div class="admin-welcome">
-        <p>Welcome, <?php echo $current_user["username"]; ?>! You are currently on consumer view.</p>
+        <p>Welcome, <?php echo htmlspecialchars($current_user["username"]); ?>! You are currently on consumer view.</p>
         <a class="admin-nav" href="/admin">Go to Edit Mode</a>
       </div>
       <a class="logout-button" href="<?php echo logout_url(); ?>">Sign Out</a>
@@ -221,7 +221,10 @@ $logged_out = $_GET['logout'] ?? NULL;
     <div class="media-catalog">
       <!-- sidebar -->
       <div class="sidebar">
-        <h2>Refine Results</h2>
+        <div class="filter-toggle">
+          <h2>Refine Results</h2>
+          <img id="toggle-filter-form" src="public/images/down.png"/>
+        </div>
         <!-- Form for filtering and sorting -->
         <div class="filter-sort-form">
           <form id="filter-garden" method="get" action="/" novalidate>
@@ -230,28 +233,28 @@ $logged_out = $_GET['logout'] ?? NULL;
               <div class="garden-info-filters">
                 <h5>Seasonality</h5>
                 <div class="filter-option">
-                  <input type="checkbox" name="perennial-filter" id="perennial-filter" <?php echo $sticky_perennial_filter; ?>/>
+                  <input type="checkbox" name="perennial-filter" id="perennial-filter" <?php echo htmlspecialchars($sticky_perennial_filter); ?>/>
                   <label for="perennial-filter">Perennial</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="annual-filter" id="annual-filter" <?php echo $sticky_annual_filter; ?>/>
+                  <input type="checkbox" name="annual-filter" id="annual-filter" <?php echo htmlspecialchars($sticky_annual_filter); ?>/>
                   <label for="annual-filter">Annual</label>
                 </div>
 
                 <h5>Light Needs</h5>
                 <div class="filter-option">
-                  <input type="checkbox" name="full-sun-filter" id="full-sun-filter" <?php echo $sticky_full_sun_filter; ?>/>
+                  <input type="checkbox" name="full-sun-filter" id="full-sun-filter" <?php echo htmlspecialchars($sticky_full_sun_filter); ?>/>
                   <label for="full-sun-filter">Full Sun</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="partial-shade-filter" id="partial-shade-filter" <?php echo $sticky_partial_shade_filter; ?>/>
+                  <input type="checkbox" name="partial-shade-filter" id="partial-shade-filter" <?php echo htmlspecialchars($sticky_partial_shade_filter); ?>/>
                   <label for="partial-shade-filter">Partial Shade</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="full-shade-filter" id="full-shade-filter" <?php echo $sticky_full_shade_filter; ?>/>
+                  <input type="checkbox" name="full-shade-filter" id="full-shade-filter" <?php echo htmlspecialchars($sticky_full_shade_filter); ?>/>
                   <label for="full-shade-filter">Full Shade</label>
                 </div>
               </div>
@@ -259,37 +262,37 @@ $logged_out = $_GET['logout'] ?? NULL;
               <div class="plant-type-filters">
                 <h5>Plant Types</h5>
                 <div class="filter-option">
-                  <input type="checkbox" name="shrub-filter" id="shrub-filter" <?php echo $sticky_shrub_filter; ?>/>
+                  <input type="checkbox" name="shrub-filter" id="shrub-filter" <?php echo htmlspecialchars($sticky_shrub_filter); ?>/>
                   <label for="shrub-filter">Shrub</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="grass-filter" id="grass-filter" <?php echo $sticky_grass_filter; ?>/>
+                  <input type="checkbox" name="grass-filter" id="grass-filter" <?php echo htmlspecialchars($sticky_grass_filter); ?>/>
                   <label for="grass-filter">Grass</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="vine-filter" id="vine-filter" <?php echo $sticky_vine_filter; ?>/>
+                  <input type="checkbox" name="vine-filter" id="vine-filter" <?php echo htmlspecialchars($sticky_vine_filter); ?>/>
                   <label for="vine-filter">Vine</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="tree-filter" id="tree-filter" <?php echo $sticky_tree_filter; ?>/>
+                  <input type="checkbox" name="tree-filter" id="tree-filter" <?php echo htmlspecialchars($sticky_tree_filter); ?>/>
                   <label for="tree-filter">Tree</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="flower-filter" id="flower-filter" <?php echo $sticky_flower_filter; ?>/>
+                  <input type="checkbox" name="flower-filter" id="flower-filter" <?php echo htmlspecialchars($sticky_flower_filter); ?>/>
                   <label for="flower-filter">Flower</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="groundcover-filter" id="groundcover-filter" <?php echo $sticky_groundcover_filter; ?>/>
+                  <input type="checkbox" name="groundcover-filter" id="groundcover-filter" <?php echo htmlspecialchars($sticky_groundcover_filter); ?>/>
                   <label for="groundcover-filter">Groundcover</label>
                 </div>
 
                 <div class="filter-option">
-                  <input type="checkbox" name="other-filter" id="other-filter" <?php echo $sticky_other_filter; ?>/>
+                  <input type="checkbox" name="other-filter" id="other-filter" <?php echo htmlspecialchars($sticky_other_filter); ?>/>
                   <label for="other-filter">Other</label>
                 </div>
 
@@ -300,32 +303,32 @@ $logged_out = $_GET['logout'] ?? NULL;
             </div>
 
             <!-- hidden inputs to track sort values -->
-            <input type="hidden" name="sort" value="<?php echo $sort; ?>" />
-            <input type="hidden" name="order" value="<?php echo $order; ?>" />
+            <input type="hidden" name="sort" value="<?php echo htmlspecialchars($sort); ?>" />
+            <input type="hidden" name="order" value="<?php echo htmlspecialchars($order); ?>" />
           </form>
         </div>
       </div>
 
       <div class="catalog-body">
         <div class="catalog-header">
-          <h2><?php echo $queries_matching; ?> Results</h2>
+          <h2><?php echo htmlspecialchars($queries_matching); ?> Results</h2>
           <div>
             <!-- referencing documentation: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onchange -->
             <select name="sort-media" id="sort" onchange="location=this.value;">
               <option value="" disabled>Sort by:</option>
-              <option value="<?php echo $sort_base . "&sort=name&order=asc"?>" <?php echo $sticky_name_sort_asc; ?>>Alphabetical by name A-Z (default)</option>
-              <option value="<?php echo $sort_base . "&sort=name&order=desc"?>" <?php echo $sticky_name_sort_desc; ?>>Alphabetical by name Z-A</option>
-              <option value="<?php echo $sort_base . "&sort=id&order=asc"?>" <?php echo $sticky_id_sort_asc; ?>>Oldest to most recently added</option>
-              <option value="<?php echo $sort_base . "&sort=id&order=desc"?>" <?php echo $sticky_id_sort_desc; ?>>Most recently added to oldest</option>
+              <option value="<?php echo htmlspecialchars($sort_base . "&sort=name&order=asc");?>" <?php echo htmlspecialchars($sticky_name_sort_asc); ?>>Alphabetical by name A-Z (default)</option>
+              <option value="<?php echo htmlspecialchars($sort_base . "&sort=name&order=desc");?>" <?php echo htmlspecialchars($sticky_name_sort_desc); ?>>Alphabetical by name Z-A</option>
+              <option value="<?php echo htmlspecialchars($sort_base . "&sort=id&order=asc");?>" <?php echo htmlspecialchars($sticky_id_sort_asc); ?>>Oldest to most recently added</option>
+              <option value="<?php echo htmlspecialchars($sort_base . "&sort=id&order=desc");?>" <?php echo htmlspecialchars($sticky_id_sort_desc); ?>>Most recently added to oldest</option>
             </select>
             <input type="hidden" name="sort" value =""/>
             <input type="hidden" name="order" value=""/>
 
-            <input type="hidden" name="perennial-filter" value="<?php echo $perennial_filter; ?>" />
-            <input type="hidden" name="annual-filter" value="<?php echo $annual_filter; ?>" />
-            <input type="hidden" name="full-sun-filter" value="<?php echo $full_sun_filter; ?>" />
-            <input type="hidden" name="partial-shade-filter" value="<?php echo $partial_shade_filter; ?>" />
-            <input type="hidden" name="full-shade-filter" value="<?php echo $full_shade_filter; ?>" />
+            <input type="hidden" name="perennial-filter" value="<?php echo htmlspecialchars($perennial_filter); ?>" />
+            <input type="hidden" name="annual-filter" value="<?php echo htmlspecialchars($annual_filter); ?>" />
+            <input type="hidden" name="full-sun-filter" value="<?php echo htmlspecialchars($full_sun_filter); ?>" />
+            <input type="hidden" name="partial-shade-filter" value="<?php echo htmlspecialchars($partial_shade_filter); ?>" />
+            <input type="hidden" name="full-shade-filter" value="<?php echo htmlspecialchars($full_shade_filter); ?>" />
           </div>
         </div>
         <!-- Media grid section -->
@@ -339,8 +342,8 @@ $logged_out = $_GET['logout'] ?? NULL;
                 $image_url = "public/uploads/documents/" . $record["id"] . "." . $record["file_ext"];
               } ?>
               <!-- default.png is original work (created by Tammy Zhang) -->
-              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="<?php echo $image_url; ?>" alt="Picture of <?php echo $record["name"]; ?>."/></a>
-              <a href="/detail?id=<?php echo $record["id"]; ?>"><p><?php echo ucwords($record["name"]); ?></p></a>
+              <a href="/detail?id=<?php echo $record["id"]; ?>"><img src="<?php echo htmlspecialchars($image_url); ?>" alt="Picture of <?php echo $record["name"]; ?>."/></a>
+              <a href="/detail?id=<?php echo htmlspecialchars($record["id"]); ?>"><p><?php echo htmlspecialchars(ucwords($record["name"])); ?></p></a>
             </div>
           <?php } ?>
         </div>
