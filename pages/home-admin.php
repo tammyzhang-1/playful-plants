@@ -103,18 +103,23 @@
 
       $add_form_valid = True;
 
-      if ($upload['error'] == UPLOAD_ERR_OK) {
-        $image_filename = basename($upload['name']);
-        $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
+      if ($upload['size'] > 0) {
+        if ($upload['error'] == UPLOAD_ERR_OK) {
+          $image_filename = basename($upload['name']);
+          $image_ext = strtolower(pathinfo($image_filename, PATHINFO_EXTENSION));
 
-        if (!in_array($image_ext, array('jpg', 'jpeg', 'png', 'gif'))) {
+          if (!in_array($image_ext, array('jpg', 'jpeg', 'png', 'gif'))) {
+            $add_form_valid = False;
+            $file_ext_feedback_class = '';
+          }
+        } else {
+          // upload was not successful
           $add_form_valid = False;
-          $file_ext_feedback_class = '';
+          $file_feedback_class = '';
         }
       } else {
-        // upload was not successful
-        $add_form_valid = False;
-        $file_feedback_class = '';
+        $image_filename = "default.png";
+        $image_ext = "png";
       }
 
       // check validity of responses
@@ -232,7 +237,12 @@
           );
         }
 
-        $new_img_name = "$new_entry_id" . "." . "$image_ext";
+        if ($upload["size"] > 0) {
+          $new_img_name = "$new_entry_id" . "." . "$image_ext";
+        } else {
+          $new_img_name = "default.png";
+        }
+
 
         $file_result = exec_sql_query(
           $db,
@@ -248,12 +258,11 @@
           move_uploaded_file($upload["tmp_name"], $id_filename);
         }
 
+
         if ($result) {
           $plant_added = True;
           $show_confirmation = True;
         }
-
-
 
       } else {
         // add form is not valid; sticky values are set
@@ -510,6 +519,9 @@
       <div id="add-plant-form" class="hidden">
         <div>
           <h2>Add new plant</h2>
+          <?php if ($add_plant && !$add_form_valid) { ?>
+            <div class="hidden invalid"></div>
+          <?php } ?>
         </div>
 
         <div class="add-body">

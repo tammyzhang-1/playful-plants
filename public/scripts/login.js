@@ -71,3 +71,8 @@ $("#edit-submit").click(function() {
         $(".confirmation").fadeOut(8000);
     });
 });
+
+if ($(".invalid")[0]) {
+    $("#add-plant-form").removeClass("hidden");
+    $("#toggle-add-form").attr("src","public/images/up.png");
+};

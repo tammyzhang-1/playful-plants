@@ -658,6 +658,9 @@ a:visited {
     .admin-welcome, .logout-button {
         display: none;
     }
+    .center {
+        display: none;
+    }
 }
 
 @media (max-width: 900px) {
