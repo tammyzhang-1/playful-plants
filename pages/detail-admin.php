@@ -397,8 +397,6 @@
         <a class="admin-nav" href="<?php echo "/detail?id=" . $id; ?>">Go to Consumer View</a>
       </div>
       <a class="logout-button" href="<?php echo "/detail?id=" . $id . htmlspecialchars("&logout="); ?>">Sign Out</a>
-    <?php } else { ?>
-      <button class="login-button" type="button">Sign in</button>
     <?php } ?>
   </header>
 

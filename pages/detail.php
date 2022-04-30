@@ -42,7 +42,7 @@
   <div class="hidden modal">
     <div class="hidden login-box">
       <?php if (!is_user_logged_in()) { ?>
-        <button class="close-button" id="modal-close">x</button>
+        <button class="close-button" id="login-close">x</button>
         <h2>Sign in to your Playful Plants account</h2>
         <p>Add plants, edit entries, and more.</p>
         <?php echo_login_form("/detail?id=" . $id, $session_messages); ?>

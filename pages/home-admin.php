@@ -75,7 +75,7 @@
 
     $sticky_other = '';
 
-    $add_plant = $_POST['add-plant'];
+    $add_plant = $_POST['add-submit'];
 
     // code to be executed when add form submitted
     if ($add_plant) {
@@ -426,8 +426,10 @@
 
     // delete button functionality
     $delete_plant_id = $_POST["id-delete"];
+    $delete_plant_name = $_POST["name-delete"];
     $delete_plant = $_POST["delete-confirmed"];
     $id_delete_confirmed = $_POST["id-delete-confirmed"];
+    $name_delete_confirmed = $_POST["name-delete-confirmed"];
     $show_delete_confirmation = False;
 
 
@@ -479,32 +481,24 @@
         <a class="admin-nav" href="/">Go to Consumer View</a>
       </div>
       <a class="logout-button" href="/?logout=">Sign Out</a>
-    <?php } else { ?>
-      <button class="login-button" type="button">Sign in</button>
     <?php } ?>
   </header>
-
-  <?php if (!is_user_logged_in()) { ?>
-    <div class="hidden modal">
-      <div class="hidden login-box">
-        <button class="close-button" id="modal-close">x</button>
-        <h2>Sign in to your Playful Plants account</h2>
-        <p>Add plants, edit entries, and more.</p>
-        <?php echo_login_form("/", $session_messages); ?>
-      </div>
-    </div>
-  <?php } ?>
 
   <?php if (is_user_logged_in() && $delete_plant_id) { ?>
     <div class="modal">
       <div class="delete-confirm-popup">
+        <button class="close-button" id="delete-close">x</button>
         <h2>Confirm Entry Deletion</h2>
-        <p>Are you sure you want to delete <?php echo $delete_plant_id; ?>?</p>
-        <p>Cancel</p>
-        <form method="post" action="/admin">
-          <input type="hidden" name="id-delete-confirmed" value="<?php echo $delete_plant_id;?>" />
-          <button type="submit" name="delete-confirmed" value="submitted">Delete</button>
-        </form>
+        <p>Are you sure you want to delete <strong><?php echo $delete_plant_name; ?>?</strong> </p>
+        <p>This action is not reversible.</p>
+        <div class="delete-buttons">
+          <button type="button" id="delete-cancel">Cancel</button>
+          <form method="post" action="/admin">
+            <input type="hidden" name="id-delete-confirmed" value="<?php echo $delete_plant_id;?>" />
+            <input type="hidden" name="name-delete-confirmed" value="<?php echo $delete_plant_name;?>" />
+            <button type="submit" name="delete-confirmed" value="submitted">Delete</button>
+          </form>
+        </div>
       </div>
     </div>
   <?php } ?>
@@ -512,10 +506,10 @@
   <?php if (is_user_logged_in()) { ?>
     <main>
       <!-- form for adding a plant to the catalog -->
-      <div id="add-plant-form">
+
+      <div id="add-plant-form" class="hidden">
         <div>
           <h2>Add new plant</h2>
-          <p> (Note for Milestone 3: bug where submit button must be clicked twice to add entry successfully)</p>
         </div>
 
         <div class="add-body">
@@ -646,7 +640,7 @@
                     </select>
                 </div>
                 <div class="submit">
-                  <input class= "submit" id="add-submit" type="submit" name="add-plant" value="Add Plant" />
+                  <input class= "submit" id="add-submit" type="submit" name="add-submit" value="Add Plant" />
                 </div>
               </div>
             </div>
@@ -662,7 +656,7 @@
 
       <?php if ($show_delete_confirmation) { ?>
         <!-- confirmation after successfully adding a plant, hidden by default -->
-        <div class="confirmation">Plant with ID "<?php echo htmlspecialchars($id_delete_confirmed); ?>" successfully deleted.</div>
+        <div class="confirmation"><?php echo htmlspecialchars($name_delete_confirmed); ?> successfully deleted.</div>
       <?php } ?>
 
       <!-- section underneath the adding form, includes the filtering/sorting sidebar and catalog data itself -->
@@ -740,7 +734,7 @@
 
         <!-- Actual database section -->
         <section class="table">
-        <div class="catalog-header">
+          <div class="catalog-header">
             <h2><?php echo $queries_matching; ?> results</h2>
             <div>
               <!-- referencing documentation: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onchange -->
@@ -766,7 +760,6 @@
             </div>
           </div>
 
-
           <?php
           foreach ($records as $record) { ?>
             <div class="entry">
@@ -780,6 +773,7 @@
 
                   <form method="post" action="/admin" id="delete-entry">
                     <input type="hidden" name="id-delete" value="<?php echo $record["id"]; ?>" />
+                    <input type="hidden" name="name-delete" value="<?php echo $record["name"]; ?>" />
                     <div class="delete-button"><button type="submit">Delete</button></div>
 
                   </form>

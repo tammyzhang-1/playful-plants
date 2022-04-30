@@ -77,6 +77,10 @@ h2, h3 {
     border-radius: 0.5em;
 }
 
+.login-button:hover, .logout-button:hover {
+    background-color:rgb(194, 217, 181);
+}
+
 ul.login {
     list-style-type: none;
     padding-left: 0;
@@ -94,6 +98,10 @@ ul.login {
     font-size: 2em;
 }
 
+#login-close:hover {
+    color:rgb(199, 199, 199)
+}
+
 .logout-confirm {
     border: thin solid rgb(30, 97, 40);
     border-radius: 0.25em;
@@ -105,10 +113,20 @@ ul.login {
 .delete-confirm-popup {
     z-index: 2;
     background-color:rgba(255, 255, 255);
-    padding: 2em 5em 4em 5em;
+    padding: 3em 5em 2em 5em;
     margin: auto;
     text-align: center;
     position: fixed;
+}
+
+.delete-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 3em;
+}
+
+#delete-cancel, .delete-buttons form {
+    width: 40%;
 }
 
 .admin-nav {
@@ -221,7 +239,7 @@ label {
     font-family:'Trebuchet MS', sans-serif;
 }
 
-input:hover, button:hover {
+input:hover, button:hover, #sort:hover {
     cursor: pointer;
 }
 
@@ -254,6 +272,8 @@ input:hover, button:hover {
     border-radius: 0.75em;
     margin: 0.5em;
 }
+
+
 
 .main-add {
     display: flex;
@@ -426,11 +446,20 @@ input:hover, button:hover {
     max-height: 25%;
 }
 
+.photo:hover {
+    opacity: 0.85;
+}
+
 .photo img, .detail-photo img {
     max-width: 100%;
     max-height: 100%;
     object-fit: scale-down;
 }
+
+/* .photo img {
+    border: solid thin;
+    border-color:rgb(56, 56, 56);
+} */
 
 .photo p {
     margin-top: 0.25em;
@@ -496,7 +525,6 @@ input:hover, button:hover {
 
 .edit-plant-form .edit-text input {
     width: 13.5em;
-
 }
 
 #edit-file {
@@ -509,9 +537,13 @@ input:hover, button:hover {
     width: 100%;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    border: solid;
+    border: solid thin;
     border-radius: 0.5em;
     font-size: 1em;
+}
+
+.align-right button:hover {
+    background-color: rgb(194, 225, 176);
 }
 
 .login-box form {
