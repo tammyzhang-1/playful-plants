@@ -268,6 +268,7 @@ _Final Design:_
 
 - Fixed margin inconsistencies in sketch 2 by aligning everything in an entry to the left
 - REVISION: add fourth textbox for a place to input hardiness zone data
+- REVISION: put add form under toggle to expand, since it may be distracting to have the whole form at the top of the page when Tim wants to view entries instead of add new plants
 
 6. Details page for administrators on desktop
 
@@ -1333,6 +1334,20 @@ modal box planning:
 // make modal box pop up to confirm deletion of a plant
 in js: when delete button is clicked, remove hidden from a div containing "Are you sure that you want to delete [plant name]?" with two buttons, "Cancel" and "Confirm"
 When confirm button is clicked, execute sql code to delete that plant from the database
+```
+
+```
+// toggle expansion of filters on consumer mobile catalog view and the add form on the admin catalog view
+
+when div to expand is hit:
+  remove hidden from rest of div with toggle animation for smoother transition
+  an icon changes to indicate the div can be hidden again
+
+when div to expand is hit again:
+  add hidden to rest of div again
+  change icon back to what it was
+
+make div clickable by changing how the cursor appears
 ```
 
 
