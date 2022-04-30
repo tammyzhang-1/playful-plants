@@ -1363,24 +1363,39 @@ The only issues I discovered during my accessibility audit were that several ima
 ### Audience (Final Submission)
 > Tell us how your final site meets the goals of your audiences. Be specific here. Tell us how you tailored your design, content, etc. to make your website usable for your personas.
 
-TODO
+
+My final site meets the goals of my consumer audience. Abi's first goal was to primarily create a garden to provide year-round interest to the community, which is served by providing a highly visual catalog of plants with details on gardening information. Abi is able to filter for annual and perennial plants, ensuring she can create a garden that lasts year-round.
+
+Abi's second goal was to find a variety of plants to add to their garden to create a high-quality natural space. This was achieved by including gardening information on each plant's details page, where she could view what growing needs each plant has and what type of plant it is. Abi is able to pick plants based on filtered needs or visual preferences from the catalog, then view details to confirm if it is suitable for her garden's location and will fit with other plants.
+
+Finally, Abi's third goal was to engage her children in gardening projects. This is achieved by including play information supported by each plant on each details page. Since it is more important to Abi as a gardener that the plants she chooses are practical, she does not need to filter by play type, but the information is available for her if she wants to reference it. She might be persuaded to grow a plant in her garden if she notes that it can support a type of play, even if she is not particularly informed on what each play type entails.
+
+My website is tailored to be usable to Abi by heavily employing familiar design patterns, such as a filter in a sidebar and a dropdown sort mechanism on the top right of the catalog (as well as a number displaying the amount of results shown, which helps give her feedback that her filtering is working). This is conducive to helping her achieve goals with her lower computer self-efficacy and lower risk tolerance, as she does not have to spend as much time gathering information thoroughly before feeling comfortable with making decisions on the website. The simple catalog layout that can lead to more detailed pages if desired limits clutter, decreasing the amount of time Abi spends looking through everything before being able to accomplish her tasks.
+
+My final site also meets the goals of my administrator audience. By creating a table-based view of the Playful Plants database, Tim is able to view all plants at once in a more efficient, less visual format. The inclusion of forms one click away - one to edit a plant, one to add a plant - on the admin catalog page allow for Tim to make quick changes to the database, his first and primary goal.
+
+Tim's second goal of tailoring plant selections by play type is achieved by a catalog sidebar with filters that can show plants with a specific play type or combination of play types. This sidebar follows a very common design pattern observed in many catalogs on the modern web.
+
+Finally, Tim's third goal of being able to print plant lists is achieved by the use of media queries to reduce visual clutter when the admin catalog is printed. By eliminating buttons, links, and sidebars, as well as reducing spacing and font size, Tim is able to print the catalog in a reader-friendly and excess-paper-limiting format.
+
+My website is tailored to be usable to Tim in several ways. The delete button on each entry makes a confirmation window pop up when clicked, to minimize the chance of any entries being accidentally deleted due to Tim's high risk tolerance and preference for tinkering. The presence of concisely labeled buttons and links such as "edit", "delete", and "add plant" serve Tim's depth-first information processing style by providing promising leads for him to accomplish goals like updating the website without having to backtrack excessively.
 
 
 ### Additional Design Justifications (Final Submission)
 > If you feel like you haven’t fully explained your design choices in the final submission, or you want to explain some functions in your site (e.g., if you feel like you make a special design choice which might not meet the final requirement), you can use the additional design justifications to justify your design choices. Remember, this is place for you to justify your design choices which you haven’t covered in the design journey. You don’t need to fill out this section if you think all design choices have been well explained in the design journey.
 
-TODO
+When a logged out user attempts to access permission-restricted pages, the display is meant to mimic the 404 page to not inform them that the resource exists. Also, slight issues with modal boxes such as the delete confirmation popup causing the user to jump to the top of the page (or the sign in modal disappearing briefly when input is invalid) are a result of Javascript only executing upon page reload, which is unavoidable when passing hidden inputs throughout the code.
 
 
 ### Self-Reflection (Final Submission)
 > Reflect on what you learned during this assignment. How have you improved from Project 2? What would you do differently next time?
 
-TODO
+I learned significantly about what goes into building websites on the modern web, such as cookies and login. My understanding of PHP and concepts such as GET and POST became much more comfortable and intuitive after working with it even more this project, and also when working with hidden inputs. I am far more comfortable with forms now.
 
 
 > Take some time here to reflect on how much you've learned since you started this class. It's often easy to ignore our own progress. Take a moment and think about your accomplishments in this class. Hopefully you'll recognize that you've accomplished a lot and that you should be very proud of those accomplishments!
 
-TODO
+I am impressed that before taking this class, I had no idea what PHP was or how any kind of server-side processing worked. I had zero sense of how forms and databases were implemented. Now, I have learned these concepts, gotten a comfortable basis in server-side code, and am excited to maybe apply what I've learned to more libraries and modern frameworks. I've also grown much quicker at CSS and Javascript to make my website look how I imagine it in my mind.
 
 
 ### Grading: Step-by-Step Instructions (Final Submission)
@@ -1391,30 +1406,47 @@ TODO
 
 _View all entries:_
 
-1. TODO
-2.
+1. All entries are shown here at / automatically. This is the consumer catalog view.
+2. Filtering is done on the left sidebar; sorting done with the top right dropdown.
 
 _View all entries for a tag:_
 
-1. TODO
-2.
+1. Check one of the checkboxes in the sidebar on the left.
+2. Click on the "Apply" button in the bottom right.
 
 _View a single entry's details:_
 
-1. TODO
-2.
+1. Click on the image or name of a plant from catalog view.
+2. This will open a new page displaying the plant's detailed information.
 
 _How to insert and upload a new entry:_
 
-1. TODO
-2.
+1. Click on the "Sign In" button on the top right.
+2. Put username "admin" and password "monkey" in the popup that appears.
+3. Click "Sign In".
+4. Click on "Go to Edit Mode" in the top green box.
+5. To add a plant, click on the green div that says "Add Plant +". This shows the form to add.
+6. Input plant details and click "Add Plant" on the bottom right.
+7. A confirmation will be shown if done successfully.
+8. If a file was uploaded and the page appears to load for a long time, try clicking the "Add Plant" button a second time on Chrome.
 
 _How to delete an entry:_
 
-1. TODO
-2.
+1. Click on the "Sign In" button on the top right.
+2. Put username "admin" and password "monkey" in the popup that appears.
+3. Click "Sign In".
+4. Click on "Go to Edit Mode" in the top green box.
+5. Click on the "Delete" button of any of the entries listed.
+6. Click "Delete" again on the confirmation popup.
+7. A confirmation will be shown if done successfully.
 
 _How to edit and existing entry and its tags:_
 
-1. TODO
-2.
+1. Click on the "Sign In" button on the top right.
+2. Put username "admin" and password "monkey" in the popup that appears.
+3. Click "Sign In".
+4. Click on "Go to Edit Mode" in the top green box.
+5. Click on the "Edit" button of any of the entries listed. This will open up an editable details page.
+6. Make any changes in the form.
+7. Click "Save Changes".
+8. A confirmation will be shown if done successfully.
