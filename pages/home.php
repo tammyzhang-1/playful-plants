@@ -210,6 +210,7 @@ $logged_out = $_GET['logout'] ?? NULL;
         <button class="close-button" id="login-close">x</button>
         <h2>Sign in to your Playful Plants account</h2>
         <p>Add plants, edit entries, and more.</p>
+        <p>Currently available only on desktop.</p>
         <?php echo_login_form("/", $session_messages); ?>
       <?php } ?>
     </div>

@@ -45,6 +45,7 @@
         <button class="close-button" id="login-close">x</button>
         <h2>Sign in to your Playful Plants account</h2>
         <p>Add plants, edit entries, and more.</p>
+        <p>Currently available only on desktop.</p>
         <?php echo_login_form("/detail?id=" . $id, $session_messages); ?>
       <?php } ?>
     </div>

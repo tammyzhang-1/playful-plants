@@ -237,12 +237,12 @@
           );
         }
 
+        // upload file if chosen when plant added
         if ($upload["size"] > 0) {
           $new_img_name = "$new_entry_id" . "." . "$image_ext";
         } else {
           $new_img_name = "default.png";
         }
-
 
         $file_result = exec_sql_query(
           $db,
@@ -257,7 +257,6 @@
           $id_filename = 'public/uploads/documents/' . $new_entry_id . '.' . $image_ext;
           move_uploaded_file($upload["tmp_name"], $id_filename);
         }
-
 
         if ($result) {
           $plant_added = True;
@@ -335,6 +334,8 @@
     $rules_filter = $_GET['rules-filter']; //untrusted
     $bio_filter = $_GET['bio-filter']; //untrusted
     $inclusive_filter = $_GET['inclusive-filter']; //untrusted
+
+    $filter_list = array($exploratory_constructive_filter, $exploratory_sensory_filter, $physical_filter, $imaginative_filter, $restorative_filter, $expressive_filter, $rules_filter, $bio_filter);
 
     // make filter options chosen by user sticky
     $sticky_exploratory_constructive_filter = (empty($exploratory_constructive_filter) ? '' : 'checked');
@@ -749,6 +750,7 @@
         <section class="table">
           <div class="catalog-header">
             <h2><?php echo htmlspecialchars($queries_matching); ?> results</h2>
+
             <div>
               <!-- referencing documentation: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onchange -->
               <select name="sort-media" id="sort" onchange="location=this.value;">

@@ -68,6 +68,10 @@ h2, h3 {
     position: absolute;
 }
 
+.login-box p {
+    line-height: 0.5em;
+}
+
 .login-button, .logout-button {
     background-color:rgb(228, 244, 219);
     border: solid;
@@ -158,15 +162,13 @@ a.admin-nav, a.logout-button {
     padding: 0.5em 2em 0.5em 2em;
 }
 
-#filter-by {
-    margin-bottom: 0;
-}
-
-.filter-toggle {
-    display: flex;
+.center {
     justify-content: center;
     align-items: center;
-    gap: 0.5em;
+}
+
+#filter-by {
+    margin-bottom: 0;
 }
 
 .filter-toggle:hover {
@@ -175,6 +177,19 @@ a.admin-nav, a.logout-button {
 
 #toggle-filter-form {
     display: none;
+}
+
+.filter-list ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filter-list ul li {
+    padding: 0.25em 0.75em 0.25em 0.75em;
+    margin: 0.25em;
+    background-color:rgb(194, 225, 176);
+    border-radius: 1em;
 }
 
 .sidebar {
@@ -301,13 +316,10 @@ input:hover, button:hover, #sort:hover {
 }
 
 .center {
-    text-align: center;
     background-color:rgb(194, 217, 181);
     padding: 0.25em;
     border-radius: 1em;
     display: flex;
-    align-items: center;
-    justify-content: center;
     gap: 0.5em;
     border: solid thin;
     border-color:rgb(175, 175, 175);
@@ -498,11 +510,6 @@ input:hover, button:hover, #sort:hover {
     max-height: 100%;
     object-fit: scale-down;
 }
-
-/* .photo img {
-    border: solid thin;
-    border-color:rgb(56, 56, 56);
-} */
 
 .photo p {
     margin-top: 0.25em;
@@ -737,4 +744,10 @@ a:visited {
     #toggle-filter-form {
         display: block;
     }
+    .filter-toggle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
 }
